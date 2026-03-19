@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notre Histoire — MONTFERCCI Paris</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#fff;color:#0a0a0a;font-family:'Montserrat',sans-serif;font-weight:300;overflow-x:hidden;cursor:none}
+
+.cursor{position:fixed;width:8px;height:8px;background:#333333;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid #333333;border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .15s ease;opacity:.5}
+
+header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:12px 48px;display:flex;align-items:center;justify-content:center;
+  border-bottom:1px solid rgba(51,51,51,.15);
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+  animation:slideDown .8s ease forwards;
+}
+.header-inner{display:flex;flex-direction:column;align-items:center;gap:10px}
+.logo-link{text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.logo-img{height:80px;width:auto;display:block}
+.logo-tagline{display:block;font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.2em;color:#555;margin-top:4px}
+nav{display:flex;gap:32px}
+nav a{font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:#0a0a0a;text-decoration:none;transition:opacity .2s;cursor:none}
+nav a:hover{opacity:.4}
+nav a.active{border-bottom:1px solid #0a0a0a;padding-bottom:2px}
+
+.page-content{padding-top:160px;min-height:100vh}
+
+.histoire-hero{
+  text-align:center;
+  padding:80px 48px 60px;
+  max-width:780px;
+  margin:0 auto;
+  animation:fadeUp 1.1s .2s ease both;
+}
+.histoire-hero h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.2rem,6vw,3.8rem);
+  font-weight:300;
+  letter-spacing:.08em;
+  margin-bottom:28px;
+  line-height:1.2;
+}
+.histoire-hero .sous-titre{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:clamp(1rem,2.5vw,1.3rem);
+  font-weight:300;
+  color:#555;
+  letter-spacing:.04em;
+  line-height:1.6;
+}
+
+.separateur{
+  width:40px;
+  height:1px;
+  background:#0a0a0a;
+  margin:48px auto;
+  animation:fadeIn 1s .6s ease both;
+}
+
+.section-texte{
+  max-width:620px;
+  margin:0 auto;
+  padding:0 48px 80px;
+  animation:fadeUp 1.1s .4s ease both;
+}
+.section-texte p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1rem,2vw,1.15rem);
+  font-weight:300;
+  line-height:1.9;
+  letter-spacing:.03em;
+  color:#1a1a1a;
+  margin-bottom:28px;
+}
+.section-texte p:last-child{margin-bottom:0}
+
+.citation{
+  text-align:center;
+  padding:60px 48px;
+  background:#f9f8f6;
+  animation:fadeIn 1s .5s ease both;
+}
+.citation blockquote{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:clamp(1.2rem,3vw,1.7rem);
+  font-weight:300;
+  letter-spacing:.05em;
+  color:#0a0a0a;
+  max-width:600px;
+  margin:0 auto;
+  line-height:1.7;
+}
+.citation cite{
+  display:block;
+  margin-top:20px;
+  font-family:'Montserrat',sans-serif;
+  font-size:.58rem;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+  color:#888;
+  font-style:normal;
+}
+
+.valeurs{
+  max-width:780px;
+  margin:0 auto;
+  padding:80px 48px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:48px;
+  animation:fadeUp 1.1s .5s ease both;
+}
+.valeur{text-align:center}
+.valeur-titre{
+  font-family:'Montserrat',sans-serif;
+  font-size:.58rem;
+  letter-spacing:.4em;
+  text-transform:uppercase;
+  margin-bottom:16px;
+}
+.valeur-texte{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.95rem;
+  line-height:1.7;
+  color:#555;
+}
+
+footer{border-top:1px solid rgba(51,51,51,.12);padding:36px 48px 32px;display:flex;flex-direction:column;align-items:center;gap:22px;animation:fadeIn 1.2s 1.2s ease both}
+.footer-label{font-size:.6rem;letter-spacing:.4em;color:#0a0a0a;text-transform:uppercase;text-align:center}
+.social-links{display:flex;gap:16px}
+.social-link{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid rgba(51,51,51,.25);border-radius:50%;color:#0a0a0a;text-decoration:none;transition:all .3s;cursor:none}
+.social-link:hover{border-color:#0a0a0a}
+.social-link svg{width:18px;height:18px}
+.footer-bottom{font-size:.56rem;letter-spacing:.2em;color:#0a0a0a;text-transform:uppercase;text-align:center}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:480px){
+  header{padding:12px 24px}
+  .histoire-hero{padding:60px 24px 40px}
+  .section-texte{padding:0 24px 60px}
+  .valeurs{grid-template-columns:1fr;gap:36px;padding:60px 24px}
+  .citation{padding:48px 24px}
+  footer{padding:36px 24px 32px}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo-link">
+      <img src="logo.png" alt="MONTFERCCI Paris" class="logo-img" onerror="this.style.display='none'">
+      <span class="logo-tagline">Paris</span>
+    </a>
+    <nav>
+      <a href="index.html">Collection</a>
+      <a href="notre-histoire.html" class="active">Notre Histoire</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+
+  <div class="histoire-hero">
+    <h1>Notre Histoire</h1>
+    <p class="sous-titre">Une maison née de la conviction que l'élégance masculine<br>mérite d'être repensée.</p>
+  </div>
+
+  <div class="separateur"></div>
+
+  <div class="section-texte">
+    <p>MONTFERCCI Paris est née d'une obsession : celle du vêtement juste. Pas trop, pas moins. Un costume qui s'oublie sur l'homme qui le porte, pour ne laisser paraître que lui.</p>
+    <p>Fondée à Paris, la maison s'est construite autour d'un savoir-faire artisanal transmis avec exigence — celui des ateliers de confection qui n'ont jamais cédé à la précipitation industrielle.</p>
+    <p>Chaque pièce est pensée pour traverser le temps. Les matières sont sélectionnées avec une rigueur qui ne souffre aucun compromis. Les coupes, travaillées jusqu'à l'obsession, cherchent l'équilibre parfait entre structure et légèreté.</p>
+  </div>
+
+  <div class="citation">
+    <blockquote>
+      « L'élégance, c'est le refus. »
+      <cite>— Coco Chanel</cite>
+    </blockquote>
+  </div>
+
+  <div class="valeurs">
+    <div class="valeur">
+      <p class="valeur-titre">Savoir-faire</p>
+      <p class="valeur-texte">Des ateliers parisiens sélectionnés pour leur maîtrise des techniques de tailleur.</p>
+    </div>
+    <div class="valeur">
+      <p class="valeur-titre">Matière</p>
+      <p class="valeur-texte">Des étoffes sourcées auprès des meilleures filatures françaises et italiennes.</p>
+    </div>
+    <div class="valeur">
+      <p class="valeur-titre">Durabilité</p>
+      <p class="valeur-texte">Des pièces conçues pour durer, contre la logique du renouvellement permanent.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p class="footer-label">Suivez la confection de notre collection</p>
+  <div class="social-links">
+    <a href="https://instagram.com" target="_blank" class="social-link" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
+    </a>
+    <a href="https://tiktok.com" target="_blank" class="social-link" aria-label="TikTok">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.12 8.12 0 0 0 4.77 1.52V6.76a4.85 4.85 0 0 1-1-.07z" opacity=".9"/></svg>
+    </a>
+  </div>
+  <p class="footer-bottom">© 2026 Montfercci Paris — contact@montfercci.com</p>
+</footer>
+
+<script>
+// Curseur
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mouseX=0,mouseY=0,ringX=0,ringY=0;
+document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY;cursor.style.left=mouseX+'px';cursor.style.top=mouseY+'px'});
+(function animRing(){ringX+=(mouseX-ringX)*.12;ringY+=(mouseY-ringY)*.12;cursorRing.style.left=ringX+'px';cursorRing.style.top=ringY+'px';requestAnimationFrame(animRing)})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursorRing.style.transform='translate(-50%,-50%) scale(1.5)';cursorRing.style.opacity='1'});
+  el.addEventListener('mouseleave',()=>{cursorRing.style.transform='translate(-50%,-50%) scale(1)';cursorRing.style.opacity='.5'});
+});
+</script>
+</body>
+</html>
