@@ -50,7 +50,7 @@ header{
 
 /* 3D scene */
 .scene{
-  perspective:600px;
+  perspective:400px;
   perspective-origin:50% 50%;
   width:100%;height:100%;
   position:relative;
@@ -58,7 +58,6 @@ header{
 .ring{
   width:100%;height:100%;
   transform-style:preserve-3d;
-  transition:transform 2.2s cubic-bezier(.4,0,.2,1);
   position:relative;
 }
 .rslide{
@@ -314,22 +313,30 @@ function go(piece, idx) {
   let d = st[piece] - prev;
   if (d >  N / 2) d -= N;
   if (d < -N / 2) d += N;
-  ang[piece] -= d * (360 / N);
-  document.getElementById('ring-' + piece).style.transform = `rotateY(${ang[piece]}deg)`;
-  // Animate opacities after transition
-  setTimeout(() => updateOpacities(piece), 50);
-  // Also update during transition
+  const startAng = ang[piece];
+  const endAng   = ang[piece] - d * (360 / N);
+  ang[piece] = endAng;
   const start = performance.now();
   const duration = 650;
-  const startAng = ang[piece] + d * (360 / N);
-  const endAng   = ang[piece];
+  const ring = document.getElementById('ring-' + piece);
   function frame(now) {
     const t = Math.min((now - start) / duration, 1);
     const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
-    ang[piece] = startAng + (endAng - startAng) * ease;
-    updateOpacities(piece);
+    const cur = startAng + (endAng - startAng) * ease;
+    ring.style.transform = `rotateY(${cur}deg)`;
+    // update per-slide opacities using current ring angle
+    const slides = ring.querySelectorAll('.rslide');
+    slides.forEach((slide, i) => {
+      const slideDeg = (360 / N) * i;
+      let eff = (slideDeg + cur) % 360;
+      if (eff < 0) eff += 360;
+      const cos = Math.cos(eff * Math.PI / 180);
+      const opacity = 0.15 + (cos + 1) / 2 * 0.85;
+      const scale = 0.82 + (cos + 1) / 2 * 0.18;
+      slide.style.opacity = opacity.toFixed(3);
+      slide.style.transform = `translateX(-50%) rotateY(${slideDeg}deg) translateZ(${R}px) scale(${scale.toFixed(3)})`;
+    });
     if (t < 1) requestAnimationFrame(frame);
-    else ang[piece] = endAng;
   }
   requestAnimationFrame(frame);
 }
