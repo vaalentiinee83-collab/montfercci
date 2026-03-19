@@ -35,12 +35,14 @@ header{
   position:relative;z-index:3;
   padding-top:20px;
   padding-left:0;padding-right:0;
+  touch-action:pan-y;
 }
 
 .piece-row{
   position:relative;
   display:flex;align-items:center;justify-content:center;
   overflow:visible;
+  touch-action:pan-y;
 }
 .piece-row.row-tie    {height:88px}
 .piece-row.row-jacket {height:185px;margin-top:12px}
@@ -56,7 +58,7 @@ header{
 .ring{
   width:100%;height:100%;
   transform-style:preserve-3d;
-  transition:transform .65s cubic-bezier(.4,0,.2,1);
+  transition:transform 2.2s cubic-bezier(.4,0,.2,1);
   position:relative;
 }
 .rslide{
@@ -66,6 +68,16 @@ header{
   transform-origin:center center;
 }
 .rslide img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
+
+/* Couleurs */
+.couleurs{text-align:center;margin-top:18px;position:relative;z-index:3}
+.couleurs-label{font-size:.58rem;letter-spacing:.4em;text-transform:uppercase;color:#0a0a0a;margin-bottom:12px}
+.couleurs-swatches{display:flex;justify-content:center;gap:14px}
+.swatch{width:22px;height:22px;border-radius:50%;border:1.5px solid transparent;cursor:none;padding:0;transition:transform .2s,border-color .2s}
+.swatch:hover{transform:scale(1.15)}
+.swatch.active{border-color:#0a0a0a;outline:2px solid rgba(10,10,10,.18);outline-offset:2px}
+.swatch[data-color="creme"]{border-color:rgba(10,10,10,.2)}
+.swatch[data-color="creme"].active{border-color:#0a0a0a}
 
 /* Arrows — fixes sur les côtés du configurateur */
 .arrows-fixed {
@@ -190,6 +202,15 @@ footer{border-top:1px solid rgba(51,51,51,.12);padding:36px 48px 32px;display:fl
 
   </div>
 
+  <div class="couleurs">
+    <p class="couleurs-label">Couleur</p>
+    <div class="couleurs-swatches">
+      <button class="swatch active" data-color="noir" style="background:#0a0a0a" title="Noir"></button>
+      <button class="swatch" data-color="marine" style="background:#1b2a4a" title="Bleu marine"></button>
+      <button class="swatch" data-color="creme" style="background:#f5f0e8" title="Crème"></button>
+    </div>
+  </div>
+
   <div class="accroche">
     <p><em>Patience</em>... on repasse votre Tieleur.</p>
   </div>
@@ -299,7 +320,7 @@ function go(piece, idx) {
   setTimeout(() => updateOpacities(piece), 50);
   // Also update during transition
   const start = performance.now();
-  const duration = 650;
+  const duration = 2200;
   const startAng = ang[piece] + d * (360 / N);
   const endAng   = ang[piece];
   function frame(now) {
@@ -322,11 +343,21 @@ function prev(p){go(p,st[p]-1)}
 ['tie','jacket','pants'].forEach(piece=>{
   const row=document.querySelector('#ring-'+piece).closest('.piece-row');
   let sx=0,drag=false;
-  row.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+  let sy=0;
+  row.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  row.addEventListener('touchmove',e=>{const dx=e.touches[0].clientX-sx;const dy=e.touches[0].clientY-sy;if(Math.abs(dx)>Math.abs(dy))e.preventDefault();},{passive:false});
   row.addEventListener('touchend',e=>{const dx=sx-e.changedTouches[0].clientX;if(Math.abs(dx)>30)dx>0?next(piece):prev(piece)});
   row.addEventListener('mousedown',e=>{drag=true;sx=e.clientX});
   row.addEventListener('mouseup',e=>{if(!drag)return;drag=false;const dx=sx-e.clientX;if(Math.abs(dx)>20)dx>0?next(piece):prev(piece)});
   row.addEventListener('mouseleave',()=>drag=false);
+});
+
+// Swatches couleur
+document.querySelectorAll('.swatch').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+  });
 });
 
 // Formulaire
