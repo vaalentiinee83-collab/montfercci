@@ -323,7 +323,9 @@ function prev(p){go(p,st[p]-1)}
 ['tie','jacket','pants'].forEach(piece=>{
   const row=document.querySelector('#ring-'+piece).closest('.piece-row');
   let sx=0,drag=false;
-  row.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+  let sy=0;
+  row.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  row.addEventListener('touchmove',e=>{const dx=e.touches[0].clientX-sx;const dy=e.touches[0].clientY-sy;if(Math.abs(dx)>Math.abs(dy))e.preventDefault();},{passive:false});
   row.addEventListener('touchend',e=>{const dx=sx-e.changedTouches[0].clientX;if(Math.abs(dx)>30)dx>0?next(piece):prev(piece)});
   row.addEventListener('mousedown',e=>{drag=true;sx=e.clientX});
   row.addEventListener('mouseup',e=>{if(!drag)return;drag=false;const dx=sx-e.clientX;if(Math.abs(dx)>20)dx>0?next(piece):prev(piece)});
