@@ -69,6 +69,16 @@ header{
 }
 .rslide img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
 
+/* Couleurs */
+.couleurs{text-align:center;margin-top:18px;position:relative;z-index:3}
+.couleurs-label{font-size:.58rem;letter-spacing:.4em;text-transform:uppercase;color:#0a0a0a;margin-bottom:12px}
+.couleurs-swatches{display:flex;justify-content:center;gap:14px}
+.swatch{width:22px;height:22px;border-radius:50%;border:1.5px solid transparent;cursor:none;padding:0;transition:transform .2s,border-color .2s}
+.swatch:hover{transform:scale(1.15)}
+.swatch.active{border-color:#0a0a0a;outline:2px solid rgba(10,10,10,.18);outline-offset:2px}
+.swatch[data-color="creme"]{border-color:rgba(10,10,10,.2)}
+.swatch[data-color="creme"].active{border-color:#0a0a0a}
+
 /* Arrows — fixes sur les côtés du configurateur */
 .arrows-fixed {
   position:absolute;
@@ -191,6 +201,15 @@ footer{border-top:1px solid rgba(51,51,51,.12);padding:36px 48px 32px;display:fl
       </div>
     </div>
 
+  </div>
+
+  <div class="couleurs">
+    <p class="couleurs-label">Couleur</p>
+    <div class="couleurs-swatches">
+      <button class="swatch active" data-color="noir" style="background:#0a0a0a" title="Noir"></button>
+      <button class="swatch" data-color="marine" style="background:#1b2a4a" title="Bleu marine"></button>
+      <button class="swatch" data-color="creme" style="background:#f5f0e8" title="Crème"></button>
+    </div>
   </div>
 
   <div class="accroche">
@@ -332,6 +351,14 @@ function prev(p){go(p,st[p]-1)}
   row.addEventListener('mousedown',e=>{drag=true;sx=e.clientX});
   row.addEventListener('mouseup',e=>{if(!drag)return;drag=false;const dx=sx-e.clientX;if(Math.abs(dx)>20)dx>0?next(piece):prev(piece)});
   row.addEventListener('mouseleave',()=>drag=false);
+});
+
+// Swatches couleur
+document.querySelectorAll('.swatch').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+  });
 });
 
 // Formulaire
