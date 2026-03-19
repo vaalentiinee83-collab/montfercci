@@ -20,14 +20,18 @@ header{
   background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
   animation:slideDown .8s ease forwards;
 }
-.header-inner{display:flex;flex-direction:column;align-items:center;gap:10px}
 .logo-link{text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .logo-img{height:80px;width:auto;display:block}
 .logo-tagline{display:block;font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.2em;color:#555;margin-top:4px}
-nav{display:flex;gap:32px}
-nav a{font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:#0a0a0a;text-decoration:none;transition:opacity .2s;cursor:none}
-nav a:hover{opacity:.4}
-nav a.active{border-bottom:1px solid #0a0a0a;padding-bottom:2px}
+.burger{position:absolute;right:24px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:none;display:flex;flex-direction:column;gap:5px;padding:8px;z-index:110}
+.burger span{display:block;width:22px;height:1px;background:#0a0a0a;transition:all .3s ease}
+.dropdown-menu{position:fixed;top:0;right:0;width:260px;height:100vh;background:#fff;z-index:105;display:flex;flex-direction:column;justify-content:center;padding:48px 40px;transform:translateX(100%);transition:transform .4s cubic-bezier(.77,0,.175,1)}
+.dropdown-menu.open{transform:translateX(0)}
+.dropdown-menu a{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;letter-spacing:.06em;color:#0a0a0a;text-decoration:none;padding:14px 0;border-bottom:1px solid rgba(51,51,51,.1);cursor:none;transition:opacity .2s}
+.dropdown-menu a:last-child{border-bottom:none}
+.dropdown-menu a:hover{opacity:.4}
+.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.2);z-index:104;opacity:0;pointer-events:none;transition:opacity .4s}
+.menu-overlay.open{opacity:1;pointer-events:all}
 
 .page-content{padding-top:160px;min-height:100vh}
 
@@ -161,17 +165,19 @@ footer{border-top:1px solid rgba(51,51,51,.12);padding:36px 48px 32px;display:fl
 <div class="cursor-ring" id="cursorRing"></div>
 
 <header>
-  <div class="header-inner">
-    <a href="index.html" class="logo-link">
-      <img src="logo.png" alt="MONTFERCCI Paris" class="logo-img" onerror="this.style.display='none'">
-      <span class="logo-tagline">Paris</span>
-    </a>
-    <nav>
-      <a href="index.html">Collection</a>
-      <a href="notre-histoire.html" class="active">Notre Histoire</a>
-    </nav>
-  </div>
+  <a href="index.html" class="logo-link">
+    <img src="logo.png" alt="MONTFERCCI Paris" class="logo-img" onerror="this.style.display='none'">
+    <span class="logo-tagline">Paris</span>
+  </a>
+  <button class="burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </header>
+<div class="menu-overlay" id="menuOverlay"></div>
+<nav class="dropdown-menu" id="dropdownMenu">
+  <a href="index.html">Nos Tieleurs</a>
+  <a href="notre-histoire.html">Notre Histoire</a>
+</nav>
 
 <main class="page-content">
 
@@ -226,7 +232,6 @@ footer{border-top:1px solid rgba(51,51,51,.12);padding:36px 48px 32px;display:fl
 </footer>
 
 <script>
-// Curseur
 const cursor = document.getElementById('cursor');
 const cursorRing = document.getElementById('cursorRing');
 let mouseX=0,mouseY=0,ringX=0,ringY=0;
@@ -235,6 +240,17 @@ document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY;curs
 document.querySelectorAll('a,button').forEach(el=>{
   el.addEventListener('mouseenter',()=>{cursorRing.style.transform='translate(-50%,-50%) scale(1.5)';cursorRing.style.opacity='1'});
   el.addEventListener('mouseleave',()=>{cursorRing.style.transform='translate(-50%,-50%) scale(1)';cursorRing.style.opacity='.5'});
+});
+const burger = document.getElementById('burger');
+const menu = document.getElementById('dropdownMenu');
+const overlay = document.getElementById('menuOverlay');
+burger.addEventListener('click', () => {
+  menu.classList.toggle('open');
+  overlay.classList.toggle('open');
+});
+overlay.addEventListener('click', () => {
+  menu.classList.remove('open');
+  overlay.classList.remove('open');
 });
 </script>
 </body>
