@@ -1076,6 +1076,7 @@ const IDX_ang={tie:0,jacket:0,pants:0};
 
 function idx_build(piece){
   const ring=document.getElementById('ring-'+piece);
+  if(!ring) return;
   ring.innerHTML='';
   for(let i=0;i<IDX_N;i++){
     const div=document.createElement('div');
@@ -1090,6 +1091,7 @@ function idx_build(piece){
 
 function idx_updateOpacities(piece) {
   const ring = document.getElementById('ring-' + piece);
+  if(!ring) return;
   const slides = ring.querySelectorAll('.rslide');
   slides.forEach((slide, i) => {
     // Angle of this slide relative to front (0 = facing viewer)
@@ -1141,11 +1143,13 @@ function idx_go(piece, idx) {
 function idx_next(p){idx_go(p,IDX_st[p]+1)}
 function idx_prev(p){idx_go(p,IDX_st[p]-1)}
 
-['tie','jacket','pants'].forEach(p => { idx_build(p); idx_updateOpacities(p); });
+['jacket','pants'].forEach(p => { idx_build(p); idx_updateOpacities(p); });
 
-// Swipe
-['tie','jacket','pants'].forEach(piece=>{
-  const row=document.querySelector('#ring-'+piece).closest('.piece-row');
+// Swipe (configurateur pieces only)
+['jacket','pants'].forEach(piece=>{
+  const el=document.querySelector('#ring-'+piece);
+  if(!el) return;
+  const row=el.closest('.piece-row');
   let sx=0,drag=false;
   row.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
   row.addEventListener('touchend',e=>{const dx=sx-e.changedTouches[0].clientX;if(Math.abs(dx)>30)dx>0?idx_next(piece):idx_prev(piece)});
@@ -1170,6 +1174,8 @@ const TIE_ang = {tie:0};
 
 function tie_build(piece) {
   const ring = document.getElementById('ring-'+piece);
+  if(!ring) return;
+  ring.innerHTML = '';
   TIELEUR_IMGS[piece].forEach((src,i) => {
     const div = document.createElement('div');
     div.className='rslide';
@@ -1320,7 +1326,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   // Initialize: show configurateur section
-  showSection('configurateur');
+  showSection('accueil');
 });
 
 // ─── SCROLL REVEAL ───
