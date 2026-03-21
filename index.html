@@ -889,13 +889,13 @@ footer{
 
   <!-- Breadcrumb -->
   <div class="breadcrumb">
+    <a href="#" onclick="showSection('boutique');return false;" style="display:flex;align-items:center;gap:6px;font-size:.7rem">&#8592; Retour</a>
+    <span>/</span>
     <a href="#" onclick="showSection('accueil');return false;">Accueil</a>
     <span>/</span>
-    <a href="#" onclick="navigateTo('tieleur','collection');return false;">Collection</a>
+    <a href="#" onclick="showSection('boutique');return false;">Collection</a>
     <span>/</span>
-    <a href="#">Nos Tieleurs</a>
-    <span>/</span>
-    <span style="color:#0a0a0a">Tieleur Nuit</span>
+    <span id="prod-breadcrumb" style="color:#0a0a0a">Tieleur Nuit</span>
   </div>
 
   <div class="product-wrap">
@@ -1219,6 +1219,8 @@ function showProduct(id) {
 
   name.textContent = p.name;
   material.textContent = p.material;
+  const bc = document.getElementById('prod-breadcrumb');
+  if (bc) bc.textContent = p.name;
   composition.innerHTML = p.composition;
   details.textContent = p.details;
   entretien.textContent = p.entretien;
