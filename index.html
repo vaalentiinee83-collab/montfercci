@@ -1226,10 +1226,10 @@ function showProduct(id) {
 
   if (p.img) {
     img.src = p.img;
-    img.style.width = '100%';
+    img.style.width = '80%';
     img.style.height = '100%';
-    img.style.objectFit = 'cover';
-    img.style.maxWidth = 'none';
+    img.style.objectFit = 'contain';
+    img.style.maxWidth = '420px';
   } else {
     img.style.width = '60%';
     img.style.maxWidth = '340px';
