@@ -1098,6 +1098,17 @@ function showSection(name) {
   if (section) {
     section.classList.add('active');
     window.scrollTo({top: 0, behavior: 'smooth'});
+    // Rebuild tieleur carousels after section becomes visible (height:100% computed at 0 while hidden)
+    if (name === 'tieleur') {
+      requestAnimationFrame(() => {
+        ['tie','jacket','pants'].forEach(p => {
+          tie_build(p);
+          tie_buildDots(p);
+          tie_updateOpacities(p);
+          tie_updateDots(p);
+        });
+      });
+    }
   }
 }
 
