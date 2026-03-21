@@ -713,6 +713,7 @@ footer{
       </div>
       <button class="tpiece-btn tpiece-next" onclick="tie_next('tie')" aria-label="Suivant">&#8594;</button>
       <div class="swiper-dots tpiece-dots" id="dots-tie"></div>
+      <p class="swiper-label" id="label-tie"></p>
     </div>
 
     <!-- BLAZER -->
@@ -727,6 +728,7 @@ footer{
       </div>
       <button class="tpiece-btn tpiece-next" onclick="tie_next('jacket')" aria-label="Suivant">&#8594;</button>
       <div class="swiper-dots tpiece-dots" id="dots-jacket"></div>
+      <p class="swiper-label" id="label-jacket"></p>
     </div>
 
     <!-- PANTALON -->
@@ -741,6 +743,7 @@ footer{
       </div>
       <button class="tpiece-btn tpiece-next" onclick="tie_next('pants')" aria-label="Suivant">&#8594;</button>
       <div class="swiper-dots tpiece-dots" id="dots-pants"></div>
+      <p class="swiper-label" id="label-pants"></p>
     </div>
 
   </div>
@@ -1488,7 +1491,8 @@ function tie_updateDots(piece) {
   document.querySelectorAll('#dots-'+piece+' .swiper-dot').forEach((d,i)=>{
     d.classList.toggle('active',i===TIE_st[piece]);
   });
-  document.getElementById('label-'+piece).textContent = (PIECE_LABELS[piece]||TIELEUR_LABELS)[TIE_st[piece]];
+  const lbl = document.getElementById('label-'+piece);
+  if (lbl) lbl.textContent = (PIECE_LABELS[piece]||TIELEUR_LABELS)[TIE_st[piece]];
 }
 
 function tie_updateOpacities(piece) {
