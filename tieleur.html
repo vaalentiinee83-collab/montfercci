@@ -31,17 +31,49 @@ header{
   background:rgba(255,255,255,.94);backdrop-filter:blur(14px);
   animation:slideDown .8s ease forwards;
 }
-.nav-links{display:flex;gap:36px;align-items:center}
-.nav-links a{
-  font-family:'Montserrat',sans-serif;font-size:.6rem;font-weight:300;
-  letter-spacing:.35em;text-transform:uppercase;color:#0a0a0a;
-  text-decoration:none;transition:opacity .2s;cursor:none;
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a,.nav-right a{
+  font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:300;
+  letter-spacing:.32em;text-transform:uppercase;color:#0a0a0a;
+  text-decoration:none;transition:opacity .2s;cursor:none;position:relative;
 }
-.nav-links a:hover{opacity:.45}
+.nav-links a::after,.nav-right a::after{
+  content:'';position:absolute;bottom:-3px;left:0;right:0;
+  height:1px;background:#0a0a0a;transform:scaleX(0);transform-origin:left;
+  transition:transform .3s cubic-bezier(.77,0,.175,1);
+}
+.nav-links a:hover::after,.nav-right a:hover::after{transform:scaleX(1)}
+.nav-links a:hover,.nav-right a:hover{opacity:.6}
 .logo-center{display:flex;flex-direction:column;align-items:center;text-decoration:none}
 .logo-img{height:62px;width:auto;display:block}
 .logo-tagline{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:.22em;color:#666;margin-top:3px}
-.nav-right{display:flex;gap:36px;align-items:center;justify-content:flex-end}
+.nav-right{display:flex;gap:32px;align-items:center;justify-content:flex-end}
+
+/* Hamburger mobile */
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:4px;z-index:200}
+.burger span{display:block;width:22px;height:1px;background:#0a0a0a;transition:all .3s}
+.burger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+/* Mobile nav overlay */
+.mobile-nav{
+  display:none;position:fixed;inset:0;background:rgba(255,255,255,.98);
+  z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:36px;
+  backdrop-filter:blur(10px);
+}
+.mobile-nav.open{display:flex}
+.mobile-nav a{
+  font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;
+  letter-spacing:.12em;color:#0a0a0a;text-decoration:none;cursor:none;
+  transition:opacity .2s;
+}
+.mobile-nav a:hover{opacity:.45}
+.mobile-nav-cta{
+  font-family:'Montserrat',sans-serif !important;
+  font-size:.7rem !important;letter-spacing:.4em !important;
+  border:1px solid #333;padding:14px 32px;margin-top:12px;
+}
 
 /* ─── HERO ─── */
 .hero{
@@ -310,6 +342,7 @@ footer{
   header{padding:0 20px}
   .nav-links{display:none}
   .nav-right{display:none}
+  .burger{display:flex}
   section{padding:70px 24px}
   .collection-grid{grid-template-columns:1fr}
   .sf-inner{grid-template-columns:1fr;gap:40px}
@@ -325,9 +358,20 @@ footer{
 <div class="cursor-ring" id="cursorRing"></div>
 
 <!-- ═══ HEADER ═══ -->
+<!-- Mobile nav overlay -->
+<nav class="mobile-nav" id="mobileNav">
+  <a href="#accueil" onclick="closeMenu()">Accueil</a>
+  <a href="#collection" onclick="closeMenu()">Produits</a>
+  <a href="#savoir-faire" onclick="closeMenu()">Savoir-faire</a>
+  <a href="#manifeste" onclick="closeMenu()">À propos</a>
+  <a href="#inscription" onclick="closeMenu()">Pré-commander</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+</nav>
+
 <header>
   <nav class="nav-links">
-    <a href="#collection">Collection</a>
+    <a href="#accueil">Accueil</a>
+    <a href="#collection">Produits</a>
     <a href="#savoir-faire">Savoir-faire</a>
   </nav>
   <a href="#" class="logo-center">
@@ -335,9 +379,13 @@ footer{
     <span class="logo-tagline">PARIS</span>
   </a>
   <nav class="nav-right">
+    <a href="#manifeste">À propos</a>
     <a href="#inscription">Pré-commander</a>
     <a href="#contact">Contact</a>
   </nav>
+  <button class="burger" id="burgerBtn" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </header>
 
 <!-- ═══ HERO ═══ -->
@@ -613,6 +661,20 @@ const observer = new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
 },{threshold:0.12});
 document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ─── MOBILE MENU ───
+function toggleMenu() {
+  const nav = document.getElementById('mobileNav');
+  const btn = document.getElementById('burgerBtn');
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+  document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+}
+function closeMenu() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('burgerBtn').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
 // ─── FORM ───
 function handleSubmit(){
