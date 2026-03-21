@@ -538,9 +538,9 @@ footer{
         <a href="#" onclick="showSection('boutique');return false;" class="nav-collection">Collection</a>
         <div class="dropdown">
           <a href="#" onclick="showSection('tieleur');return false;">Nos Tieleurs</a>
-          <a href="#" onclick="showSection('boutique');return false;">Nos Vestes</a>
-          <a href="#" onclick="showSection('boutique');return false;">Nos Pantalons</a>
-          <a href="#" onclick="showSection('boutique');return false;">Nos Accessoires</a>
+          <a href="#" onclick="showBoutiqueFiltered('veste');return false;">Nos Vestes</a>
+          <a href="#" onclick="showBoutiqueFiltered('pantalon');return false;">Nos Pantalons</a>
+          <a href="#" onclick="showBoutiqueFiltered('accessoire');return false;">Nos Accessoires</a>
         </div>
       </div>
       <a href="#" onclick="navigateTo('tieleur','savoir-faire');return false;">Savoir-faire</a>
@@ -625,10 +625,10 @@ footer{
       <h2 class="section-title reveal" style="margin-bottom:40px">La <em>Boutique</em></h2>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px">
         <button onclick="filterBoutique(this,'all')" style="font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;border:1px solid #0a0a0a;background:#0a0a0a;color:#fff;cursor:none" class="filter-btn filter-active">Tous</button>
-        <button onclick="filterBoutique(this,'tieleur')" style="font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;border:1px solid rgba(0,0,0,.2);background:transparent;color:#0a0a0a;cursor:none" class="filter-btn">Tieleurs</button>
-        <button onclick="filterBoutique(this,'veste')" style="font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;border:1px solid rgba(0,0,0,.2);background:transparent;color:#0a0a0a;cursor:none" class="filter-btn">Vestes</button>
-        <button onclick="filterBoutique(this,'pantalon')" style="font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;border:1px solid rgba(0,0,0,.2);background:transparent;color:#0a0a0a;cursor:none" class="filter-btn">Pantalons</button>
-        <button onclick="filterBoutique(this,'accessoire')" style="font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;border:1px solid rgba(0,0,0,.2);background:transparent;color:#0a0a0a;cursor:none" class="filter-btn">Accessoires</button>
+        <button onclick="filterBoutique(this,'tieleur')" data-cat="tieleur" style="font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;border:1px solid rgba(0,0,0,.2);background:transparent;color:#0a0a0a;cursor:none" class="filter-btn">Tieleurs</button>
+        <button onclick="filterBoutique(this,'veste')" data-cat="veste" style="font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;border:1px solid rgba(0,0,0,.2);background:transparent;color:#0a0a0a;cursor:none" class="filter-btn">Vestes</button>
+        <button onclick="filterBoutique(this,'pantalon')" data-cat="pantalon" style="font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;border:1px solid rgba(0,0,0,.2);background:transparent;color:#0a0a0a;cursor:none" class="filter-btn">Pantalons</button>
+        <button onclick="filterBoutique(this,'accessoire')" data-cat="accessoire" style="font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;border:1px solid rgba(0,0,0,.2);background:transparent;color:#0a0a0a;cursor:none" class="filter-btn">Accessoires</button>
       </div>
       <div id="boutique-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:40px;max-width:1200px">
         <div class="boutique-item" data-cat="tieleur" onclick="showSection('tieleur')" style="cursor:none">
@@ -1108,6 +1108,12 @@ document.querySelectorAll('button,a,input,label,.color-row,.thumb,.related-card,
 
 
 // ─── BOUTIQUE FILTER ───
+function showBoutiqueFiltered(cat) {
+  showSection('boutique');
+  const btn = document.querySelector(`.filter-btn[data-cat="${cat}"]`);
+  if (btn) filterBoutique(btn, cat);
+}
+
 function filterBoutique(btn, cat) {
   document.querySelectorAll('.filter-btn').forEach(b => {
     b.style.background = 'transparent';
