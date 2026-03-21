@@ -965,7 +965,7 @@ footer{
       </div>
 
       <!-- Sizes -->
-      <span class="option-label">Taille</span>
+      <span class="option-label" id="size-label">Taille</span>
       <div class="sizes" id="sizeOptions">
         <button class="size-btn" onclick="selectSize(this)">XS</button>
         <button class="size-btn active" onclick="selectSize(this)">S</button>
@@ -1009,7 +1009,7 @@ footer{
           </div>
         </div>
 
-        <div class="acc-item">
+        <div class="acc-item" id="acc-tailles">
           <button class="acc-trigger" onclick="toggleAcc(this)">
             <span class="acc-trigger-label">Guide des tailles</span>
             <span class="acc-icon">+</span>
@@ -1211,7 +1211,8 @@ const PRODUCTS = {
     details: 'Cravate 7 plis cousue à la main. Largeur 8 cm. Longueur 148 cm. Nœud intérieur pour maintien. Pièce signature de la maison.',
     entretien: 'Nettoyage à sec uniquement. Ne pas tordre. Repasser à faible température sous un linge humide.',
     tailles: 'Longueur standard 148 cm. Ajustement possible sur demande. Contactez-nous pour un conseil personnalisé.',
-    related: ['blazer-large', 'pantalon-large']
+    related: ['blazer-large', 'pantalon-large'],
+    showSizes: false
   }
 };
 
@@ -1247,6 +1248,12 @@ function showProduct(id) {
     img.style.height = 'auto';
     img.style.objectFit = 'contain';
   }
+
+  // Tailles
+  const showSizes = p.showSizes !== false;
+  document.getElementById('size-label').style.display = showSizes ? '' : 'none';
+  document.getElementById('sizeOptions').style.display = showSizes ? '' : 'none';
+  document.getElementById('acc-tailles').style.display = showSizes ? '' : 'none';
 
   // Produits associés
   const grid = document.getElementById('related-grid');
