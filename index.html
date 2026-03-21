@@ -1061,6 +1061,8 @@ footer{
         <button class="size-btn" onclick="selectSize(this)">XL</button>
       </div>
 
+      <button id="prod-panier" style="display:block;width:100%;border:1px solid #0a0a0a;background:transparent;padding:14px 0;text-align:center;font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:#0a0a0a;cursor:none;transition:all .3s;margin-bottom:20px" onmouseenter="this.style.background='#0a0a0a';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='#0a0a0a'">Ajouter au panier</button>
+
       <p class="made-in">Made in Europe</p>
 
       <!-- Accordion -->
@@ -1340,6 +1342,7 @@ function showProduct(id) {
   const showSizes = p.showSizes !== false;
   document.getElementById('size-label').style.display = showSizes ? '' : 'none';
   document.getElementById('sizeOptions').style.display = showSizes ? '' : 'none';
+  document.getElementById('prod-panier').style.display = showSizes ? 'block' : 'none';
   document.getElementById('acc-tailles').style.display = showSizes ? '' : 'none';
 
   // Produits associés
