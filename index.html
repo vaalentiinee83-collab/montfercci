@@ -689,7 +689,7 @@ footer{
   <div class="header-top">
     <nav class="nav-links">
       <div class="nav-item">
-        <a href="#" onclick="showSection('boutique');return false;" class="nav-collection">Collection</a>
+        <a href="#" onclick="showBoutiqueFiltered('all');return false;" class="nav-collection">Collection</a>
         <div class="dropdown">
           <a href="#" onclick="showSection('tieleur');return false;">Nos Tieleurs</a>
           <a href="#" onclick="showBoutiqueFiltered('veste');return false;">Nos Vestes</a>
@@ -777,8 +777,8 @@ footer{
 <div id="section-boutique" class="page-section">
   <div style="padding-top:100px">
     <section style="padding:60px 48px 0">
-      <p class="section-eyebrow reveal" style="margin-bottom:12px">Notre sélection</p>
-      <h2 class="section-title reveal" style="margin-bottom:40px">La <em>Boutique</em></h2>
+      <p class="section-eyebrow reveal" id="boutique-eyebrow" style="margin-bottom:12px">Notre sélection</p>
+      <h2 class="section-title reveal" id="boutique-title" style="margin-bottom:40px">La <em>Boutique</em></h2>
       <div id="boutique-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:40px;max-width:1200px">
         <div class="boutique-item" data-cat="tieleur" onclick="showProduct('tieleur-nuit')" style="cursor:none">
           <div style="height:380px;background:#f5f5f5;margin-bottom:16px;display:flex;align-items:center;justify-content:center;overflow:hidden"><span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#888;font-style:italic">Tieleur</span></div>
@@ -1485,8 +1485,18 @@ function showProduct(id) {
 }
 
 // ─── BOUTIQUE FILTER ───
+const CAT_LABELS = {
+  veste:     { eyebrow: 'Collection', title: 'Nos <em>Vestes</em>' },
+  pantalon:  { eyebrow: 'Collection', title: 'Nos <em>Pantalons</em>' },
+  accessoire:{ eyebrow: 'Collection', title: 'Nos <em>Accessoires</em>' },
+  all:       { eyebrow: 'Notre sélection', title: 'La <em>Boutique</em>' }
+};
+
 function showBoutiqueFiltered(cat) {
   showSection('boutique');
+  const lbl = CAT_LABELS[cat] || CAT_LABELS.all;
+  document.getElementById('boutique-eyebrow').textContent = lbl.eyebrow;
+  document.getElementById('boutique-title').innerHTML = lbl.title;
   document.querySelectorAll('.boutique-item').forEach(item => {
     item.style.display = (cat === 'all' || item.dataset.cat === cat) ? '' : 'none';
   });
