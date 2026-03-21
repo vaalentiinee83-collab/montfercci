@@ -1103,8 +1103,9 @@ document.querySelectorAll('button,a,input,label,.color-row,.thumb,.related-card,
 // ─── BOUTIQUE FILTER ───
 function showBoutiqueFiltered(cat) {
   showSection('boutique');
-  const btn = document.querySelector(`.filter-btn[data-cat="${cat}"]`);
-  if (btn) filterBoutique(btn, cat);
+  document.querySelectorAll('.boutique-item').forEach(item => {
+    item.style.display = (cat === 'all' || item.dataset.cat === cat) ? '' : 'none';
+  });
 }
 
 function filterBoutique(btn, cat) {
