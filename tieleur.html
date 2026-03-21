@@ -25,27 +25,80 @@ body{background:#fff;color:#0a0a0a;font-family:'Lora',serif;font-weight:300;over
 /* ─── HEADER ─── */
 header{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:0 48px;height:90px;
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid rgba(51,51,51,.12);
-  background:rgba(255,255,255,.94);backdrop-filter:blur(14px);
+  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
   animation:slideDown .8s ease forwards;
+  border-bottom:1px solid rgba(51,51,51,.13);
+}
+.header-top{
+  padding:0 48px;height:80px;
+  display:flex;align-items:center;justify-content:space-between;
 }
 .nav-links{display:flex;gap:36px;align-items:center}
-.nav-links a{
+.nav-links a,.nav-right a{
   font-family:'Montserrat',sans-serif;font-size:.6rem;font-weight:300;
-  letter-spacing:.35em;text-transform:uppercase;color:#0a0a0a;
+  letter-spacing:.18em;text-transform:uppercase;color:#0a0a0a;
   text-decoration:none;transition:opacity .2s;cursor:none;
 }
-.nav-links a:hover{opacity:.45}
-.logo-center{display:flex;flex-direction:column;align-items:center;text-decoration:none}
-.logo-img{height:62px;width:auto;display:block}
-.logo-tagline{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:.22em;color:#666;margin-top:3px}
-.nav-right{display:flex;gap:36px;align-items:center;justify-content:flex-end}
+.nav-links a:hover,.nav-right a:hover{opacity:.5}
+.nav-collection{font-weight:600 !important;letter-spacing:.18em}
+.logo-center{display:flex;flex-direction:column;align-items:center;text-decoration:none;position:absolute;left:50%;transform:translateX(-50%)}
+.logo-img{height:68px;width:auto;display:block}
+.logo-tagline{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:.28em;color:#888;margin-top:2px;text-transform:uppercase}
+.nav-right{display:flex;gap:28px;align-items:center}
+.nav-cart{
+  display:flex;align-items:center;justify-content:center;
+  width:36px;height:36px;cursor:none;color:#0a0a0a;
+  transition:opacity .2s;
+}
+.nav-cart:hover{opacity:.5}
+.nav-cart svg{width:20px;height:20px}
+
+/* ── DROPDOWN ── */
+.nav-item{position:relative}
+.nav-item:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+.dropdown{
+  position:absolute;top:100%;left:0;
+  background:#fff;border-top:2px solid #0a0a0a;
+  padding:22px 0;min-width:180px;
+  opacity:0;visibility:hidden;
+  transform:translateY(-6px);
+  transition:opacity .22s ease,transform .22s ease,visibility .22s;
+  z-index:200;
+}
+.dropdown a{
+  display:block;padding:10px 28px;
+  font-family:'Cormorant Garamond',serif !important;
+  font-size:1rem !important;font-weight:400 !important;
+  letter-spacing:.04em !important;text-transform:none !important;
+  color:#0a0a0a;text-decoration:none;cursor:none;
+  transition:padding-left .2s ease;
+}
+.dropdown a:hover{padding-left:36px;opacity:1 !important}
+
+/* Hamburger mobile */
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:4px;z-index:200}
+.burger span{display:block;width:22px;height:1px;background:#0a0a0a;transition:all .3s}
+.burger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+/* Mobile nav overlay */
+.mobile-nav{
+  display:none;position:fixed;inset:0;background:rgba(255,255,255,.98);
+  z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:32px;
+  backdrop-filter:blur(10px);
+}
+.mobile-nav.open{display:flex}
+.mobile-nav a{
+  font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;
+  letter-spacing:.12em;color:#0a0a0a;text-decoration:none;cursor:none;
+  transition:opacity .2s;
+}
+.mobile-nav a:hover{opacity:.45}
 
 /* ─── HERO ─── */
 .hero{
-  min-height:100vh;padding-top:90px;
+  min-height:100vh;padding-top:80px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   position:relative;overflow:hidden;
 }
@@ -307,9 +360,11 @@ footer{
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:768px){
-  header{padding:0 20px}
+  .header-top{padding:0 20px}
   .nav-links{display:none}
   .nav-right{display:none}
+  .burger{display:flex}
+  .logo-center{position:static;transform:none}
   section{padding:70px 24px}
   .collection-grid{grid-template-columns:1fr}
   .sf-inner{grid-template-columns:1fr;gap:40px}
@@ -325,9 +380,28 @@ footer{
 <div class="cursor-ring" id="cursorRing"></div>
 
 <!-- ═══ HEADER ═══ -->
+<!-- Mobile nav overlay -->
+<nav class="mobile-nav" id="mobileNav">
+  <a href="#collection" onclick="closeMenu()">Collection</a>
+  <a href="#savoir-faire" onclick="closeMenu()">Notre histoire</a>
+  <a href="#savoir-faire" onclick="closeMenu()">Savoir-faire</a>
+  <a href="#inscription" onclick="closeMenu()">Pré-commander</a>
+  <a href="#contact" onclick="closeMenu()">Contactez-nous</a>
+</nav>
+
 <header>
+  <div class="header-top">
   <nav class="nav-links">
-    <a href="#collection">Collection</a>
+    <div class="nav-item">
+      <a href="#collection" class="nav-collection">Collection</a>
+      <div class="dropdown">
+        <a href="#collection">Nos Tieleurs</a>
+        <a href="#collection">Nos Vestes</a>
+        <a href="#collection">Nos Pantalons</a>
+        <a href="#collection">Nos Accessoires</a>
+      </div>
+    </div>
+    <a href="#manifeste">Notre histoire</a>
     <a href="#savoir-faire">Savoir-faire</a>
   </nav>
   <a href="#" class="logo-center">
@@ -335,9 +409,17 @@ footer{
     <span class="logo-tagline">PARIS</span>
   </a>
   <nav class="nav-right">
-    <a href="#inscription">Pré-commander</a>
-    <a href="#contact">Contact</a>
+    <a href="#contact">Contactez-nous</a>
+    <a href="#inscription" class="nav-cart" aria-label="Panier">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+    </a>
   </nav>
+  <button class="burger" id="burgerBtn" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  </div>
 </header>
 
 <!-- ═══ HERO ═══ -->
@@ -613,6 +695,20 @@ const observer = new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
 },{threshold:0.12});
 document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ─── MOBILE MENU ───
+function toggleMenu() {
+  const nav = document.getElementById('mobileNav');
+  const btn = document.getElementById('burgerBtn');
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+  document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+}
+function closeMenu() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('burgerBtn').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
 // ─── FORM ───
 function handleSubmit(){
