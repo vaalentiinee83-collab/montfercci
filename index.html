@@ -202,15 +202,50 @@ header{
 }
 .swiper-dot.active{background:#0a0a0a;transform:scale(1.3)}
 
-/* ─── TIELEUR PIECES — layout vertical pleine largeur ─── */
+/* ─── TIELEUR LAYOUT ─── */
+.tieleur-layout{
+  display:flex;align-items:flex-start;justify-content:center;
+  gap:40px;width:100%;
+}
 .tieleur-pieces{
-  width:100%;position:relative;z-index:3;
+  flex:1;position:relative;z-index:3;
   animation:fadeUp 1.1s .5s ease both;
 }
 .tieleur-piece-row{
   width:100%;position:relative;
   display:flex;align-items:center;justify-content:center;
 }
+/* ─── OPTIONS DROITE ─── */
+.tieleur-opts{
+  width:180px;flex-shrink:0;
+  display:flex;flex-direction:column;
+  padding-top:20px;gap:0;
+}
+.topt-block{
+  display:flex;flex-direction:column;align-items:flex-start;
+}
+.topt-label{
+  font-family:'Cormorant Garamond',serif;font-size:.95rem;
+  color:#0a0a0a;margin-bottom:10px;
+}
+.topt-sizes{
+  display:flex;flex-direction:column;gap:4px;
+}
+.topt-size-btn{
+  background:none;border:none;
+  font-family:'Cormorant Garamond',serif;font-size:.9rem;
+  color:#888;cursor:none;text-align:left;padding:2px 0;
+  transition:color .2s;
+}
+.topt-size-btn:hover,.topt-size-btn.active{color:#0a0a0a;font-weight:600}
+.topt-panier{
+  display:block;width:100%;border:1px solid #0a0a0a;
+  background:transparent;padding:10px 0;text-align:center;
+  font-family:'Montserrat',sans-serif;font-size:.55rem;
+  font-weight:300;letter-spacing:.25em;text-transform:uppercase;
+  color:#0a0a0a;cursor:none;transition:all .3s;
+}
+.topt-panier:hover{background:#0a0a0a;color:#fff}
 .tpiece-cfg{
   width:100%;max-width:680px;
   flex:1 1 auto;
@@ -695,57 +730,107 @@ footer{
 <div id="section-tieleur" class="page-section">
   <section class="hero" id="accueil">
   <div class="hero-bg"></div>
-  <p class="hero-eyebrow">Nouvelle Collection — 2025</p>
-  <h1 class="hero-title">La <em>Tieleur</em><br>Collection</h1>
-  <p class="hero-sub">Cravates de caractère, taillées pour durer.</p>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.8rem;letter-spacing:.06em;color:#0a0a0a;margin-bottom:12px">Le Tieleur</h2>
 
-  <div class="tieleur-pieces">
+  <div class="tieleur-layout">
 
-    <!-- CRAVATE -->
-    <div class="tieleur-piece-row">
-      <button class="tpiece-btn tpiece-prev" onclick="tie_prev('tie')" aria-label="Précédent">&#8592;</button>
-      <div class="tpiece-cfg">
-        <div class="piece-row row-tie">
-          <div class="scene">
-            <div class="ring" id="ring-tie"></div>
+    <div class="tieleur-pieces">
+
+      <!-- CRAVATE -->
+      <div class="tieleur-piece-row">
+        <button class="tpiece-btn tpiece-prev" onclick="tie_prev('tie')" aria-label="Précédent">&#8592;</button>
+        <div class="tpiece-cfg">
+          <div class="piece-row row-tie">
+            <div class="scene">
+              <div class="ring" id="ring-tie"></div>
+            </div>
           </div>
         </div>
+        <button class="tpiece-btn tpiece-next" onclick="tie_next('tie')" aria-label="Suivant">&#8594;</button>
+        <div class="swiper-dots tpiece-dots" id="dots-tie"></div>
+        <p class="swiper-label" id="label-tie"></p>
       </div>
-      <button class="tpiece-btn tpiece-next" onclick="tie_next('tie')" aria-label="Suivant">&#8594;</button>
-      <div class="swiper-dots tpiece-dots" id="dots-tie"></div>
-      <p class="swiper-label" id="label-tie"></p>
-    </div>
 
-    <!-- BLAZER -->
-    <div class="tieleur-piece-row">
-      <button class="tpiece-btn tpiece-prev" onclick="tie_prev('jacket')" aria-label="Précédent">&#8592;</button>
-      <div class="tpiece-cfg">
-        <div class="piece-row row-jacket">
-          <div class="scene">
-            <div class="ring" id="ring-jacket"></div>
+      <!-- BLAZER -->
+      <div class="tieleur-piece-row">
+        <button class="tpiece-btn tpiece-prev" onclick="tie_prev('jacket')" aria-label="Précédent">&#8592;</button>
+        <div class="tpiece-cfg">
+          <div class="piece-row row-jacket">
+            <div class="scene">
+              <div class="ring" id="ring-jacket"></div>
+            </div>
           </div>
         </div>
+        <button class="tpiece-btn tpiece-next" onclick="tie_next('jacket')" aria-label="Suivant">&#8594;</button>
+        <div class="swiper-dots tpiece-dots" id="dots-jacket"></div>
+        <p class="swiper-label" id="label-jacket"></p>
       </div>
-      <button class="tpiece-btn tpiece-next" onclick="tie_next('jacket')" aria-label="Suivant">&#8594;</button>
-      <div class="swiper-dots tpiece-dots" id="dots-jacket"></div>
-      <p class="swiper-label" id="label-jacket"></p>
-    </div>
 
-    <!-- PANTALON -->
-    <div class="tieleur-piece-row">
-      <button class="tpiece-btn tpiece-prev" onclick="tie_prev('pants')" aria-label="Précédent">&#8592;</button>
-      <div class="tpiece-cfg">
-        <div class="piece-row row-pants">
-          <div class="scene">
-            <div class="ring" id="ring-pants"></div>
+      <!-- PANTALON -->
+      <div class="tieleur-piece-row">
+        <button class="tpiece-btn tpiece-prev" onclick="tie_prev('pants')" aria-label="Précédent">&#8592;</button>
+        <div class="tpiece-cfg">
+          <div class="piece-row row-pants">
+            <div class="scene">
+              <div class="ring" id="ring-pants"></div>
+            </div>
           </div>
         </div>
+        <button class="tpiece-btn tpiece-next" onclick="tie_next('pants')" aria-label="Suivant">&#8594;</button>
+        <div class="swiper-dots tpiece-dots" id="dots-pants"></div>
+        <p class="swiper-label" id="label-pants"></p>
       </div>
-      <button class="tpiece-btn tpiece-next" onclick="tie_next('pants')" aria-label="Suivant">&#8594;</button>
-      <div class="swiper-dots tpiece-dots" id="dots-pants"></div>
-      <p class="swiper-label" id="label-pants"></p>
+
     </div>
 
+    <!-- ─── OPTIONS DROITE ─── -->
+    <div class="tieleur-opts">
+
+      <!-- Option cravate -->
+      <div class="topt-block" style="height:140px;justify-content:center">
+        <span style="display:inline-block;border:1px solid #ccc;padding:4px 12px;font-family:'Cormorant Garamond',serif;font-size:.85rem;color:#666">Sans cravate</span>
+      </div>
+
+      <!-- Option blazer -->
+      <div class="topt-block" style="height:310px;justify-content:center">
+        <p class="topt-label">Taille du blazer</p>
+        <div class="topt-sizes" id="topt-jacket-sizes">
+          <button class="topt-size-btn active" onclick="selectTieleurSize(this,'jacket')">XS</button>
+          <button class="topt-size-btn" onclick="selectTieleurSize(this,'jacket')">S</button>
+          <button class="topt-size-btn" onclick="selectTieleurSize(this,'jacket')">M</button>
+          <button class="topt-size-btn" onclick="selectTieleurSize(this,'jacket')">L</button>
+          <button class="topt-size-btn" onclick="selectTieleurSize(this,'jacket')">XL</button>
+        </div>
+      </div>
+
+      <!-- Option pantalon -->
+      <div class="topt-block" style="height:430px;justify-content:center">
+        <p class="topt-label">Taille du pantalon</p>
+        <div class="topt-sizes" id="topt-pants-sizes">
+          <button class="topt-size-btn active" onclick="selectTieleurSize(this,'pants')">XS</button>
+          <button class="topt-size-btn" onclick="selectTieleurSize(this,'pants')">S</button>
+          <button class="topt-size-btn" onclick="selectTieleurSize(this,'pants')">M</button>
+          <button class="topt-size-btn" onclick="selectTieleurSize(this,'pants')">L</button>
+          <button class="topt-size-btn" onclick="selectTieleurSize(this,'pants')">XL</button>
+        </div>
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px;cursor:none" onclick="selectTieleurColor(this,'noir')">
+            <div style="width:18px;height:18px;border-radius:50%;background:#0a0a0a;border:1px solid #ccc"></div>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:.95rem">Noir</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;cursor:none" onclick="selectTieleurColor(this,'marine')">
+            <div style="width:18px;height:18px;border-radius:50%;background:#1a2d5a;border:1px solid #ccc"></div>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:.95rem">Marine</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;cursor:none" onclick="selectTieleurColor(this,'creme')">
+            <div style="width:18px;height:18px;border-radius:50%;background:#e8dcc8;border:1px solid #ccc"></div>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:.95rem">Crème</span>
+          </div>
+        </div>
+        <button class="topt-panier" style="margin-top:28px">Ajouter au panier</button>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -1534,6 +1619,15 @@ function tie_go(piece,idx) {
 
 function tie_next(p){tie_go(p,TIE_st[p]+1)}
 function tie_prev(p){tie_go(p,TIE_st[p]-1)}
+
+function selectTieleurSize(btn, piece) {
+  btn.closest('.topt-sizes').querySelectorAll('.topt-size-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function selectTieleurColor(row) {
+  row.parentElement.querySelectorAll('div[onclick]').forEach(r => r.style.fontWeight = '');
+  row.style.fontWeight = '600';
+}
 
 ['tie','jacket','pants'].forEach(p => {
   tie_build(p);
