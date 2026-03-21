@@ -1296,7 +1296,7 @@ function tie_updateOpacities(piece) {
     if(eff<0) eff+=360;
     const rad = eff*Math.PI/180;
     const cos = Math.cos(rad);
-    const opacity = 1;
+    const opacity = 0.12+(cos+1)/2*0.88;
     const scale   = 0.75+(cos+1)/2*0.25;
     slide.style.opacity = opacity.toFixed(3);
     slide.style.transform = `translateX(-50%) rotateY(${slideDeg}deg) translateZ(${TIE_R}px) scale(${scale.toFixed(3)})`;
