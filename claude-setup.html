@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connecter Claude Code à GitHub</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 680px;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      color: #f0f6fc;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #8b949e;
+      font-size: 1rem;
+    }
+
+    .logo {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 16px;
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: #238636;
+      color: #fff;
+      border-radius: 50%;
+      font-weight: bold;
+      font-size: 0.9rem;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .step-header h2 {
+      font-size: 1.1rem;
+      color: #f0f6fc;
+    }
+
+    .code-block {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #79c0ff;
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #8b949e;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: #30363d;
+      color: #c9d1d9;
+    }
+
+    .copy-btn.copied {
+      color: #3fb950;
+      border-color: #3fb950;
+    }
+
+    .note {
+      background: #161b22;
+      border-left: 3px solid #d29922;
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.875rem;
+      color: #e3b341;
+      margin-top: 10px;
+    }
+
+    .success-note {
+      border-left-color: #3fb950;
+      color: #3fb950;
+    }
+
+    .action-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #238636;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.2s;
+      margin-top: 10px;
+    }
+
+    .action-btn:hover {
+      background: #2ea043;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #30363d;
+      margin: 20px 0;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #0d419d;
+      color: #79c0ff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      margin-right: 6px;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 0.875rem;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #8b949e;
+    }
+
+    .dot.active {
+      background: #3fb950;
+      box-shadow: 0 0 6px #3fb950;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">🤖</div>
+    <h1>Connecter Claude Code</h1>
+    <p>Guide pour utiliser Claude Code dans GitHub Codespaces</p>
+  </div>
+
+  <!-- Étape 1 -->
+  <div class="card">
+    <div class="step-header">
+      <span class="step-number">1</span>
+      <h2>Installe Node.js (si pas déjà fait)</h2>
+    </div>
+    <div class="code-block">
+      node --version
+      <button class="copy-btn" onclick="copyCode(this, 'node --version')">Copier</button>
+    </div>
+    <div class="note">
+      ⚠️ Si la commande échoue, installe Node.js depuis nodejs.org
+    </div>
+  </div>
+
+  <!-- Étape 2 -->
+  <div class="card">
+    <div class="step-header">
+      <span class="step-number">2</span>
+      <h2>Installe Claude Code via npm</h2>
+    </div>
+    <div class="code-block">
+      npm install -g @anthropic-ai/claude-code
+      <button class="copy-btn" onclick="copyCode(this, 'npm install -g @anthropic-ai/claude-code')">Copier</button>
+    </div>
+  </div>
+
+  <!-- Étape 3 -->
+  <div class="card">
+    <div class="step-header">
+      <span class="step-number">3</span>
+      <h2>Lance Claude Code dans ton projet</h2>
+    </div>
+    <div class="code-block">
+      cd ton-projet && claude
+      <button class="copy-btn" onclick="copyCode(this, 'cd ton-projet && claude')">Copier</button>
+    </div>
+    <div class="note success-note">
+      ✅ Claude va ouvrir un lien de connexion dans ton navigateur pour te connecter avec ton compte Anthropic.
+    </div>
+  </div>
+
+  <!-- Étape 4 -->
+  <div class="card">
+    <div class="step-header">
+      <span class="step-number">4</span>
+      <h2>Configure ton token GitHub (optionnel)</h2>
+    </div>
+    <p style="font-size:0.9rem; color:#8b949e; margin-bottom:12px;">
+      Pour que Claude puisse interagir avec tes repos GitHub (issues, PRs, etc.) :
+    </p>
+    <div class="code-block">
+      export GITHUB_TOKEN=ton_token_ici
+      <button class="copy-btn" onclick="copyCode(this, 'export GITHUB_TOKEN=ton_token_ici')">Copier</button>
+    </div>
+    <hr class="divider"/>
+    <p style="font-size:0.85rem; color:#8b949e;">
+      Génère un token sur : <span class="tag">GitHub → Settings → Developer settings → Personal access tokens</span>
+    </p>
+  </div>
+
+  <!-- Statut -->
+  <div class="card">
+    <h2 style="color:#f0f6fc; margin-bottom:16px;">Vérification rapide</h2>
+    <div class="code-block">
+      claude --version
+      <button class="copy-btn" onclick="copyCode(this, 'claude --version')">Copier</button>
+    </div>
+    <div class="status-indicator">
+      <div class="dot active"></div>
+      <span>Si tu vois un numéro de version → Claude Code est bien installé !</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function copyCode(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copié !';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copier';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+</script>
+
+</body>
+</html>
