@@ -163,8 +163,8 @@ header{
   position:relative;display:flex;align-items:center;justify-content:center;overflow:visible;
 }
 .piece-row.row-tie{height:340px}
-.scene{width:100%;height:100%;position:relative}
-.ring{width:100%;height:100%;position:relative}
+.scene{perspective:900px;perspective-origin:50% 50%;width:100%;height:100%;position:relative}
+.ring{width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,0,.2,1);position:relative}
 .rslide{position:absolute;width:160px;height:100%;left:50%;transform-origin:center center}
 .rslide img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
 
@@ -272,7 +272,7 @@ header{
 .tieleur-pieces .piece-row.row-tie    {height:180px}
 .tieleur-pieces .piece-row.row-jacket {height:380px}
 .tieleur-pieces .piece-row.row-pants  {height:500px}
-.tieleur-pieces .rslide{width:260px}
+.tieleur-pieces .rslide{width:220px}
 .tieleur-pieces .piece-row.row-jacket{margin-top:0}
 .tieleur-pieces .piece-row.row-pants{margin-top:0}
 
@@ -1714,17 +1714,37 @@ function tie_updateDots(piece) {
 function tie_updateOpacities(piece) {
   const ring = document.getElementById('ring-'+piece);
   ring.querySelectorAll('.rslide').forEach((slide,i) => {
-    const active = i === TIE_st[piece];
-    slide.style.opacity = active ? '1' : '0';
-    slide.style.transform = 'translateX(-50%)';
-    slide.style.transition = 'opacity .4s ease';
+    const slideDeg = (360/TIE_N)*i;
+    let eff = (slideDeg + TIE_ang[piece]) % 360;
+    if(eff<0) eff+=360;
+    const cos = Math.cos(eff*Math.PI/180);
+    const scale = 0.75+(cos+1)/2*0.25;
+    const opacity = 0.35+(cos+1)/2*0.65;
+    slide.style.opacity = opacity.toFixed(3);
+    slide.style.transform = `translateX(-50%) rotateY(${slideDeg}deg) translateZ(${TIE_R}px) scale(${scale.toFixed(3)})`;
   });
 }
 
 function tie_go(piece,idx) {
+  const prev = TIE_st[piece];
   TIE_st[piece] = ((idx%TIE_N)+TIE_N)%TIE_N;
-  tie_updateOpacities(piece);
+  let d = TIE_st[piece]-prev;
+  if(d>TIE_N/2) d-=TIE_N;
+  if(d<-TIE_N/2) d+=TIE_N;
+  TIE_ang[piece] -= d*(360/TIE_N);
+  document.getElementById('ring-'+piece).style.transform = `rotateY(${TIE_ang[piece]}deg)`;
   tie_updateDots(piece);
+  const start=performance.now(), dur=650;
+  const startAng=TIE_ang[piece]+d*(360/TIE_N), endAng=TIE_ang[piece];
+  function frame(now){
+    const t=Math.min((now-start)/dur,1);
+    const ease=t<.5?2*t*t:-1+(4-2*t)*t;
+    TIE_ang[piece]=startAng+(endAng-startAng)*ease;
+    tie_updateOpacities(piece);
+    if(t<1) requestAnimationFrame(frame);
+    else TIE_ang[piece]=endAng;
+  }
+  requestAnimationFrame(frame);
 }
 
 function tie_next(p){tie_go(p,TIE_st[p]+1)}
