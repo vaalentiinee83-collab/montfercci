@@ -924,7 +924,7 @@ footer{
       <!-- Related products -->
       <div class="related">
         <span class="related-label">Produits associés</span>
-        <div class="related-grid">
+        <div class="related-grid" id="related-grid">
           <div class="related-card" onclick="showSection('produit')">
             <div class="related-card-img">
               <img src="data:image/png;base64,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" alt="Tieleur Onyx">
@@ -1122,7 +1122,8 @@ const PRODUCTS = {
     composition: 'Tissus Italiens<br>100 % soie<br>Doublure 100 % viscose',
     details: 'Cravate 7 plis cousue à la main. Doublure en soie. Largeur 8 cm. Longueur 148 cm. Nœud intérieur pour maintien.',
     entretien: 'Nettoyage à sec uniquement. Ne pas tordre. Repasser à faible température sous un linge humide.',
-    tailles: 'Longueur standard 148 cm. Ajustement possible sur demande. Contactez-nous pour un conseil personnalisé.'
+    tailles: 'Longueur standard 148 cm. Ajustement possible sur demande. Contactez-nous pour un conseil personnalisé.',
+    related: ['tieleur-minuit', 'cravate']
   },
   'tieleur-minuit': {
     name: 'Tieleur Minuit',
@@ -1132,7 +1133,8 @@ const PRODUCTS = {
     composition: 'Tissus Italiens<br>100 % soie<br>Doublure 100 % viscose',
     details: 'Cravate 7 plis cousue à la main. Doublure en soie. Largeur 8 cm. Longueur 148 cm. Nœud intérieur pour maintien.',
     entretien: 'Nettoyage à sec uniquement. Ne pas tordre. Repasser à faible température sous un linge humide.',
-    tailles: 'Longueur standard 148 cm. Ajustement possible sur demande. Contactez-nous pour un conseil personnalisé.'
+    tailles: 'Longueur standard 148 cm. Ajustement possible sur demande. Contactez-nous pour un conseil personnalisé.',
+    related: ['tieleur-nuit', 'cravate']
   },
   'blazer-large': {
     name: 'Blazer Large',
@@ -1142,7 +1144,8 @@ const PRODUCTS = {
     composition: 'Tissus Italiens<br>100 % laine<br>Doublure 100 % viscose',
     details: 'Blazer à coupe large et oversize. Épaules tombantes. Poches plaquées. Boutons en nacre. Finitions cousues à la main.',
     entretien: 'Nettoyage à sec recommandé. Repassage à température moyenne. Conserver sur cintre pour garder la forme.',
-    tailles: 'Tailles disponibles : XS à XL. Sur mesure disponible sur demande. Contactez-nous pour vos mensurations.'
+    tailles: 'Tailles disponibles : XS à XL. Sur mesure disponible sur demande. Contactez-nous pour vos mensurations.',
+    related: ['pantalon-large', 'cravate']
   },
   'blazer-cintre': {
     name: 'Blazer Cintré',
@@ -1152,7 +1155,8 @@ const PRODUCTS = {
     composition: 'Tissus Italiens<br>100 % laine<br>Doublure 100 % viscose',
     details: 'Blazer à coupe cintrée. Taille marquée. Poches passepoilées. Doublure intérieure en soie. Finitions à la main.',
     entretien: 'Nettoyage à sec recommandé. Repassage à température moyenne. Conserver sur cintre pour garder la forme.',
-    tailles: 'Tailles disponibles : XS à XL. Sur mesure disponible sur demande. Contactez-nous pour vos mensurations.'
+    tailles: 'Tailles disponibles : XS à XL. Sur mesure disponible sur demande. Contactez-nous pour vos mensurations.',
+    related: ['pantalon-patte', 'cravate']
   },
   'blazer-ballon': {
     name: 'Blazer Ballon',
@@ -1162,7 +1166,8 @@ const PRODUCTS = {
     composition: 'Tissus Italiens<br>100 % laine<br>Doublure 100 % viscose',
     details: 'Blazer à volume ballon. Coupe sculpturale. Manches bouffantes. Boutons dorés. Pièce d\'exception de la collection.',
     entretien: 'Nettoyage à sec recommandé. Repassage à température moyenne. Conserver sur cintre pour garder la forme.',
-    tailles: 'Tailles disponibles : XS à XL. Sur mesure disponible sur demande. Contactez-nous pour vos mensurations.'
+    tailles: 'Tailles disponibles : XS à XL. Sur mesure disponible sur demande. Contactez-nous pour vos mensurations.',
+    related: ['pantalon-ballon', 'cravate']
   },
   'pantalon-large': {
     name: 'Pantalon Large',
@@ -1172,7 +1177,8 @@ const PRODUCTS = {
     composition: 'Tissus Italiens<br>100 % laine<br>Doublure partielle 100 % viscose',
     details: 'Pantalon à jambe large. Taille haute. Plis avant. Poches italiennes. Finitions cousues à la main.',
     entretien: 'Nettoyage à sec recommandé. Repassage avec pattemouille. Conserver sur cintre.',
-    tailles: 'Tailles disponibles : XS à XL. Sur mesure disponible sur demande. Contactez-nous pour vos mensurations.'
+    tailles: 'Tailles disponibles : XS à XL. Sur mesure disponible sur demande. Contactez-nous pour vos mensurations.',
+    related: ['blazer-large', 'cravate']
   },
   'pantalon-patte': {
     name: 'Pantalon Patte d\'Éléphant',
@@ -1182,7 +1188,8 @@ const PRODUCTS = {
     composition: 'Tissus Italiens<br>100 % laine<br>Doublure partielle 100 % viscose',
     details: 'Pantalon à jambe évasée type patte d\'éléphant. Taille haute. Coupe rétro et élégante. Poches latérales.',
     entretien: 'Nettoyage à sec recommandé. Repassage avec pattemouille. Conserver sur cintre.',
-    tailles: 'Tailles disponibles : XS à XL. Sur mesure disponible sur demande. Contactez-nous pour vos mensurations.'
+    tailles: 'Tailles disponibles : XS à XL. Sur mesure disponible sur demande. Contactez-nous pour vos mensurations.',
+    related: ['blazer-cintre', 'cravate']
   },
   'pantalon-ballon': {
     name: 'Pantalon Ballon',
@@ -1192,7 +1199,8 @@ const PRODUCTS = {
     composition: 'Tissus Italiens<br>100 % laine<br>Doublure partielle 100 % viscose',
     details: 'Pantalon à volume ballon. Coupe architecturale. Taille haute élastiquée. Silhouette sculptée et contemporaine.',
     entretien: 'Nettoyage à sec recommandé. Repassage avec pattemouille. Conserver sur cintre.',
-    tailles: 'Tailles disponibles : XS à XL. Sur mesure disponible sur demande. Contactez-nous pour vos mensurations.'
+    tailles: 'Tailles disponibles : XS à XL. Sur mesure disponible sur demande. Contactez-nous pour vos mensurations.',
+    related: ['blazer-ballon', 'cravate']
   },
   'cravate': {
     name: 'Cravate Soie',
@@ -1202,7 +1210,8 @@ const PRODUCTS = {
     composition: 'Tissus Italiens<br>100 % soie<br>Doublure 100 % soie',
     details: 'Cravate 7 plis cousue à la main. Largeur 8 cm. Longueur 148 cm. Nœud intérieur pour maintien. Pièce signature de la maison.',
     entretien: 'Nettoyage à sec uniquement. Ne pas tordre. Repasser à faible température sous un linge humide.',
-    tailles: 'Longueur standard 148 cm. Ajustement possible sur demande. Contactez-nous pour un conseil personnalisé.'
+    tailles: 'Longueur standard 148 cm. Ajustement possible sur demande. Contactez-nous pour un conseil personnalisé.',
+    related: ['blazer-large', 'pantalon-large']
   }
 };
 
@@ -1237,6 +1246,22 @@ function showProduct(id) {
     img.style.maxWidth = '340px';
     img.style.height = 'auto';
     img.style.objectFit = 'contain';
+  }
+
+  // Produits associés
+  const grid = document.getElementById('related-grid');
+  if (grid && p.related) {
+    grid.innerHTML = p.related.map(relId => {
+      const rel = PRODUCTS[relId];
+      if (!rel) return '';
+      const thumb = rel.img
+        ? `<img src="${rel.img}" style="width:100%;height:100%;object-fit:cover;display:block">`
+        : `<span style="font-family:'Cormorant Garamond',serif;font-size:.75rem;color:#888;font-style:italic">${rel.name}</span>`;
+      return `<div class="related-card" onclick="showProduct('${relId}')" style="cursor:none">
+        <div class="related-card-img">${thumb}</div>
+        <span class="related-card-name">${rel.name}</span>
+      </div>`;
+    }).join('');
   }
 
   showSection('produit');
