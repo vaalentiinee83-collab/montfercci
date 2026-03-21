@@ -901,18 +901,6 @@ footer{
         <p style="font-family:'Lora',serif;font-size:.9rem;color:#666">Sur mesure — Prix sur demande</p>
       </div>
 
-      <!-- Taille cravate -->
-      <div>
-        <p class="topt-section-label">Taille de la cravate</p>
-        <div id="topt-tie-sizes" style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="topt-size-btn active" onclick="selectTieleurSize(this,'tie')">XS</button>
-          <button class="topt-size-btn" onclick="selectTieleurSize(this,'tie')">S</button>
-          <button class="topt-size-btn" onclick="selectTieleurSize(this,'tie')">M</button>
-          <button class="topt-size-btn" onclick="selectTieleurSize(this,'tie')">L</button>
-          <button class="topt-size-btn" onclick="selectTieleurSize(this,'tie')">XL</button>
-        </div>
-      </div>
-
       <!-- Taille blazer -->
       <div>
         <p class="topt-section-label">Taille du blazer</p>
@@ -1963,12 +1951,11 @@ document.getElementById('prod-panier').addEventListener('click', function() {
 
 // Ajouter depuis le tieleur
 document.querySelector('.topt-panier').addEventListener('click', function() {
-  const tieSize    = document.querySelector('#topt-tie-sizes .topt-size-btn.active');
   const jacketSize = document.querySelector('#topt-jacket-sizes .topt-size-btn.active');
   const pantsSize  = document.querySelector('#topt-pants-sizes .topt-size-btn.active');
   addToCart({
     name: 'Le Tieleur',
-    size: `Cravate ${tieSize ? tieSize.textContent : '—'} / Blazer ${jacketSize ? jacketSize.textContent : '—'} / Pantalon ${pantsSize ? pantsSize.textContent : '—'}`,
+    size: `Blazer ${jacketSize ? jacketSize.textContent : '—'} / Pantalon ${pantsSize ? pantsSize.textContent : '—'}`,
     img: null
   });
 });
