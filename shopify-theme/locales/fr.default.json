@@ -1,0 +1,26 @@
+{
+  "general": {
+    "meta": {
+      "tags": "Mots-clés",
+      "links": "Liens"
+    }
+  },
+  "layout": {
+    "navigation": {
+      "expand_header": "Développer le menu"
+    }
+  },
+  "newsletter": {
+    "prenom": "Prénom",
+    "nom": "Nom",
+    "email": "Adresse e-mail",
+    "rgpd": "J'accepte de recevoir les communications de MONTFERCCI Paris.",
+    "submit": "Être alertée du lancement",
+    "success": "Merci. Nous vous contacterons en avant-première.",
+    "already_subscribed": "Vous êtes déjà inscrite. Merci !"
+  },
+  "errors": {
+    "required": "Champ requis",
+    "email": "E-mail invalide"
+  }
+}

@@ -1,0 +1,117 @@
+<section class="hero">
+
+  <div class="configurateur">
+
+    <!-- Flèches gauche -->
+    <div class="arrows-fixed left">
+      <button class="piece-arr" onclick="prev('tie')">&#8249;</button>
+      <button class="piece-arr" onclick="prev('jacket')">&#8249;</button>
+      <button class="piece-arr" onclick="prev('pants')">&#8249;</button>
+    </div>
+
+    <!-- Flèches droite -->
+    <div class="arrows-fixed right">
+      <button class="piece-arr" onclick="next('tie')">&#8250;</button>
+      <button class="piece-arr" onclick="next('jacket')">&#8250;</button>
+      <button class="piece-arr" onclick="next('pants')">&#8250;</button>
+    </div>
+
+    <!-- Cravate / Col -->
+    <div class="piece-row row-tie">
+      <div class="scene">
+        <div class="ring" id="ring-tie"></div>
+      </div>
+    </div>
+
+    <!-- Veste -->
+    <div class="piece-row row-jacket">
+      <div class="scene">
+        <div class="ring" id="ring-jacket"></div>
+      </div>
+    </div>
+
+    <!-- Pantalon -->
+    <div class="piece-row row-pants">
+      <div class="scene">
+        <div class="ring" id="ring-pants"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="couleurs">
+    <p class="couleurs-label">Couleur</p>
+    <div class="couleurs-swatches">
+      <button class="swatch active" data-color="noir" style="background:#0a0a0a" title="Noir"></button>
+      <button class="swatch" data-color="marine" style="background:#1b2a4a" title="Bleu marine"></button>
+      <button class="swatch" data-color="creme" style="background:#f5f0e8" title="Crème"></button>
+    </div>
+  </div>
+
+  <div class="accroche">
+    <p><em>Patience</em>... on repasse votre Tieleur.</p>
+  </div>
+
+  <div class="tagline">
+    <p>{{ section.settings.tagline }}</p>
+  </div>
+
+  <div class="inscription-section">
+    {% if customer %}
+      <p style="text-align:center;font-size:.75rem;letter-spacing:.1em;">Vous êtes déjà inscrite. Merci !</p>
+    {% else %}
+      {% form 'customer', id: 'newsletter-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter,pre-launch">
+        <div id="inscriptionForm">
+          <p class="inscription-titre">Être alertée en avant-première</p>
+          <div class="form-group">
+            <input type="text" name="contact[first_name]" placeholder="Prénom" autocomplete="given-name" required>
+          </div>
+          <div class="form-group">
+            <input type="text" name="contact[last_name]" placeholder="Nom" autocomplete="family-name" required>
+          </div>
+          <div class="form-group">
+            <input type="email" name="contact[email]" placeholder="Adresse e-mail" autocomplete="email" required>
+          </div>
+          <div class="rgpd-row">
+            <input type="checkbox" id="rgpd" name="contact[accepts_marketing]" value="1" required>
+            <label for="rgpd">J'accepte de recevoir les communications de MONTFERCCI Paris et reconnais avoir pris connaissance de la politique de confidentialité.</label>
+          </div>
+          <button type="submit" class="btn-submit">Être alertée du lancement</button>
+        </div>
+        {% if form.posted_successfully? %}
+          <div class="confirmation-msg" style="display:block">
+            <p>Merci. Nous vous contacterons en avant-première.</p>
+          </div>
+        {% endif %}
+        {% if form.errors %}
+          <div class="form-error">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+      {% endform %}
+    {% endif %}
+  </div>
+
+</section>
+
+{{ 'configurateur.js' | asset_url | script_tag }}
+
+{% schema %}
+{
+  "name": "Configurateur",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "COLLECTION PRINTEMPS — LANCEMENT 2026"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Configurateur"
+    }
+  ]
+}
+{% endschema %}

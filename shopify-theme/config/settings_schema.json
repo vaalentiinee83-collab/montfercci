@@ -1,0 +1,44 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "MONTFERCCI",
+    "theme_version": "1.0.0",
+    "theme_author": "MONTFERCCI Paris",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Couleurs",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Couleur principale",
+        "default": "#0a0a0a"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Couleur accent",
+        "default": "#333333"
+      }
+    ]
+  },
+  {
+    "name": "Réseaux sociaux",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram",
+        "default": "https://instagram.com/montfercci"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok",
+        "label": "TikTok",
+        "default": "https://tiktok.com/@montfercci"
+      }
+    ]
+  }
+]

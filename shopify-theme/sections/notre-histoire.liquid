@@ -1,0 +1,68 @@
+<div class="page-content">
+
+  <div class="histoire-hero">
+    <p class="histoire-surtitre">{{ section.settings.surtitre }}</p>
+    <h1>{{ section.settings.titre }}</h1>
+    <p class="histoire-intro">{{ section.settings.intro }}</p>
+  </div>
+
+  <div class="section-texte">
+    <p>Tout a commencé à Bari, dans le sud de l'Italie. Nous nous sommes rencontrées lors d'un Erasmus, deux Françaises unies par la même frustration : impossible de trouver un tailleur à notre taille.</p>
+    <p>L'une d'entre nous, petite, se heurtait sans cesse aux vêtements trop longs, trop larges, trop pensés pour un gabarit qui n'était pas le sien. L'autre, grande, cherchait en vain des pantalons à la bonne longueur, des manches qui ne s'arrêtaient pas au milieu de l'avant-bras. Deux corps différents, un même constat : le tailleur féminin n'existait pas vraiment, pas pour nous, pas à notre taille, pas à un prix juste.</p>
+    <p>De cette conviction est née MONTFERCCI Paris. Notre ambition est simple : donner à chaque femme la possibilité de choisir la coupe qui lui va vraiment, celle qui épouse sa silhouette et non l'inverse. Un excellent rapport qualité-prix, parce que s'habiller bien ne devrait pas être un luxe réservé à quelques-unes.</p>
+  </div>
+
+  <div class="citation">
+    <blockquote>
+      « Osez le porter. Devenez la femme que vous voulez être. Affirmez-vous. »
+      <cite>Montfercci Paris</cite>
+    </blockquote>
+  </div>
+
+  <div class="valeurs">
+    <div class="valeur">
+      <p class="valeur-titre">Pour toutes les tailles</p>
+      <p class="valeur-texte">Des coupes pensées pour chaque morphologie, des petites aux grandes tailles.</p>
+    </div>
+    <div class="valeur">
+      <p class="valeur-titre">Rapport qualité-prix</p>
+      <p class="valeur-texte">Des matières soigneusement sélectionnées, à un prix accessible et honnête.</p>
+    </div>
+    <div class="valeur">
+      <p class="valeur-titre">Féminité &amp; ambition</p>
+      <p class="valeur-texte">Le tailleur comme armor, élégant, affirmé, fait pour les femmes qui avancent.</p>
+    </div>
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Notre Histoire",
+  "settings": [
+    {
+      "type": "text",
+      "id": "surtitre",
+      "label": "Surtitre",
+      "default": "Notre Histoire"
+    },
+    {
+      "type": "text",
+      "id": "titre",
+      "label": "Titre principal",
+      "default": "Deux femmes. Une idée simple."
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Introduction",
+      "default": "MONTFERCCI Paris est née d'un constat universel : le tailleur féminin n'existait pas à notre taille."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Notre Histoire"
+    }
+  ]
+}
+{% endschema %}
