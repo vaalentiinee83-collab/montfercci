@@ -179,7 +179,7 @@ header{
 }
 .piece-row.row-tie{height:340px}
 .scene{perspective:900px;perspective-origin:50% 50%;width:100%;height:100%;position:relative}
-.ring{width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,0,.2,1);position:relative}
+.ring{width:100%;height:100%;transform-style:preserve-3d;position:relative}
 .rslide{position:absolute;width:160px;height:100%;left:50%;transform-origin:center center}
 .rslide img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
 
@@ -1712,6 +1712,7 @@ const TIE_N = 3;
 const TIE_R = 280;
 const TIE_st = {tie:0, jacket:0, pants:0};
 const TIE_ang = {tie:0, jacket:0, pants:0};
+const TIE_raf = {tie:null, jacket:null, pants:null};
 
 function tie_build(piece) {
   const ring = document.getElementById('ring-'+piece);
@@ -1762,25 +1763,28 @@ function tie_updateOpacities(piece) {
 }
 
 function tie_go(piece,idx) {
+  // Cancel any in-progress animation for this piece
+  if(TIE_raf[piece]){ cancelAnimationFrame(TIE_raf[piece]); TIE_raf[piece]=null; }
   const prev = TIE_st[piece];
   TIE_st[piece] = ((idx%TIE_N)+TIE_N)%TIE_N;
   let d = TIE_st[piece]-prev;
   if(d>TIE_N/2) d-=TIE_N;
   if(d<-TIE_N/2) d+=TIE_N;
-  TIE_ang[piece] -= d*(360/TIE_N);
-  document.getElementById('ring-'+piece).style.transform = `rotateY(${TIE_ang[piece]}deg)`;
   tie_updateDots(piece);
+  // startAng = current visual position (may be mid-animation if interrupted)
+  const startAng = TIE_ang[piece];
+  const endAng = startAng - d*(360/TIE_N);
   const start=performance.now(), dur=650;
-  const startAng=TIE_ang[piece]+d*(360/TIE_N), endAng=TIE_ang[piece];
   function frame(now){
     const t=Math.min((now-start)/dur,1);
     const ease=t<.5?2*t*t:-1+(4-2*t)*t;
     TIE_ang[piece]=startAng+(endAng-startAng)*ease;
+    document.getElementById('ring-'+piece).style.transform=`rotateY(${TIE_ang[piece]}deg)`;
     tie_updateOpacities(piece);
-    if(t<1) requestAnimationFrame(frame);
-    else TIE_ang[piece]=endAng;
+    if(t<1) TIE_raf[piece]=requestAnimationFrame(frame);
+    else{ TIE_ang[piece]=endAng; TIE_raf[piece]=null; }
   }
-  requestAnimationFrame(frame);
+  TIE_raf[piece]=requestAnimationFrame(frame);
 }
 
 function tie_next(p){tie_go(p,TIE_st[p]+1)}
