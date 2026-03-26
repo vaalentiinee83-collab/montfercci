@@ -1717,6 +1717,11 @@ const TIE_raf = {tie:null, jacket:null, pants:null};
 function tie_build(piece) {
   const ring = document.getElementById('ring-'+piece);
   if(!ring) return;
+  // Reset state so the first slide is always shown after rebuild
+  if(TIE_raf[piece]){ cancelAnimationFrame(TIE_raf[piece]); TIE_raf[piece]=null; }
+  TIE_ang[piece] = 0;
+  TIE_st[piece] = 0;
+  ring.style.transform = 'rotateY(0deg)';
   ring.innerHTML = '';
   TIELEUR_IMGS[piece].forEach((src,i) => {
     const div = document.createElement('div');
@@ -1753,15 +1758,9 @@ function tie_updateOpacities(piece) {
   if(!ring) return;
   ring.querySelectorAll('.rslide').forEach((slide,i) => {
     const slideDeg = (360/TIE_N)*i;
-    let eff = (slideDeg + TIE_ang[piece]) % 360;
-    if(eff<0) eff+=360;
-    const cos = Math.cos(eff*Math.PI/180);
-    // Only show the front-facing slide — hide sides completely
-    const isFront = eff < 45 || eff > 315;
-    const scale = isFront ? 1 : 0.85;
-    const opacity = isFront ? 1 : 0;
-    slide.style.opacity = opacity;
-    slide.style.transform = `translateX(-50%) rotateY(${slideDeg}deg) translateZ(${TIE_R}px) scale(${scale})`;
+    const isActive = (i === TIE_st[piece]);
+    slide.style.opacity = isActive ? 1 : 0;
+    slide.style.transform = `translateX(-50%) rotateY(${slideDeg}deg) translateZ(${TIE_R}px) scale(${isActive ? 1 : 0.85})`;
   });
 }
 
