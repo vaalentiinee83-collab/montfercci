@@ -1677,18 +1677,18 @@ function idx_go(piece, idx) {
 function idx_next(p){idx_go(p,IDX_st[p]+1)}
 function idx_prev(p){idx_go(p,IDX_st[p]-1)}
 
-['jacket','pants'].forEach(p => { idx_build(p); idx_updateOpacities(p); });
+// idx_build not called on load — rings belong to tieleur section and are built by tie_build()
 
-// Swipe (configurateur pieces only)
-['jacket','pants'].forEach(piece=>{
+// Swipe (tieleur pieces only)
+['tie','jacket','pants'].forEach(piece=>{
   const el=document.querySelector('#ring-'+piece);
   if(!el) return;
   const row=el.closest('.piece-row');
   let sx=0,drag=false;
   row.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
-  row.addEventListener('touchend',e=>{const dx=sx-e.changedTouches[0].clientX;if(Math.abs(dx)>30)dx>0?idx_next(piece):idx_prev(piece)});
+  row.addEventListener('touchend',e=>{const dx=sx-e.changedTouches[0].clientX;if(Math.abs(dx)>30)dx>0?tie_next(piece):tie_prev(piece)});
   row.addEventListener('mousedown',e=>{drag=true;sx=e.clientX});
-  row.addEventListener('mouseup',e=>{if(!drag)return;drag=false;const dx=sx-e.clientX;if(Math.abs(dx)>20)dx>0?idx_next(piece):idx_prev(piece)});
+  row.addEventListener('mouseup',e=>{if(!drag)return;drag=false;const dx=sx-e.clientX;if(Math.abs(dx)>20)dx>0?tie_next(piece):tie_prev(piece)});
   row.addEventListener('mouseleave',()=>drag=false);
 });
 
@@ -1750,15 +1750,18 @@ function tie_updateDots(piece) {
 
 function tie_updateOpacities(piece) {
   const ring = document.getElementById('ring-'+piece);
+  if(!ring) return;
   ring.querySelectorAll('.rslide').forEach((slide,i) => {
     const slideDeg = (360/TIE_N)*i;
     let eff = (slideDeg + TIE_ang[piece]) % 360;
     if(eff<0) eff+=360;
     const cos = Math.cos(eff*Math.PI/180);
-    const scale = 0.75+(cos+1)/2*0.25;
-    const opacity = 0.35+(cos+1)/2*0.65;
-    slide.style.opacity = opacity.toFixed(3);
-    slide.style.transform = `translateX(-50%) rotateY(${slideDeg}deg) translateZ(${TIE_R}px) scale(${scale.toFixed(3)})`;
+    // Only show the front-facing slide — hide sides completely
+    const isFront = eff < 45 || eff > 315;
+    const scale = isFront ? 1 : 0.85;
+    const opacity = isFront ? 1 : 0;
+    slide.style.opacity = opacity;
+    slide.style.transform = `translateX(-50%) rotateY(${slideDeg}deg) translateZ(${TIE_R}px) scale(${scale})`;
   });
 }
 
