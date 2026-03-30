@@ -820,7 +820,7 @@ footer{
       </div>
       <div class="reveal" onclick="showSection('boutique')" style="cursor:none;background:#0a0a0a;padding:40px 32px;transition:box-shadow .3s" onmouseenter="this.style.boxShadow='0 8px 40px rgba(0,0,0,.2)'" onmouseleave="this.style.boxShadow='none'">
         <p style="font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:#888;margin-bottom:16px">Collection</p>
-        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:400;color:#fff;margin-bottom:12px">La Boutique</h3>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:400;color:#fff;margin-bottom:12px">La Collection</h3>
         <p style="font-size:.9rem;color:#999;line-height:1.7">Costumes, vestes, pantalons — chaque pièce conçue pour durer.</p>
       </div>
       <div class="reveal" onclick="showSection('apropos')" style="cursor:none;background:#fff;padding:40px 32px;border:1px solid rgba(0,0,0,.08);transition:box-shadow .3s" onmouseenter="this.style.boxShadow='0 8px 40px rgba(0,0,0,.1)'" onmouseleave="this.style.boxShadow='none'">
@@ -851,20 +851,8 @@ footer{
   <div style="padding-top:100px">
     <section style="padding:60px 48px 0">
       <p class="section-eyebrow reveal" id="boutique-eyebrow" style="margin-bottom:12px">Notre sélection</p>
-      <h2 class="section-title reveal" id="boutique-title" style="margin-bottom:40px">La <em>Boutique</em></h2>
+      <h2 class="section-title reveal" id="boutique-title" style="margin-bottom:40px">La <em>Collection</em></h2>
       <div id="boutique-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:40px;max-width:1200px">
-        <div class="boutique-item" data-cat="tieleur" onclick="showProduct('tieleur-nuit')" style="cursor:none">
-          <div style="height:380px;background:#f5f5f5;margin-bottom:16px;display:flex;align-items:center;justify-content:center;overflow:hidden"><span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#888;font-style:italic">Tieleur</span></div>
-          <p style="font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:#888;margin-bottom:6px">Signature</p>
-          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:4px">Tieleur Nuit</h3>
-          <p style="font-family:'Lora',serif;font-size:.85rem;color:#666">Sur mesure — Prix sur demande</p>
-        </div>
-        <div class="boutique-item" data-cat="tieleur" onclick="showProduct('tieleur-minuit')" style="cursor:none">
-          <div style="height:380px;background:#1a1a1a;margin-bottom:16px;display:flex;align-items:center;justify-content:center;overflow:hidden"><span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#666;font-style:italic">Tieleur</span></div>
-          <p style="font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:#888;margin-bottom:6px">Collection</p>
-          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:4px">Tieleur Minuit</h3>
-          <p style="font-family:'Lora',serif;font-size:.85rem;color:#666">Sur mesure — Prix sur demande</p>
-        </div>
         <div class="boutique-item" data-cat="veste" onclick="showProduct('blazer-large')" style="cursor:none">
           <div style="aspect-ratio:3/4;background:#e8e4dc;margin-bottom:16px;overflow:hidden"><img src="https://i.pinimg.com/1200x/32/34/76/323476291f39a3f76eed0f2c83533eb0.jpg" alt="Blazer Large" style="width:100%;height:100%;object-fit:cover;display:block"></div>
           <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:4px">Blazer Large</h3>
@@ -1659,7 +1647,7 @@ const CAT_LABELS = {
   veste:     { eyebrow: 'Collection', title: 'Nos <em>Vestes</em>' },
   pantalon:  { eyebrow: 'Collection', title: 'Nos <em>Pantalons</em>' },
   accessoire:{ eyebrow: 'Collection', title: 'Nos <em>Accessoires</em>' },
-  all:       { eyebrow: 'Notre sélection', title: 'La <em>Boutique</em>' }
+  all:       { eyebrow: 'Notre sélection', title: 'La <em>Collection</em>' }
 };
 
 function showBoutiqueFiltered(cat) {
