@@ -276,25 +276,26 @@ header{
   overflow:visible;
   touch-action:pan-y;
 }
-.tieleur-pieces .piece-row.row-tie    {height:50px;margin-top:-12px}
-.tieleur-pieces .piece-row.row-jacket {height:165px;margin-top:10px}
-.tieleur-pieces .piece-row.row-pants  {height:165px;margin-top:30px}
+.tieleur-pieces .piece-row.row-tie    {height:90px;margin-top:0}
+.tieleur-pieces .piece-row.row-jacket {height:260px;margin-top:14px}
+.tieleur-pieces .piece-row.row-pants  {height:260px;margin-top:20px}
 .tieleur-pieces .scene{perspective:700px;perspective-origin:50% 50%;width:100%;height:100%;position:relative}
 .tieleur-pieces .ring{width:100%;height:100%;transform-style:preserve-3d;position:relative}
 .tieleur-pieces .rslide{position:absolute;width:145px;height:100%;left:50%;transform-origin:center center}
 .tieleur-pieces .rslide img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
-/* arrows fixes */
-.tieleur-pieces .arrows-fixed{position:absolute;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:space-around;z-index:20;gap:0}
-.tieleur-pieces .arrows-fixed.left{left:-36px}
-.tieleur-pieces .arrows-fixed.right{right:-36px}
-.tieleur-pieces .piece-arr{background:none;border:none;color:rgba(51,51,51,.4);font-size:1rem;cursor:none;padding:8px 6px;transition:color .2s,transform .15s;line-height:1;display:block}
-.tieleur-pieces .piece-arr:hover{color:#0a0a0a;transform:scale(1.35)}
+/* per-row arrows */
+.tieleur-pieces .piece-arr{position:absolute;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(51,51,51,.4);font-size:.95rem;cursor:none;padding:8px 6px;transition:color .2s,transform .15s;line-height:1;z-index:20}
+.tieleur-pieces .piece-arr.arr-l{left:-38px}
+.tieleur-pieces .piece-arr.arr-r{right:-38px}
+.tieleur-pieces .piece-arr:hover{color:#0a0a0a;transform:translateY(-50%) scale(1.35)}
 @media(max-width:480px){
   .tieleur-pieces{width:300px}
-  .tieleur-pieces .piece-row.row-tie    {height:44px;margin-top:-10px}
-  .tieleur-pieces .piece-row.row-jacket {height:145px;margin-top:8px}
-  .tieleur-pieces .piece-row.row-pants  {height:145px;margin-top:26px}
+  .tieleur-pieces .piece-row.row-tie    {height:75px;margin-top:0}
+  .tieleur-pieces .piece-row.row-jacket {height:220px;margin-top:12px}
+  .tieleur-pieces .piece-row.row-pants  {height:220px;margin-top:16px}
   .tieleur-pieces .rslide{width:130px}
+  .tieleur-pieces .piece-arr.arr-l{left:-32px}
+  .tieleur-pieces .piece-arr.arr-r{right:-32px}
 }
 /* ─── OPTIONS BAS ─── */
 .tieleur-opts{
@@ -910,24 +911,20 @@ footer{
 
     <!-- GAUCHE : carousel -->
     <div class="tieleur-pieces">
-      <div class="arrows-fixed left">
-        <button class="piece-arr" onclick="tie_prev('tie')">&#8592;</button>
-        <button class="piece-arr" onclick="tie_prev('jacket')">&#8592;</button>
-        <button class="piece-arr" onclick="tie_prev('pants')">&#8592;</button>
-      </div>
-      <div class="arrows-fixed right">
-        <button class="piece-arr" onclick="tie_next('tie')">&#8594;</button>
-        <button class="piece-arr" onclick="tie_next('jacket')">&#8594;</button>
-        <button class="piece-arr" onclick="tie_next('pants')">&#8594;</button>
-      </div>
       <div class="piece-row row-tie">
+        <button class="piece-arr arr-l" onclick="tie_prev('tie')">&#8592;</button>
         <div class="scene"><div class="ring" id="ring-tie"></div></div>
+        <button class="piece-arr arr-r" onclick="tie_next('tie')">&#8594;</button>
       </div>
       <div class="piece-row row-jacket">
+        <button class="piece-arr arr-l" onclick="tie_prev('jacket')">&#8592;</button>
         <div class="scene"><div class="ring" id="ring-jacket"></div></div>
+        <button class="piece-arr arr-r" onclick="tie_next('jacket')">&#8594;</button>
       </div>
       <div class="piece-row row-pants">
+        <button class="piece-arr arr-l" onclick="tie_prev('pants')">&#8592;</button>
         <div class="scene"><div class="ring" id="ring-pants"></div></div>
+        <button class="piece-arr arr-r" onclick="tie_next('pants')">&#8594;</button>
       </div>
     </div>
 
