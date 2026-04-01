@@ -1853,8 +1853,6 @@ function tie_updateOpacities(piece) {
     slide.style.opacity = opacity.toFixed(3);
     slide.style.transform = `translateX(-50%) rotateY(${slideDeg}deg) translateZ(${TIE_R}px) scale(${scale.toFixed(3)})`;
   });
-}deg) translateZ(${TIE_R}px) scale(${isActive ? 1 : 0.85})`;
-  });
 }
 
 function tie_go(piece,idx) {
@@ -1883,27 +1881,6 @@ function tie_go(piece,idx) {
       slide.style.opacity=opacity.toFixed(3);
       slide.style.transform=`translateX(-50%) rotateY(${slideDeg}deg) translateZ(${TIE_R}px) scale(${scale.toFixed(3)})`;
     });
-    if(t<1) TIE_raf[piece]=requestAnimationFrame(frame);
-    else{ TIE_ang[piece]=endAng; TIE_raf[piece]=null; }
-  }
-  TIE_raf[piece]=requestAnimationFrame(frame);
-}
-  const prev = TIE_st[piece];
-  TIE_st[piece] = ((idx%TIE_N)+TIE_N)%TIE_N;
-  let d = TIE_st[piece]-prev;
-  if(d>TIE_N/2) d-=TIE_N;
-  if(d<-TIE_N/2) d+=TIE_N;
-  tie_updateDots(piece);
-  // startAng = current visual position (may be mid-animation if interrupted)
-  const startAng = TIE_ang[piece];
-  const endAng = startAng - d*(360/TIE_N);
-  const start=performance.now(), dur=650;
-  function frame(now){
-    const t=Math.min((now-start)/dur,1);
-    const ease=t<.5?2*t*t:-1+(4-2*t)*t;
-    TIE_ang[piece]=startAng+(endAng-startAng)*ease;
-    document.getElementById('ring-'+piece).style.transform=`rotateY(${TIE_ang[piece]}deg)`;
-    tie_updateOpacities(piece);
     if(t<1) TIE_raf[piece]=requestAnimationFrame(frame);
     else{ TIE_ang[piece]=endAng; TIE_raf[piece]=null; }
   }
