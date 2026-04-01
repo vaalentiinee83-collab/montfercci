@@ -289,15 +289,6 @@ header{
 .tieleur-pieces .arrows-fixed.right{right:-36px}
 .tieleur-pieces .piece-arr{background:none;border:none;color:rgba(51,51,51,.4);font-size:1rem;cursor:none;padding:8px 6px;transition:color .2s,transform .15s;line-height:1;display:block}
 .tieleur-pieces .piece-arr:hover{color:#0a0a0a;transform:scale(1.35)}
-/* couleurs */
-.tieleur-couleurs{text-align:center;margin-top:32px;position:relative;z-index:3}
-.tieleur-couleurs .couleurs-label{font-size:.58rem;letter-spacing:.4em;text-transform:uppercase;color:#0a0a0a;margin-bottom:12px}
-.tieleur-couleurs .couleurs-swatches{display:flex;justify-content:center;gap:14px}
-.tieleur-couleurs .swatch{width:22px;height:22px;border-radius:50%;border:1.5px solid transparent;cursor:none;padding:0;transition:transform .2s,border-color .2s}
-.tieleur-couleurs .swatch:hover{transform:scale(1.15)}
-.tieleur-couleurs .swatch.active{border-color:#0a0a0a;outline:2px solid rgba(10,10,10,.18);outline-offset:2px}
-.tieleur-couleurs .swatch[data-color="creme"]{border-color:rgba(10,10,10,.2)}
-.tieleur-couleurs .swatch[data-color="creme"].active{border-color:#0a0a0a}
 @media(max-width:480px){
   .tieleur-pieces{width:300px}
   .tieleur-pieces .piece-row.row-tie    {height:86px}
@@ -943,15 +934,6 @@ footer{
       <!-- Pantalon -->
       <div class="piece-row row-pants">
         <div class="scene"><div class="ring" id="ring-pants"></div></div>
-      </div>
-    </div>
-
-    <div class="tieleur-couleurs">
-      <p class="couleurs-label">Couleur</p>
-      <div class="couleurs-swatches">
-        <button class="swatch active" data-color="noir" style="background:#0a0a0a" title="Noir"></button>
-        <button class="swatch" data-color="marine" style="background:#1b2a4a" title="Bleu marine"></button>
-        <button class="swatch" data-color="creme" style="background:#f5f0e8" title="Crème"></button>
       </div>
     </div>
 
