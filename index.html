@@ -1563,19 +1563,12 @@ function showProduct(id) {
   entretien.textContent = p.entretien;
   tailles.textContent = p.tailles;
 
-  if (p.img) {
-    img.src = p.img;
-    img.style.width = 'auto';
-    img.style.height = 'auto';
-    img.style.maxWidth = '80%';
-    img.style.maxHeight = '100%';
-    img.style.objectFit = 'contain';
-  } else {
-    img.style.width = '60%';
-    img.style.maxWidth = '340px';
-    img.style.height = 'auto';
-    img.style.objectFit = 'contain';
-  }
+  img.src = p.img || img.src;
+  img.style.width = '';
+  img.style.height = '';
+  img.style.maxWidth = '';
+  img.style.maxHeight = '';
+  img.style.objectFit = '';
 
   // Tailles
   const showSizes = p.showSizes !== false;
