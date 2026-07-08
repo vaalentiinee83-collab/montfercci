@@ -2360,7 +2360,7 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") closeSizeFind
 <style>
 .tf-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;display:none;align-items:center;justify-content:center;padding:24px}
 .tf-overlay.open{display:flex}
-.tf-modal{background:#fff;width:100%;max-width:800px;padding:52px 48px;position:relative;animation:tfIn 0.35s ease forwards;max-height:92vh;overflow-y:auto}
+.tf-modal{background:#fff;width:100%;max-width:820px;padding:52px 48px;position:relative;animation:tfIn 0.35s ease forwards;max-height:92vh;overflow-y:auto}
 .tf-close{position:absolute;top:20px;right:24px;font-size:.65rem;letter-spacing:.2em;color:#888;cursor:pointer;background:none;border:none;font-family:"Montserrat",sans-serif;text-transform:uppercase}
 .tf-close:hover{color:#0a0a0a}
 .tf-eyebrow{font-size:.56rem;letter-spacing:.3em;text-transform:uppercase;color:#888;margin-bottom:14px;text-indent:.3em}
@@ -2370,7 +2370,7 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") closeSizeFind
 .tf-step.active{display:block;animation:tfIn .3s ease forwards}
 
 .tf-layout{display:flex;gap:44px;align-items:flex-start}
-.tf-mannequin-wrap{flex-shrink:0;width:200px;display:flex;flex-direction:column;align-items:center;background:linear-gradient(180deg,#eceae6 0%,#f7f6f4 55%,#e4e2de 100%);border-radius:2px}
+.tf-mannequin-wrap{flex-shrink:0;width:190px;display:flex;flex-direction:column;align-items:center;background:linear-gradient(180deg,#eceae6 0%,#f7f6f4 45%,#e4e2de 100%);border-radius:2px;overflow:hidden}
 .tf-mannequin-wrap svg{width:100%;height:auto;display:block}
 .tf-sliders{flex:1;display:flex;flex-direction:column;gap:24px;min-width:0}
 .tf-slider-row label{display:flex;justify-content:space-between;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:#0a0a0a;margin-bottom:12px;text-indent:.2em}
@@ -2399,7 +2399,7 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") closeSizeFind
 
 @media (max-width:640px){
   .tf-layout{flex-direction:column;align-items:center}
-  .tf-mannequin-wrap{width:160px}
+  .tf-mannequin-wrap{width:150px}
   .tf-result-grid{flex-direction:column;align-items:center}
 }
 </style>
@@ -2416,20 +2416,20 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") closeSizeFind
 
       <div class="tf-layout">
         <div class="tf-mannequin-wrap">
-          <svg viewBox="0 0 240 480" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 240 600" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="tfSkin" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#dedcd7"/>
-                <stop offset="0.45" stop-color="#f4f3f0"/>
-                <stop offset="0.55" stop-color="#f4f3f0"/>
-                <stop offset="1" stop-color="#d5d3ce"/>
+                <stop offset="0" stop-color="#dbd9d4"/>
+                <stop offset="0.45" stop-color="#f5f4f1"/>
+                <stop offset="0.55" stop-color="#f5f4f1"/>
+                <stop offset="1" stop-color="#d2d0cb"/>
               </linearGradient>
-              <filter id="tfShadow" x="-40%" y="-10%" width="180%" height="130%">
-                <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000" flood-opacity="0.16"/>
+              <filter id="tfShadow" x="-40%" y="-6%" width="180%" height="118%">
+                <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#000" flood-opacity="0.15"/>
               </filter>
             </defs>
 
-            <ellipse cx="120" cy="462" rx="58" ry="9" fill="#000" opacity="0.08"/>
+            <ellipse cx="120" cy="582" rx="56" ry="8" fill="#000" opacity="0.08"/>
 
             <g id="tfFigure" filter="url(#tfShadow)" style="transform-box:fill-box;transform-origin:top center;transition:transform .18s ease">
 
@@ -2438,26 +2438,31 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") closeSizeFind
               <path id="tfLegR" fill="url(#tfSkin)"/>
 
               <!-- pieds -->
-              <path d="M85,460 C83,464 83,468 88,469 L106,469 C108,466 107,462 102,460 Z" fill="url(#tfSkin)"/>
-              <path d="M155,460 C157,464 157,468 152,469 L134,469 C132,466 133,462 138,460 Z" fill="url(#tfSkin)"/>
+              <path d="M85,578 C82,583 82,588 88,589 L108,589 C110,585 108,580 102,578 Z" fill="url(#tfSkin)"/>
+              <path d="M155,578 C158,584 159,589 152,590 L132,590 C130,586 132,581 138,578 Z" fill="url(#tfSkin)"/>
 
-              <!-- bras -->
-              <path d="M83,120 C70,150 62,185 60,222 C59,235 60,248 64,258 L76,255 C73,240 73,224 76,208 C80,180 88,152 98,128 Z" fill="url(#tfSkin)"/>
-              <path d="M157,120 C170,150 178,185 180,222 C181,235 180,248 176,258 L164,255 C167,240 167,224 164,208 C160,180 152,152 142,128 Z" fill="url(#tfSkin)"/>
-              <ellipse cx="63" cy="266" rx="9" ry="13" fill="url(#tfSkin)"/>
-              <ellipse cx="177" cy="266" rx="9" ry="13" fill="url(#tfSkin)"/>
+              <!-- bras (légèrement écartés du corps) -->
+              <path d="M80,124 C64,155 54,192 51,228 C49,250 50,268 55,282 L69,278 C65,262 65,244 68,226 C72,196 82,164 96,134 Z" fill="url(#tfSkin)"/>
+              <path d="M160,124 C176,155 186,192 189,228 C191,250 190,268 185,282 L171,278 C175,262 175,244 172,226 C168,196 158,164 144,134 Z" fill="url(#tfSkin)"/>
+              <ellipse cx="57" cy="292" rx="9" ry="14" fill="url(#tfSkin)" transform="rotate(-8 57 292)"/>
+              <ellipse cx="183" cy="292" rx="9" ry="14" fill="url(#tfSkin)" transform="rotate(8 183 292)"/>
+              <ellipse cx="49" cy="285" rx="4" ry="7" fill="url(#tfSkin)" transform="rotate(-20 49 285)"/>
+              <ellipse cx="191" cy="285" rx="4" ry="7" fill="url(#tfSkin)" transform="rotate(20 191 285)"/>
 
               <!-- torse : une silhouette réelle et continue (poitrine, ventre, hanches), recalculée en JS -->
               <path id="tfTorso" fill="url(#tfSkin)"/>
 
+              <!-- ligne de hanche (couture du mannequin) -->
+              <path id="tfHipLine" fill="none" stroke="#c7c5c0" stroke-width="1.1" opacity="0.6"/>
+
               <!-- épaules -->
-              <path d="M78,100 C92,86 148,86 162,100 C168,106 168,116 162,122 C148,108 92,108 78,122 C72,116 72,106 78,100 Z" fill="url(#tfSkin)"/>
+              <path d="M78,102 C92,88 148,88 162,102 C168,108 168,118 162,124 C148,110 92,110 78,124 C72,118 72,108 78,102 Z" fill="url(#tfSkin)"/>
 
               <!-- cou -->
-              <path d="M106,66 C106,80 106,90 108,98 L132,98 C134,90 134,80 134,66 Z" fill="url(#tfSkin)"/>
+              <path d="M105,64 C105,80 105,92 108,100 L132,100 C135,92 135,80 135,64 Z" fill="url(#tfSkin)"/>
 
               <!-- tête -->
-              <ellipse cx="120" cy="40" rx="26" ry="32" fill="url(#tfSkin)"/>
+              <ellipse cx="120" cy="35" rx="24" ry="33" fill="url(#tfSkin)"/>
 
             </g>
           </svg>
@@ -2470,20 +2475,20 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") closeSizeFind
           </div>
           <hr class="tf-slider-sep"/>
           <div class="tf-slider-row">
-            <label for="tfPoitrine">Tour de poitrine <span id="tfPoitrineVal">100 cm</span></label>
-            <input type="range" id="tfPoitrine" min="80" max="130" value="100" oninput="tfUpdate()"/>
+            <label for="tfPoitrine">Tour de poitrine <span id="tfPoitrineVal">96 cm</span></label>
+            <input type="range" id="tfPoitrine" min="80" max="130" value="96" oninput="tfUpdate()"/>
           </div>
           <div class="tf-slider-row">
-            <label for="tfTaille">Tour de taille <span id="tfTailleVal">84 cm</span></label>
-            <input type="range" id="tfTaille" min="65" max="120" value="84" oninput="tfUpdate()"/>
+            <label for="tfTaille">Tour de taille <span id="tfTailleVal">76 cm</span></label>
+            <input type="range" id="tfTaille" min="65" max="120" value="76" oninput="tfUpdate()"/>
           </div>
           <div class="tf-slider-row">
-            <label for="tfHanches">Tour de hanches <span id="tfHanchesVal">98 cm</span></label>
-            <input type="range" id="tfHanches" min="80" max="130" value="98" oninput="tfUpdate()"/>
+            <label for="tfHanches">Tour de hanches <span id="tfHanchesVal">94 cm</span></label>
+            <input type="range" id="tfHanches" min="80" max="130" value="94" oninput="tfUpdate()"/>
           </div>
           <div class="tf-slider-row">
-            <label for="tfCuisse">Tour de cuisse <span id="tfCuisseVal">56 cm</span></label>
-            <input type="range" id="tfCuisse" min="45" max="75" value="56" oninput="tfUpdate()"/>
+            <label for="tfCuisse">Tour de cuisse <span id="tfCuisseVal">52 cm</span></label>
+            <input type="range" id="tfCuisse" min="45" max="75" value="52" oninput="tfUpdate()"/>
           </div>
         </div>
       </div>
@@ -2536,10 +2541,10 @@ function handleTfOverlay(e){
 }
 function tfRestart(){
   document.getElementById("tfHauteur").value = 172;
-  document.getElementById("tfPoitrine").value = 100;
-  document.getElementById("tfTaille").value = 84;
-  document.getElementById("tfHanches").value = 98;
-  document.getElementById("tfCuisse").value = 56;
+  document.getElementById("tfPoitrine").value = 96;
+  document.getElementById("tfTaille").value = 76;
+  document.getElementById("tfHanches").value = 94;
+  document.getElementById("tfCuisse").value = 52;
   tfUpdate();
   document.querySelectorAll(".tf-step").forEach(s => s.classList.remove("active"));
   document.querySelector('.tf-step[data-tfstep="1"]').classList.add("active");
@@ -2570,34 +2575,41 @@ function tfSmoothPath(points, centerX){
 }
 
 function tfTorsoPath(poitrine, taille, hanches){
-  const bust = tfHalf(poitrine, 80, 130, 34, 58);
-  const waist = tfHalf(taille, 65, 120, 23, 52);
-  const hips = tfHalf(hanches, 80, 130, 34, 58);
+  const bust = tfHalf(poitrine, 80, 130, 33, 57);
+  const waist = tfHalf(taille, 65, 120, 20, 48);
+  const hips = tfHalf(hanches, 80, 130, 31, 53);
 
   const points = [
-    [98, 44],                          // épaule
-    [112, bust * 0.90],                // aisselle / haut de poitrine
-    [126, bust],                       // poitrine — point le plus fort (vraie poitrine)
-    [143, bust * 0.72],                // sous la poitrine — creux réel
-    [160, (bust * 0.72 + waist) / 2 * 1.02], // cage thoracique / transition
-    [182, waist],                      // taille / ventre — point le plus fin
-    [206, (waist + hips) / 2 * 1.05],  // transition taille → hanches
-    [233, hips],                       // hanches — point le plus large
-    [254, hips * 0.82],                // sous les hanches
-    [268, 9]                           // entrejambe
+    [102, 40],                         // épaule
+    [116, bust * 0.88],                // aisselle / haut de poitrine
+    [130, bust],                       // poitrine — point le plus fort (vraie poitrine)
+    [148, bust * 0.68],                // sous la poitrine — creux réel
+    [166, (bust * 0.68 + waist) / 2 * 1.02], // cage thoracique / transition
+    [190, waist],                      // taille / ventre — point le plus fin
+    [212, (waist + hips) / 2 * 1.08],  // transition taille → hanches
+    [236, hips],                       // hanches — point le plus large
+    [256, hips * 0.80],                // sous les hanches
+    [270, 9]                           // entrejambe
   ];
   return tfSmoothPath(points, 120);
 }
 
+function tfHipLinePath(hanches){
+  const hips = tfHalf(hanches, 80, 130, 31, 53);
+  const y = 224;
+  const w = hips * 0.9;
+  return `M ${120-w} ${y} Q 120 ${y+16} ${120+w} ${y}`;
+}
+
 function tfLegPath(centerX, thighHalf){
   const points = [
-    [268, 11],
-    [292, thighHalf],
-    [330, thighHalf * 0.60],
-    [352, thighHalf * 0.48],
-    [388, thighHalf * 0.46],
-    [425, thighHalf * 0.30],
-    [455, thighHalf * 0.26]
+    [270, 11],
+    [305, thighHalf],
+    [345, thighHalf * 0.60],
+    [390, thighHalf * 0.44],
+    [460, thighHalf * 0.42],
+    [530, thighHalf * 0.27],
+    [572, thighHalf * 0.22]
   ];
   return tfSmoothPath(points, centerX);
 }
@@ -2615,15 +2627,16 @@ function tfUpdate(){
   document.getElementById("tfHanchesVal").textContent  = hanches + "\u00a0cm";
   document.getElementById("tfCuisseVal").textContent   = cuisse + "\u00a0cm";
 
-  const hipHalf = tfHalf(hanches, 80, 130, 34, 58);
-  const thighHalf = tfHalf(cuisse, 45, 75, 15, 34);
-  const legOffset = hipHalf * 0.44;
+  const hipHalf = tfHalf(hanches, 80, 130, 31, 53);
+  const thighHalf = tfHalf(cuisse, 45, 75, 13, 30);
+  const legOffset = hipHalf * 0.42;
 
   document.getElementById("tfTorso").setAttribute("d", tfTorsoPath(poitrine, taille, hanches));
+  document.getElementById("tfHipLine").setAttribute("d", tfHipLinePath(hanches));
   document.getElementById("tfLegL").setAttribute("d", tfLegPath(120 - legOffset, thighHalf));
   document.getElementById("tfLegR").setAttribute("d", tfLegPath(120 + legOffset, thighHalf));
 
-  const hScale = tfHalf(hauteur, 150, 200, 0.86, 1.12);
+  const hScale = tfHalf(hauteur, 150, 200, 0.84, 1.14);
   document.getElementById("tfFigure").style.transform = `scaleY(${hScale})`;
 }
 
