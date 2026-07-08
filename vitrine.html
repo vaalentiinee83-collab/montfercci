@@ -2126,6 +2126,8 @@ function openPanierPage() {
 </div>
 
 <script>
+const MEMBERSHIP_API_URL = "REMPLACER_PAR_VOTRE_URL_APPS_SCRIPT";
+
 function openMembreModal(e){if(e)e.stopPropagation();document.getElementById("membreOverlay").classList.add("open");document.body.style.overflow="hidden";}
 function closeMembreModal(){document.getElementById("membreOverlay").classList.remove("open");document.body.style.overflow="";setTimeout(()=>{document.getElementById("membreForm").style.display="block";document.getElementById("membreConfirm").classList.remove("show");document.getElementById("mPrenom").value="";document.getElementById("mNom").value="";document.getElementById("mEmail").value="";},300);}
 function handleMembreOverlay(e){if(e.target===document.getElementById("membreOverlay"))closeMembreModal();}
@@ -2135,6 +2137,16 @@ function submitMembre(){
   const em=document.getElementById("mEmail").value.trim();
   if(!p||!n||!em){alert("Veuillez remplir tous les champs.");return;}
   if(!em.includes("@")){alert("Veuillez entrer une adresse email valide.");return;}
+
+  if(MEMBERSHIP_API_URL && MEMBERSHIP_API_URL.indexOf("REMPLACER") === -1){
+    fetch(MEMBERSHIP_API_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ prenom: p, nom: n, email: em })
+    }).catch(function(err){ console.error("Erreur envoi demande membre :", err); });
+  }
+
   document.getElementById("membreForm").style.display="none";
   document.getElementById("membreConfirm").classList.add("show");
 }
