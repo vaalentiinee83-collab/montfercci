@@ -56,7 +56,7 @@
   const input = document.getElementById("codeInput");
   input.addEventListener("input", () => { const pos = input.selectionStart; input.value = input.value.toUpperCase(); input.setSelectionRange(pos, pos); });
   input.addEventListener("keydown", e => { if (e.key === "Enter") handleAccess(); });
-  const MEMBERSHIP_API_URL = "REMPLACER_PAR_VOTRE_URL_APPS_SCRIPT";
+  const MEMBERSHIP_API_URL = "https://script.google.com/macros/s/AKfycbznbyC9OUrNAQ2ZX66BkE9eeXk0sHNxK-8IFYK3hDOvISAky-eDxV3UMYSqit9XvAj1/exec";
   function handleAccess() {
     const code = input.value.trim().toUpperCase();
     const errorEl = document.getElementById("errorMsg");
