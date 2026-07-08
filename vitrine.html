@@ -2433,24 +2433,13 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") closeSizeFind
 
             <g id="tfFigure" filter="url(#tfShadow)" style="transform-box:fill-box;transform-origin:top center;transition:transform .18s ease">
 
-              <!-- jambe gauche (statique sous la cuisse) -->
-              <path d="M100,300 C96,340 93,380 92,420 C91,438 90,450 88,460 L102,460 C104,448 106,436 108,420 C111,380 112,340 111,302 Z" fill="url(#tfSkin)"/>
-              <!-- jambe droite -->
-              <path d="M140,300 C144,340 147,380 148,420 C149,438 150,450 152,460 L138,460 C136,448 134,436 132,420 C129,380 128,340 129,302 Z" fill="url(#tfSkin)"/>
+              <!-- jambes (silhouette réelle, recalculées en JS) -->
+              <path id="tfLegL" fill="url(#tfSkin)"/>
+              <path id="tfLegR" fill="url(#tfSkin)"/>
 
               <!-- pieds -->
               <path d="M85,460 C83,464 83,468 88,469 L106,469 C108,466 107,462 102,460 Z" fill="url(#tfSkin)"/>
               <path d="M155,460 C157,464 157,468 152,469 L134,469 C132,466 133,462 138,460 Z" fill="url(#tfSkin)"/>
-
-              <!-- cuisses (redimensionnables) -->
-              <ellipse id="tfThighL" cx="102" cy="288" rx="21" ry="55" fill="url(#tfSkin)" style="transform-box:fill-box;transform-origin:center;transition:transform .15s ease"/>
-              <ellipse id="tfThighR" cx="138" cy="288" rx="21" ry="55" fill="url(#tfSkin)" style="transform-box:fill-box;transform-origin:center;transition:transform .15s ease"/>
-
-              <!-- hanches (redimensionnables) -->
-              <ellipse id="tfHips" cx="120" cy="238" rx="46" ry="38" fill="url(#tfSkin)" style="transform-box:fill-box;transform-origin:center;transition:transform .15s ease"/>
-
-              <!-- taille (redimensionnable) -->
-              <ellipse id="tfWaist" cx="120" cy="188" rx="34" ry="34" fill="url(#tfSkin)" style="transform-box:fill-box;transform-origin:center;transition:transform .15s ease"/>
 
               <!-- bras -->
               <path d="M83,120 C70,150 62,185 60,222 C59,235 60,248 64,258 L76,255 C73,240 73,224 76,208 C80,180 88,152 98,128 Z" fill="url(#tfSkin)"/>
@@ -2458,8 +2447,8 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") closeSizeFind
               <ellipse cx="63" cy="266" rx="9" ry="13" fill="url(#tfSkin)"/>
               <ellipse cx="177" cy="266" rx="9" ry="13" fill="url(#tfSkin)"/>
 
-              <!-- poitrine / buste (redimensionnable) -->
-              <ellipse id="tfChest" cx="120" cy="128" rx="48" ry="46" fill="url(#tfSkin)" style="transform-box:fill-box;transform-origin:center;transition:transform .15s ease"/>
+              <!-- torse : une silhouette réelle et continue (poitrine, ventre, hanches), recalculée en JS -->
+              <path id="tfTorso" fill="url(#tfSkin)"/>
 
               <!-- épaules -->
               <path d="M78,100 C92,86 148,86 162,100 C168,106 168,116 162,122 C148,108 92,108 78,122 C72,116 72,106 78,100 Z" fill="url(#tfSkin)"/>
@@ -2556,10 +2545,61 @@ function tfRestart(){
   document.querySelector('.tf-step[data-tfstep="1"]').classList.add("active");
 }
 
-function tfScale(val, min, max, lo, hi){
-  lo = (lo === undefined) ? 0.72 : lo;
-  hi = (hi === undefined) ? 1.38 : hi;
-  return lo + ((val - min) / (max - min)) * (hi - lo);
+// ─── Génération d'une silhouette réelle (courbes continues, pas de ronds) ───
+
+function tfHalf(val, min, max, loHalf, hiHalf){
+  return loHalf + ((val - min) / (max - min)) * (hiHalf - loHalf);
+}
+
+// Construit un contour fermé et lissé à partir d'un profil de demi-largeurs
+// (points du haut vers le bas), symétrique de part et d'autre de centerX.
+function tfSmoothPath(points, centerX){
+  const right = points.map(p => [p[0], centerX + p[1]]);
+  const left  = points.slice().reverse().map(p => [p[0], centerX - p[1]]);
+  const seq = right.concat(left);
+  let d = `M ${seq[0][1]} ${seq[0][0]} `;
+  for(let i = 0; i < seq.length - 1; i++){
+    const [y0, x0] = seq[i];
+    const [y1, x1] = seq[i+1];
+    const cy1 = y0 + (y1 - y0) / 3;
+    const cy2 = y0 + (y1 - y0) * 2 / 3;
+    d += `C ${x0} ${cy1}, ${x1} ${cy2}, ${x1} ${y1} `;
+  }
+  d += "Z";
+  return d;
+}
+
+function tfTorsoPath(poitrine, taille, hanches){
+  const bust = tfHalf(poitrine, 80, 130, 34, 58);
+  const waist = tfHalf(taille, 65, 120, 23, 52);
+  const hips = tfHalf(hanches, 80, 130, 34, 58);
+
+  const points = [
+    [98, 44],                          // épaule
+    [112, bust * 0.90],                // aisselle / haut de poitrine
+    [126, bust],                       // poitrine — point le plus fort (vraie poitrine)
+    [143, bust * 0.72],                // sous la poitrine — creux réel
+    [160, (bust * 0.72 + waist) / 2 * 1.02], // cage thoracique / transition
+    [182, waist],                      // taille / ventre — point le plus fin
+    [206, (waist + hips) / 2 * 1.05],  // transition taille → hanches
+    [233, hips],                       // hanches — point le plus large
+    [254, hips * 0.82],                // sous les hanches
+    [268, 9]                           // entrejambe
+  ];
+  return tfSmoothPath(points, 120);
+}
+
+function tfLegPath(centerX, thighHalf){
+  const points = [
+    [268, 11],
+    [292, thighHalf],
+    [330, thighHalf * 0.60],
+    [352, thighHalf * 0.48],
+    [388, thighHalf * 0.46],
+    [425, thighHalf * 0.30],
+    [455, thighHalf * 0.26]
+  ];
+  return tfSmoothPath(points, centerX);
 }
 
 function tfUpdate(){
@@ -2575,14 +2615,15 @@ function tfUpdate(){
   document.getElementById("tfHanchesVal").textContent  = hanches + "\u00a0cm";
   document.getElementById("tfCuisseVal").textContent   = cuisse + "\u00a0cm";
 
-  document.getElementById("tfChest").style.transform  = `scaleX(${tfScale(poitrine, 80, 130)})`;
-  document.getElementById("tfWaist").style.transform   = `scaleX(${tfScale(taille, 65, 120)})`;
-  document.getElementById("tfHips").style.transform    = `scaleX(${tfScale(hanches, 80, 130)})`;
-  const cuisseScale = tfScale(cuisse, 45, 75);
-  document.getElementById("tfThighL").style.transform  = `scaleX(${cuisseScale})`;
-  document.getElementById("tfThighR").style.transform  = `scaleX(${cuisseScale})`;
+  const hipHalf = tfHalf(hanches, 80, 130, 34, 58);
+  const thighHalf = tfHalf(cuisse, 45, 75, 15, 34);
+  const legOffset = hipHalf * 0.44;
 
-  const hScale = tfScale(hauteur, 150, 200, 0.86, 1.12);
+  document.getElementById("tfTorso").setAttribute("d", tfTorsoPath(poitrine, taille, hanches));
+  document.getElementById("tfLegL").setAttribute("d", tfLegPath(120 - legOffset, thighHalf));
+  document.getElementById("tfLegR").setAttribute("d", tfLegPath(120 + legOffset, thighHalf));
+
+  const hScale = tfHalf(hauteur, 150, 200, 0.86, 1.12);
   document.getElementById("tfFigure").style.transform = `scaleY(${hScale})`;
 }
 
