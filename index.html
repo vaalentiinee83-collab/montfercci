@@ -74,6 +74,7 @@
       .then(data => {
         if (data.valid) {
           errorEl.textContent = "Bienvenue."; errorEl.style.color = "#1a1a1a"; errorEl.classList.add("visible");
+          sessionStorage.setItem("montfercci_member", "true");
           setTimeout(() => { window.location.href = "vitrine.html"; }, 1200);
         } else {
           showError("Code invalide — veuillez vérifier votre email");
@@ -86,6 +87,6 @@
     const el = document.getElementById("errorMsg"); el.textContent = msg; el.style.color = "#888";
     el.classList.add("visible"); setTimeout(() => el.classList.remove("visible"), 3500);
   }
-<\/script>
+</script>
 </body>
 </html>
