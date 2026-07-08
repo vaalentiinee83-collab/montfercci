@@ -56,18 +56,31 @@
   const input = document.getElementById("codeInput");
   input.addEventListener("input", () => { const pos = input.selectionStart; input.value = input.value.toUpperCase(); input.setSelectionRange(pos, pos); });
   input.addEventListener("keydown", e => { if (e.key === "Enter") handleAccess(); });
-  const VALID_CODES = ["MONTFERCCI2024", "MFC-ACCESS", "INVITATION01"];
+  const MEMBERSHIP_API_URL = "REMPLACER_PAR_VOTRE_URL_APPS_SCRIPT";
   function handleAccess() {
     const code = input.value.trim().toUpperCase();
     const errorEl = document.getElementById("errorMsg");
     if (!code) { showError("Veuillez entrer votre code d'accès"); return; }
-    if (VALID_CODES.includes(code)) {
-      errorEl.textContent = "Bienvenue."; errorEl.style.color = "#1a1a1a"; errorEl.classList.add("visible");
-      setTimeout(() => { window.location.href = "montfercci-home.html"; }, 1200);
-    } else {
-      showError("Code invalide — veuillez vérifier votre email");
-      input.style.animation = "shake 0.4s ease"; setTimeout(() => input.style.animation = "", 400);
+
+    if (!MEMBERSHIP_API_URL || MEMBERSHIP_API_URL.indexOf("REMPLACER") !== -1) {
+      showError("Configuration en cours, réessayez plus tard.");
+      return;
     }
+
+    errorEl.textContent = "Vérification…"; errorEl.style.color = "#888"; errorEl.classList.add("visible");
+
+    fetch(MEMBERSHIP_API_URL + "?action=verify&code=" + encodeURIComponent(code))
+      .then(res => res.json())
+      .then(data => {
+        if (data.valid) {
+          errorEl.textContent = "Bienvenue."; errorEl.style.color = "#1a1a1a"; errorEl.classList.add("visible");
+          setTimeout(() => { window.location.href = "vitrine.html"; }, 1200);
+        } else {
+          showError("Code invalide — veuillez vérifier votre email");
+          input.style.animation = "shake 0.4s ease"; setTimeout(() => input.style.animation = "", 400);
+        }
+      })
+      .catch(() => { showError("Erreur de connexion, réessayez."); });
   }
   function showError(msg) {
     const el = document.getElementById("errorMsg"); el.textContent = msg; el.style.color = "#888";
