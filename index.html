@@ -30,6 +30,9 @@
   .btn-access:hover { background: var(--noir); color: var(--blanc); }
   .error-msg { margin-top: 18px; font-size: 0.6rem; letter-spacing: 0.22em; color: var(--gris); text-transform: uppercase; opacity: 0; transition: opacity 0.4s; min-height: 1em; text-indent: 0.22em; }
   .error-msg.visible { opacity: 1; }
+  .switch-link { margin-top: 20px; font-family: "Montserrat", sans-serif; font-weight: 300; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--gris); text-transform: uppercase; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .switch-link:hover { color: var(--noir); }
+  #loginEmail { text-transform: none; letter-spacing: 0.05em; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
 </style>
@@ -43,13 +46,49 @@
   <div class="center-block">
     <a href="vitrine.html" class="btn-decouvrir">Découvrir la collection</a>
     <div class="ou-sep"><span>Ou</span></div>
-    <p class="membres-label">Espace membres</p>
-    <div class="field-wrap">
-      <label class="field-label" for="codeInput">Entrez votre code</label>
-      <input class="code-input" id="codeInput" type="text" placeholder="Code d'accès" maxlength="32" autocomplete="off" spellcheck="false" />
+
+    <!-- ÉTAPE 1 : première visite, code à usage unique -->
+    <div id="step-code">
+      <p class="membres-label">Espace membres</p>
+      <div class="field-wrap">
+        <label class="field-label" for="codeInput">Entrez votre code</label>
+        <input class="code-input" id="codeInput" type="text" placeholder="Code d'accès" maxlength="32" autocomplete="off" spellcheck="false" />
+      </div>
+      <button class="btn-access" onclick="handleAccess()">Accéder</button>
+      <p class="error-msg" id="errorMsg"></p>
+      <p class="switch-link" onclick="showStep('login')">Déjà membre ? Se connecter</p>
     </div>
-    <button class="btn-access" onclick="handleAccess()">Accéder</button>
-    <p class="error-msg" id="errorMsg">Code invalide — veuillez vérifier votre email</p>
+
+    <!-- ÉTAPE 2 : création du mot de passe après validation du code -->
+    <div id="step-password" style="display:none">
+      <p class="membres-label">Créez votre mot de passe</p>
+      <div class="field-wrap">
+        <label class="field-label" for="newPassword">Mot de passe</label>
+        <input class="code-input" id="newPassword" type="password" placeholder="6 caractères minimum" autocomplete="new-password" style="text-transform:none" />
+      </div>
+      <div class="field-wrap">
+        <label class="field-label" for="newPasswordConfirm">Confirmez le mot de passe</label>
+        <input class="code-input" id="newPasswordConfirm" type="password" placeholder="Confirmez le mot de passe" autocomplete="new-password" style="text-transform:none" />
+      </div>
+      <button class="btn-access" onclick="handleSetPassword()">Valider et accéder</button>
+      <p class="error-msg" id="passwordError"></p>
+    </div>
+
+    <!-- ÉTAPE 3 : connexion pour une cliente déjà membre -->
+    <div id="step-login" style="display:none">
+      <p class="membres-label">Se connecter</p>
+      <div class="field-wrap">
+        <label class="field-label" for="loginEmail">Email</label>
+        <input class="code-input" id="loginEmail" type="email" placeholder="Votre email" autocomplete="email" />
+      </div>
+      <div class="field-wrap">
+        <label class="field-label" for="loginPassword">Mot de passe</label>
+        <input class="code-input" id="loginPassword" type="password" placeholder="Mot de passe" autocomplete="current-password" style="text-transform:none" />
+      </div>
+      <button class="btn-access" onclick="handleLogin()">Se connecter</button>
+      <p class="error-msg" id="loginError"></p>
+      <p class="switch-link" onclick="showStep('code')">Première visite ? Utiliser mon code</p>
+    </div>
   </div>
 </div>
 <script>
@@ -57,35 +96,103 @@
   input.addEventListener("input", () => { const pos = input.selectionStart; input.value = input.value.toUpperCase(); input.setSelectionRange(pos, pos); });
   input.addEventListener("keydown", e => { if (e.key === "Enter") handleAccess(); });
   const MEMBERSHIP_API_URL = "https://script.google.com/macros/s/AKfycbznbyC9OUrNAQ2ZX66BkE9eeXk0sHNxK-8IFYK3hDOvISAky-eDxV3UMYSqit9XvAj1/exec";
+  let pendingEmail = ""; // email associé au code qui vient d'être validé, en attente de création de mot de passe
+
+  function showStep(name) {
+    ["code", "password", "login"].forEach(s => {
+      document.getElementById("step-" + s).style.display = (s === name) ? "block" : "none";
+    });
+  }
+
   function handleAccess() {
     const code = input.value.trim().toUpperCase();
-    const errorEl = document.getElementById("errorMsg");
-    if (!code) { showError("Veuillez entrer votre code d'accès"); return; }
+    if (!code) { showError("errorMsg", "Veuillez entrer votre code d'accès"); return; }
 
     if (!MEMBERSHIP_API_URL || MEMBERSHIP_API_URL.indexOf("REMPLACER") !== -1) {
-      showError("Configuration en cours, réessayez plus tard.");
+      showError("errorMsg", "Configuration en cours, réessayez plus tard.");
       return;
     }
 
-    errorEl.textContent = "Vérification…"; errorEl.style.color = "#888"; errorEl.classList.add("visible");
+    showError("errorMsg", "Vérification…", true);
 
     fetch(MEMBERSHIP_API_URL + "?action=verify&code=" + encodeURIComponent(code))
       .then(res => res.json())
       .then(data => {
         if (data.valid) {
-          errorEl.textContent = "Bienvenue."; errorEl.style.color = "#1a1a1a"; errorEl.classList.add("visible");
-          sessionStorage.setItem("montfercci_member", "true");
-          setTimeout(() => { window.location.href = "vitrine.html"; }, 1200);
+          pendingEmail = data.email || "";
+          document.getElementById("errorMsg").classList.remove("visible");
+          showStep("password");
         } else {
-          showError("Code invalide — veuillez vérifier votre email");
+          showError("errorMsg", "Code invalide — veuillez vérifier votre email");
           input.style.animation = "shake 0.4s ease"; setTimeout(() => input.style.animation = "", 400);
         }
       })
-      .catch(() => { showError("Erreur de connexion, réessayez."); });
+      .catch(() => { showError("errorMsg", "Erreur de connexion, réessayez."); });
   }
-  function showError(msg) {
-    const el = document.getElementById("errorMsg"); el.textContent = msg; el.style.color = "#888";
-    el.classList.add("visible"); setTimeout(() => el.classList.remove("visible"), 3500);
+
+  function handleSetPassword() {
+    const pass = document.getElementById("newPassword").value;
+    const confirm = document.getElementById("newPasswordConfirm").value;
+
+    if (!pass || pass.length < 6) { showError("passwordError", "6 caractères minimum."); return; }
+    if (pass !== confirm) { showError("passwordError", "Les mots de passe ne correspondent pas."); return; }
+    if (!pendingEmail) { showError("passwordError", "Session expirée, veuillez recommencer."); return; }
+
+    showError("passwordError", "Enregistrement…", true);
+
+    fetch(MEMBERSHIP_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "setPassword", email: pendingEmail, password: pass })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.ok) {
+          sessionStorage.setItem("montfercci_member", "true");
+          document.getElementById("passwordError").textContent = "Bienvenue.";
+          document.getElementById("passwordError").style.color = "#1a1a1a";
+          document.getElementById("passwordError").classList.add("visible");
+          setTimeout(() => { window.location.href = "vitrine.html"; }, 1000);
+        } else {
+          showError("passwordError", "Une erreur est survenue, réessayez.");
+        }
+      })
+      .catch(() => { showError("passwordError", "Erreur de connexion, réessayez."); });
+  }
+
+  function handleLogin() {
+    const email = document.getElementById("loginEmail").value.trim();
+    const pass = document.getElementById("loginPassword").value;
+
+    if (!email || !pass) { showError("loginError", "Merci de remplir tous les champs."); return; }
+
+    showError("loginError", "Connexion…", true);
+
+    fetch(MEMBERSHIP_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "login", email: email, password: pass })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.valid) {
+          sessionStorage.setItem("montfercci_member", "true");
+          document.getElementById("loginError").textContent = "Bienvenue.";
+          document.getElementById("loginError").style.color = "#1a1a1a";
+          document.getElementById("loginError").classList.add("visible");
+          setTimeout(() => { window.location.href = "vitrine.html"; }, 800);
+        } else {
+          showError("loginError", "Email ou mot de passe incorrect.");
+        }
+      })
+      .catch(() => { showError("loginError", "Erreur de connexion, réessayez."); });
+  }
+
+  function showError(elId, msg, persist) {
+    const el = document.getElementById(elId);
+    el.textContent = msg; el.style.color = "#888";
+    el.classList.add("visible");
+    if (!persist) setTimeout(() => el.classList.remove("visible"), 3500);
   }
 </script>
 </body>
