@@ -149,6 +149,8 @@
       .then(data => {
         if (data.ok) {
           sessionStorage.setItem("montfercci_member", "true");
+          sessionStorage.setItem("montfercci_email", pendingEmail);
+          sessionStorage.setItem("montfercci_prenom", data.prenom || "");
           document.getElementById("passwordError").textContent = "Bienvenue.";
           document.getElementById("passwordError").style.color = "#1a1a1a";
           document.getElementById("passwordError").classList.add("visible");
@@ -177,6 +179,8 @@
       .then(data => {
         if (data.valid) {
           sessionStorage.setItem("montfercci_member", "true");
+          sessionStorage.setItem("montfercci_email", email);
+          sessionStorage.setItem("montfercci_prenom", data.prenom || "");
           document.getElementById("loginError").textContent = "Bienvenue.";
           document.getElementById("loginError").style.color = "#1a1a1a";
           document.getElementById("loginError").classList.add("visible");
