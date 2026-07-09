@@ -2701,57 +2701,9 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") closeSizeFind
       <p class="tf-sub">Déplacez les curseurs pour indiquer votre taille et vos mensurations. Le mannequin s'ajuste en direct pour vous aider à visualiser votre gabarit.</p>
 
       <div class="tf-layout">
-        <div class="tf-mannequin-wrap">
-          <svg viewBox="0 0 240 600" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="tfSkin" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#dbd9d4"/>
-                <stop offset="0.45" stop-color="#f5f4f1"/>
-                <stop offset="0.55" stop-color="#f5f4f1"/>
-                <stop offset="1" stop-color="#d2d0cb"/>
-              </linearGradient>
-              <filter id="tfShadow" x="-40%" y="-6%" width="180%" height="118%">
-                <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#000" flood-opacity="0.15"/>
-              </filter>
-            </defs>
-
-            <ellipse cx="120" cy="582" rx="56" ry="8" fill="#000" opacity="0.08"/>
-
-            <g id="tfFigure" filter="url(#tfShadow)" style="transform-box:fill-box;transform-origin:top center;transition:transform .18s ease">
-
-              <!-- jambes (silhouette réelle, recalculées en JS) -->
-              <path id="tfLegL" fill="url(#tfSkin)"/>
-              <path id="tfLegR" fill="url(#tfSkin)"/>
-
-              <!-- pieds -->
-              <path d="M85,578 C82,583 82,588 88,589 L108,589 C110,585 108,580 102,578 Z" fill="url(#tfSkin)"/>
-              <path d="M155,578 C158,584 159,589 152,590 L132,590 C130,586 132,581 138,578 Z" fill="url(#tfSkin)"/>
-
-              <!-- bras (légèrement écartés du corps) -->
-              <path d="M80,124 C64,155 54,192 51,228 C49,250 50,268 55,282 L69,278 C65,262 65,244 68,226 C72,196 82,164 96,134 Z" fill="url(#tfSkin)"/>
-              <path d="M160,124 C176,155 186,192 189,228 C191,250 190,268 185,282 L171,278 C175,262 175,244 172,226 C168,196 158,164 144,134 Z" fill="url(#tfSkin)"/>
-              <ellipse cx="57" cy="292" rx="9" ry="14" fill="url(#tfSkin)" transform="rotate(-8 57 292)"/>
-              <ellipse cx="183" cy="292" rx="9" ry="14" fill="url(#tfSkin)" transform="rotate(8 183 292)"/>
-              <ellipse cx="49" cy="285" rx="4" ry="7" fill="url(#tfSkin)" transform="rotate(-20 49 285)"/>
-              <ellipse cx="191" cy="285" rx="4" ry="7" fill="url(#tfSkin)" transform="rotate(20 191 285)"/>
-
-              <!-- torse : une silhouette réelle et continue (poitrine, ventre, hanches), recalculée en JS -->
-              <path id="tfTorso" fill="url(#tfSkin)"/>
-
-              <!-- ligne de hanche (couture du mannequin) -->
-              <path id="tfHipLine" fill="none" stroke="#c7c5c0" stroke-width="1.1" opacity="0.6"/>
-
-              <!-- épaules -->
-              <path d="M78,102 C92,88 148,88 162,102 C168,108 168,118 162,124 C148,110 92,110 78,124 C72,118 72,108 78,102 Z" fill="url(#tfSkin)"/>
-
-              <!-- cou -->
-              <path d="M105,64 C105,80 105,92 108,100 L132,100 C135,92 135,80 135,64 Z" fill="url(#tfSkin)"/>
-
-              <!-- tête -->
-              <ellipse cx="120" cy="35" rx="24" ry="33" fill="url(#tfSkin)"/>
-
-            </g>
-          </svg>
+        <div class="tf-mannequin-wrap" style="height:320px;position:relative">
+          <div id="tf3dViewer" style="width:100%;height:100%"></div>
+          <div id="tf3dLoading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:#999">Chargement…</div>
         </div>
 
         <div class="tf-sliders">
@@ -2913,17 +2865,7 @@ function tfUpdate(){
   document.getElementById("tfHanchesVal").textContent  = hanches + "\u00a0cm";
   document.getElementById("tfCuisseVal").textContent   = cuisse + "\u00a0cm";
 
-  const hipHalf = tfHalf(hanches, 80, 130, 31, 53);
-  const thighHalf = tfHalf(cuisse, 45, 75, 13, 30);
-  const legOffset = hipHalf * 0.42;
-
-  document.getElementById("tfTorso").setAttribute("d", tfTorsoPath(poitrine, taille, hanches));
-  document.getElementById("tfHipLine").setAttribute("d", tfHipLinePath(hanches));
-  document.getElementById("tfLegL").setAttribute("d", tfLegPath(120 - legOffset, thighHalf));
-  document.getElementById("tfLegR").setAttribute("d", tfLegPath(120 + legOffset, thighHalf));
-
-  const hScale = tfHalf(hauteur, 150, 200, 0.84, 1.14);
-  document.getElementById("tfFigure").style.transform = `scaleY(${hScale})`;
+  if (window.tfSetMorphs) window.tfSetMorphs(poitrine, taille, hanches, hauteur);
 }
 
 const TF_SIZES = ["XS","S","M","L","XL"];
@@ -2972,6 +2914,126 @@ function tfComputeResult(){
 }
 
 document.addEventListener("keydown", e => { if(e.key === "Escape") closeTieleurSizeFinder(); });
+</script>
+
+<!-- ═══ MANNEQUIN 3D — VIEWER THREE.JS ═══ -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+let tf3d = null;
+
+function initTf3dViewer() {
+  if (tf3d) return; // deja initialise
+  const container = document.getElementById('tf3dViewer');
+  if (!container) return;
+
+  const scene = new THREE.Scene();
+  scene.background = null;
+
+  const camera = new THREE.PerspectiveCamera(32, container.clientWidth / Math.max(container.clientHeight,1), 0.05, 10);
+  camera.position.set(0, 0.42, 1.35);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, 0.38, 0);
+  controls.enableDamping = true;
+  controls.enablePan = false;
+  controls.enableZoom = false;
+  controls.minPolarAngle = Math.PI/2 - 0.35;
+  controls.maxPolarAngle = Math.PI/2 + 0.15;
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+  const key = new THREE.DirectionalLight(0xffffff, 0.9);
+  key.position.set(1, 1.5, 1);
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.35);
+  fill.position.set(-1, 0.4, -1);
+  scene.add(fill);
+
+  let mesh = null;
+
+  const loader = new GLTFLoader();
+  loader.load('3d/mannequin.glb', (gltf) => {
+    mesh = gltf.scene.getObjectByProperty('type', 'Mesh');
+    scene.add(gltf.scene);
+    const loadingEl = document.getElementById('tf3dLoading');
+    if (loadingEl) loadingEl.style.display = 'none';
+    applyMorphs();
+  }, undefined, (err) => {
+    console.error('Erreur chargement mannequin 3D :', err);
+    const loadingEl = document.getElementById('tf3dLoading');
+    if (loadingEl) loadingEl.textContent = 'Aperçu indisponible';
+  });
+
+  function mapRange(value, inMin, inMax) {
+    const t = (value - inMin) / (inMax - inMin);
+    return Math.min(1, Math.max(0, t));
+  }
+
+  let lastVals = { poitrine: 96, taille: 76, hanches: 94, hauteur: 172 };
+
+  function applyMorphs() {
+    if (!mesh || !mesh.morphTargetDictionary) return;
+    const dict = mesh.morphTargetDictionary;
+    const { poitrine, taille, hanches, hauteur } = lastVals;
+    mesh.morphTargetInfluences[dict.chest] = mapRange(poitrine, 80, 130);
+    mesh.morphTargetInfluences[dict.waist] = mapRange(taille, 65, 120);
+    mesh.morphTargetInfluences[dict.hips]  = mapRange(hanches, 80, 130);
+
+    const hScale = 0.84 + mapRange(hauteur, 150, 200) * 0.30;
+    gltf_scene_scale(hScale);
+  }
+
+  function gltf_scene_scale(s) {
+    scene.children.forEach(child => {
+      if (child.type === 'Group' || child.type === 'Object3D' || child.type === 'Scene') {
+        child.scale.set(1, s, 1);
+      }
+    });
+  }
+
+  window.tfSetMorphs = function(poitrine, taille, hanches, hauteur) {
+    lastVals = { poitrine, taille, hanches, hauteur };
+    applyMorphs();
+  };
+
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    if (!container.clientWidth) return;
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+
+  tf3d = { scene, camera, renderer };
+}
+
+// Initialise le viewer 3D des l'ouverture de la modale Tieleur
+const _origOpenTf = window.openTieleurSizeFinder;
+window.openTieleurSizeFinder = function(e) {
+  _origOpenTf(e);
+  setTimeout(initTf3dViewer, 50); // laisse le temps au conteneur d'avoir une taille (display:flex applique)
+};
 </script>
 
 </body>
