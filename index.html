@@ -151,6 +151,7 @@
           sessionStorage.setItem("montfercci_member", "true");
           sessionStorage.setItem("montfercci_email", pendingEmail);
           sessionStorage.setItem("montfercci_prenom", data.prenom || "");
+          sessionStorage.setItem("montfercci_nom", data.nom || "");
           document.getElementById("passwordError").textContent = "Bienvenue.";
           document.getElementById("passwordError").style.color = "#1a1a1a";
           document.getElementById("passwordError").classList.add("visible");
@@ -181,6 +182,7 @@
           sessionStorage.setItem("montfercci_member", "true");
           sessionStorage.setItem("montfercci_email", email);
           sessionStorage.setItem("montfercci_prenom", data.prenom || "");
+          sessionStorage.setItem("montfercci_nom", data.nom || "");
           document.getElementById("loginError").textContent = "Bienvenue.";
           document.getElementById("loginError").style.color = "#1a1a1a";
           document.getElementById("loginError").classList.add("visible");
