@@ -1,27 +1,72 @@
 // api/_shopify.js
 //
 // Internal helper used by the other files in /api. Never imported by any
-// browser-facing code. Talks to the Shopify Admin GraphQL API using the
-// secret access token, which must be set as a Vercel environment variable
-// and must NEVER be placed in index.html / vitrine.html / any client file.
+// browser-facing code. Talks to the Shopify Admin GraphQL API.
+//
+// Shopify apps created since January 2026 no longer get a permanent static
+// Admin API token. Instead, we exchange the app's Client ID + Client Secret
+// for a short-lived (24h) access token using the "client credentials grant"
+// — this works because the app and the store are in the same Shopify
+// organization (your own store's own app). The token is cached in memory
+// for the life of the serverless instance and refreshed automatically.
 //
 // Required environment variables (set in Vercel → Project → Settings →
 // Environment Variables):
-//   SHOPIFY_STORE_DOMAIN        e.g. "paxcyt-ct.myshopify.com"
-//   SHOPIFY_ADMIN_ACCESS_TOKEN  the secret Admin API access token
+//   SHOPIFY_STORE_DOMAIN          e.g. "paxcyt-ct.myshopify.com"
+//   SHOPIFY_ADMIN_CLIENT_ID       "ID client" from Paramètres de l'appli
+//   SHOPIFY_ADMIN_CLIENT_SECRET   "Secret" from Paramètres de l'appli
+//
+// These must NEVER be placed in index.html / vitrine.html / any client file.
 
 const ADMIN_API_VERSION = "2025-01";
 
-async function shopifyAdmin(query, variables = {}) {
-  const domain = process.env.SHOPIFY_STORE_DOMAIN;
-  const token = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
+let cachedToken = null;
+let cachedTokenExpiryMs = 0;
 
-  if (!domain || !token) {
+async function getAccessToken() {
+  const domain = process.env.SHOPIFY_STORE_DOMAIN;
+  const clientId = process.env.SHOPIFY_ADMIN_CLIENT_ID;
+  const clientSecret = process.env.SHOPIFY_ADMIN_CLIENT_SECRET;
+
+  if (!domain || !clientId || !clientSecret) {
     throw new Error(
-      "Configuration Shopify manquante : définissez SHOPIFY_STORE_DOMAIN et " +
-        "SHOPIFY_ADMIN_ACCESS_TOKEN dans les variables d'environnement Vercel."
+      "Configuration Shopify manquante : définissez SHOPIFY_STORE_DOMAIN, " +
+        "SHOPIFY_ADMIN_CLIENT_ID et SHOPIFY_ADMIN_CLIENT_SECRET dans les " +
+        "variables d'environnement Vercel."
     );
   }
+
+  const now = Date.now();
+  if (cachedToken && now < cachedTokenExpiryMs - 60000) {
+    return cachedToken;
+  }
+
+  const tokenRes = await fetch(`https://${domain}/admin/oauth/access_token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      client_id: clientId,
+      client_secret: clientSecret,
+      grant_type: "client_credentials"
+    })
+  });
+  const tokenJson = await tokenRes.json();
+
+  if (!tokenRes.ok || !tokenJson.access_token) {
+    throw new Error(
+      "Impossible d'obtenir un token Shopify (vérifiez SHOPIFY_ADMIN_CLIENT_ID / " +
+        "SHOPIFY_ADMIN_CLIENT_SECRET) : " + JSON.stringify(tokenJson)
+    );
+  }
+
+  cachedToken = tokenJson.access_token;
+  cachedTokenExpiryMs = now + (tokenJson.expires_in || 86399) * 1000;
+  return cachedToken;
+}
+
+async function shopifyAdmin(query, variables = {}) {
+  const domain = process.env.SHOPIFY_STORE_DOMAIN;
+  const token = await getAccessToken();
 
   const response = await fetch(
     `https://${domain}/admin/api/${ADMIN_API_VERSION}/graphql.json`,
