@@ -48,7 +48,7 @@ async function shopifyStorefront(query, variables) {
 
 // Creates the real Shopify customer account (this is where the password is
 // actually stored, securely, by Shopify — never by our own code).
-async function shopifyCustomerCreate({ email, password, firstName, lastName }) {
+async function shopifyCustomerCreate({ email, password, firstName, lastName, acceptsMarketing }) {
   const mutation = `
     mutation CustomerCreate($input: CustomerCreateInput!) {
       customerCreate(input: $input) {
@@ -57,7 +57,7 @@ async function shopifyCustomerCreate({ email, password, firstName, lastName }) {
       }
     }`;
   const data = await shopifyStorefront(mutation, {
-    input: { email, password, firstName, lastName }
+    input: { email, password, firstName, lastName, acceptsMarketing: !!acceptsMarketing }
   });
   return data.customerCreate;
 }

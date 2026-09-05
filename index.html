@@ -2400,6 +2400,10 @@ function submitCommande() {
         <label for="mPasswordConfirm">Confirmez le mot de passe</label>
         <input type="password" id="mPasswordConfirm" placeholder="Confirmez le mot de passe" autocomplete="new-password"/>
       </div>
+      <div class="rgpd-row">
+        <input type="checkbox" id="mNewsletter">
+        <label for="mNewsletter">J'accepte de recevoir les communications de MONTFERCCI Paris et reconnais avoir pris connaissance de la politique de confidentialité.</label>
+      </div>
       <p class="membre-error" id="membreError" style="font-size:.6rem;letter-spacing:.1em;color:#c0392b;margin-top:-8px;margin-bottom:16px;display:none"></p>
       <button class="membre-btn" onclick="submitMembre()">Créer mon compte</button>
     </div>
@@ -2415,7 +2419,7 @@ function submitCommande() {
 
 <script>
 function openMembreModal(e){if(e)e.stopPropagation();document.getElementById("membreOverlay").classList.add("open");document.body.style.overflow="hidden";}
-function closeMembreModal(){document.getElementById("membreOverlay").classList.remove("open");document.body.style.overflow="";setTimeout(()=>{document.getElementById("membreForm").style.display="block";document.getElementById("membreConfirm").classList.remove("show");document.getElementById("mPrenom").value="";document.getElementById("mNom").value="";document.getElementById("mEmail").value="";document.getElementById("mPassword").value="";document.getElementById("mPasswordConfirm").value="";hideMembreError();},300);}
+function closeMembreModal(){document.getElementById("membreOverlay").classList.remove("open");document.body.style.overflow="";setTimeout(()=>{document.getElementById("membreForm").style.display="block";document.getElementById("membreConfirm").classList.remove("show");document.getElementById("mPrenom").value="";document.getElementById("mNom").value="";document.getElementById("mEmail").value="";document.getElementById("mPassword").value="";document.getElementById("mPasswordConfirm").value="";document.getElementById("mNewsletter").checked=false;hideMembreError();},300);}
 function handleMembreOverlay(e){if(e.target===document.getElementById("membreOverlay"))closeMembreModal();}
 function hideMembreError(){const el=document.getElementById("membreError");el.style.display="none";el.textContent="";}
 function showMembreError(msg){const el=document.getElementById("membreError");el.textContent=msg;el.style.display="block";}
@@ -2426,6 +2430,7 @@ function submitMembre(){
   const em=document.getElementById("mEmail").value.trim();
   const pass=document.getElementById("mPassword").value;
   const passConfirm=document.getElementById("mPasswordConfirm").value;
+  const wantsNewsletter=document.getElementById("mNewsletter").checked;
   hideMembreError();
 
   if(!p||!n||!em||!pass){showMembreError("Veuillez remplir tous les champs.");return;}
@@ -2436,7 +2441,7 @@ function submitMembre(){
   const btn=document.querySelector("#membreForm .membre-btn");
   btn.disabled=true; btn.textContent="Création en cours…";
 
-  shopifyCustomerCreate({ email: em, password: pass, firstName: p, lastName: n })
+  shopifyCustomerCreate({ email: em, password: pass, firstName: p, lastName: n, acceptsMarketing: wantsNewsletter })
     .then(result => {
       if(result.customerUserErrors && result.customerUserErrors.length){
         throw new Error(result.customerUserErrors[0].message || "Une erreur est survenue.");
