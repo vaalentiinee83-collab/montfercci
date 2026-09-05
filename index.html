@@ -2462,6 +2462,14 @@ function submitMembre(){
       sessionStorage.setItem("montfercci_nom", n);
       sessionStorage.setItem("montfercci_customerAccessToken", token);
 
+      if (wantsNewsletter) {
+        fetch("/api/set-marketing-consent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: em, accepts: true })
+        }).catch(() => {});
+      }
+
       document.getElementById("membreForm").style.display="none";
       document.getElementById("membreConfirm").classList.add("show");
       if (typeof applyMemberUI === "function") applyMemberUI();
