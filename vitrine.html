@@ -2374,7 +2374,7 @@ function submitCommande() {
     <button class="membre-close" onclick="closeMembreModal()">Fermer</button>
     <div id="membreForm">
       <h2 class="membre-title">Devenir membre</h2>
-      <p class="membre-sub">Demande d'accès — sélection sur invitation</p>
+      <p class="membre-sub">Créez votre compte MONTFERCCI Paris</p>
       <div class="membre-field">
         <label for="mPrenom">Prénom</label>
         <input type="text" id="mPrenom" placeholder="Votre prénom" autocomplete="given-name"/>
@@ -2387,14 +2387,22 @@ function submitCommande() {
         <label for="mEmail">Adresse e-mail</label>
         <input type="email" id="mEmail" placeholder="Votre email" autocomplete="email"/>
       </div>
-      <button class="membre-btn" onclick="submitMembre()">Enregistrer ma demande</button>
+      <div class="membre-field">
+        <label for="mPassword">Mot de passe</label>
+        <input type="password" id="mPassword" placeholder="6 caractères minimum" autocomplete="new-password"/>
+      </div>
+      <div class="membre-field">
+        <label for="mPasswordConfirm">Confirmez le mot de passe</label>
+        <input type="password" id="mPasswordConfirm" placeholder="Confirmez le mot de passe" autocomplete="new-password"/>
+      </div>
+      <p class="membre-error" id="membreError" style="font-size:.6rem;letter-spacing:.1em;color:#c0392b;margin-top:-8px;margin-bottom:16px;display:none"></p>
+      <button class="membre-btn" onclick="submitMembre()">Créer mon compte</button>
     </div>
     <div class="membre-confirm" id="membreConfirm">
-      <p class="membre-confirm-title">Merci pour votre demande.</p>
+      <p class="membre-confirm-title">Bienvenue.</p>
       <p class="membre-confirm-text">
-        Votre inscription a bien été enregistrée.<br><br>
-        Vous recevrez un email si votre profil<br>
-        est retenu pour rejoindre MONTFERCCI Paris.
+        Votre compte a bien été créé.<br><br>
+        Vous êtes maintenant membre MONTFERCCI Paris.
       </p>
     </div>
   </div>
@@ -2402,23 +2410,59 @@ function submitCommande() {
 
 <script>
 function openMembreModal(e){if(e)e.stopPropagation();document.getElementById("membreOverlay").classList.add("open");document.body.style.overflow="hidden";}
-function closeMembreModal(){document.getElementById("membreOverlay").classList.remove("open");document.body.style.overflow="";setTimeout(()=>{document.getElementById("membreForm").style.display="block";document.getElementById("membreConfirm").classList.remove("show");document.getElementById("mPrenom").value="";document.getElementById("mNom").value="";document.getElementById("mEmail").value="";},300);}
+function closeMembreModal(){document.getElementById("membreOverlay").classList.remove("open");document.body.style.overflow="";setTimeout(()=>{document.getElementById("membreForm").style.display="block";document.getElementById("membreConfirm").classList.remove("show");document.getElementById("mPrenom").value="";document.getElementById("mNom").value="";document.getElementById("mEmail").value="";document.getElementById("mPassword").value="";document.getElementById("mPasswordConfirm").value="";hideMembreError();},300);}
 function handleMembreOverlay(e){if(e.target===document.getElementById("membreOverlay"))closeMembreModal();}
+function hideMembreError(){const el=document.getElementById("membreError");el.style.display="none";el.textContent="";}
+function showMembreError(msg){const el=document.getElementById("membreError");el.textContent=msg;el.style.display="block";}
+
 function submitMembre(){
   const p=document.getElementById("mPrenom").value.trim();
   const n=document.getElementById("mNom").value.trim();
   const em=document.getElementById("mEmail").value.trim();
-  if(!p||!n||!em){alert("Veuillez remplir tous les champs.");return;}
-  if(!em.includes("@")){alert("Veuillez entrer une adresse email valide.");return;}
+  const pass=document.getElementById("mPassword").value;
+  const passConfirm=document.getElementById("mPasswordConfirm").value;
+  hideMembreError();
 
-  fetch("/api/membership-request", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prenom: p, nom: n, email: em })
-  }).catch(function(err){ console.error("Erreur envoi demande membre :", err); });
+  if(!p||!n||!em||!pass){showMembreError("Veuillez remplir tous les champs.");return;}
+  if(!em.includes("@")){showMembreError("Veuillez entrer une adresse email valide.");return;}
+  if(pass.length<6){showMembreError("Le mot de passe doit contenir au moins 6 caractères.");return;}
+  if(pass!==passConfirm){showMembreError("Les mots de passe ne correspondent pas.");return;}
 
-  document.getElementById("membreForm").style.display="none";
-  document.getElementById("membreConfirm").classList.add("show");
+  const btn=document.querySelector("#membreForm .membre-btn");
+  btn.disabled=true; btn.textContent="Création en cours…";
+
+  shopifyCustomerCreate({ email: em, password: pass, firstName: p, lastName: n })
+    .then(result => {
+      if(result.customerUserErrors && result.customerUserErrors.length){
+        throw new Error(result.customerUserErrors[0].message || "Une erreur est survenue.");
+      }
+      return shopifyCustomerLogin({ email: em, password: pass });
+    })
+    .then(loginResult => {
+      if(loginResult.customerUserErrors && loginResult.customerUserErrors.length){
+        // Compte créé mais connexion auto échouée : on invite à se connecter.
+        document.getElementById("membreForm").style.display="none";
+        document.getElementById("membreConfirm").classList.add("show");
+        return;
+      }
+      const token = loginResult.customerAccessToken.accessToken;
+      sessionStorage.setItem("montfercci_member", "true");
+      sessionStorage.setItem("montfercci_email", em);
+      sessionStorage.setItem("montfercci_prenom", p);
+      sessionStorage.setItem("montfercci_nom", n);
+      sessionStorage.setItem("montfercci_customerAccessToken", token);
+
+      document.getElementById("membreForm").style.display="none";
+      document.getElementById("membreConfirm").classList.add("show");
+      if (typeof applyMemberUI === "function") applyMemberUI();
+      setTimeout(closeMembreModal, 1600);
+    })
+    .catch(err => {
+      showMembreError(err.message || "Erreur de connexion, réessayez.");
+    })
+    .finally(() => {
+      btn.disabled=false; btn.textContent="Créer mon compte";
+    });
 }
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeMembreModal();});
 </script>
