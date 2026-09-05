@@ -19,7 +19,7 @@
 // ──────────────────────────────────────────────────────────────────────
 
 const SHOPIFY_STOREFRONT_DOMAIN = "paxcyt-ct.myshopify.com";
-const SHOPIFY_STOREFRONT_TOKEN = "REMPLACER_PAR_VOTRE_TOKEN";
+const SHOPIFY_STOREFRONT_TOKEN = "efad0d04fa289a191aebad78d4b32747";
 const SHOPIFY_STOREFRONT_API_VERSION = "2025-01";
 
 async function shopifyStorefront(query, variables) {
