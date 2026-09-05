@@ -727,6 +727,7 @@ footer{
 </style>
 </head>
 <body>
+<script src="shopify-config.js"></script>
 
 
 <!-- ═══ MOBILE NAV ═══ -->
@@ -2025,6 +2026,7 @@ function logoutMember() {
   sessionStorage.removeItem('montfercci_email');
   sessionStorage.removeItem('montfercci_prenom');
   sessionStorage.removeItem('montfercci_nom');
+  sessionStorage.removeItem('montfercci_customerAccessToken');
   window.location.href = 'index.html';
 }
 
@@ -2034,16 +2036,18 @@ function openProfil() {
 }
 
 function loadOrderHistory() {
-  const email = sessionStorage.getItem('montfercci_email');
+  const token = sessionStorage.getItem('montfercci_customerAccessToken');
   const container = document.getElementById('profil-orders');
   if (!container) return;
-  if (!email) { renderOrderHistory([]); return; }
+  if (!token) { renderOrderHistory([]); return; }
 
   container.innerHTML = '<p style="font-family:\'Lora\',serif;font-style:italic;font-size:.85rem;color:#999">Chargement de votre historique…</p>';
 
-  fetch(MEMBERSHIP_API_URL + '?action=getOrders&email=' + encodeURIComponent(email))
-    .then(res => res.json())
-    .then(data => renderOrderHistory(data.orders || []))
+  shopifyCustomerOrders(token)
+    .then(customer => {
+      const orders = ((customer && customer.orders && customer.orders.edges) || []).map(e => e.node);
+      renderOrderHistory(orders);
+    })
     .catch(() => renderOrderHistory(null));
 }
 
@@ -2066,23 +2070,24 @@ function renderOrderHistory(orders) {
   }
 
   container.innerHTML = orders.map(order => {
-    const d = order.date ? new Date(order.date) : null;
+    const d = order.processedAt ? new Date(order.processedAt) : null;
     const dateStr = d && !isNaN(d) ? d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+    const lineItems = ((order.lineItems && order.lineItems.edges) || []).map(e => e.node);
     let itemsHtml;
-    if (order.items && order.items.length) {
-      itemsHtml = '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">' + order.items.map(it => {
-        const initiale = (it.name || '?').trim().charAt(0).toUpperCase();
-        const sizeHtml = it.size ? '<span style="display:block;font-size:.6rem;color:#999;margin-top:2px">Taille : ' + it.size + '</span>' : '';
+    if (lineItems.length) {
+      itemsHtml = '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">' + lineItems.map(it => {
+        const initiale = (it.title || '?').trim().charAt(0).toUpperCase();
+        const qtyHtml = it.quantity > 1 ? '<span style="display:block;font-size:.6rem;color:#999;margin-top:2px">Quantité : ' + it.quantity + '</span>' : '';
         return '<div style="display:flex;align-items:center;gap:10px;border:1px solid rgba(51,51,51,.1);padding:10px 14px;min-width:180px">' +
           '<div style="width:34px;height:34px;border:1px solid #ddd;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:\'Cormorant Garamond\',serif;font-size:.95rem;color:#0a0a0a;flex-shrink:0">' + initiale + '</div>' +
-          '<div><span style="display:block;font-family:\'Lora\',serif;font-size:.8rem;color:#1a1a1a">' + (it.name || '') + '</span>' + sizeHtml + '</div>' +
+          '<div><span style="display:block;font-family:\'Lora\',serif;font-size:.8rem;color:#1a1a1a">' + (it.title || '') + '</span>' + qtyHtml + '</div>' +
         '</div>';
       }).join('') + '</div>';
     } else {
-      itemsHtml = '<p style="font-family:\'Lora\',serif;font-size:.82rem;color:#555;margin-top:8px">' + (order.articles || '') + '</p>';
+      itemsHtml = '';
     }
     return '<div style="padding:20px 0;border-bottom:1px solid rgba(51,51,51,.08)">' +
-      '<span style="font-family:\'Montserrat\',sans-serif;font-weight:300;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#888">Commande du ' + dateStr + '</span>' +
+      '<span style="font-family:\'Montserrat\',sans-serif;font-weight:300;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#888">Commande ' + (order.name || '') + ' — ' + dateStr + '</span>' +
       itemsHtml +
     '</div>';
   }).join('');
@@ -2236,18 +2241,14 @@ function submitCommande() {
   const items = CART.map(item => item.name + (item.size ? " (Taille : " + item.size + ")" : "")).join(", ");
   const itemsJson = JSON.stringify(CART.map(item => ({ name: item.name, size: item.size || null })));
 
-  if (MEMBERSHIP_API_URL && MEMBERSHIP_API_URL.indexOf("REMPLACER") === -1) {
-    fetch(MEMBERSHIP_API_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        action: "commande",
-        prenom: p, nom: n, email: em, telephone: tel, adresse: adresse,
-        notes: notes, articles: items, itemsJson: itemsJson
-      })
-    }).catch(function(err){ console.error("Erreur envoi commande :", err); });
-  }
+  fetch("/api/order-request", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      prenom: p, nom: n, email: em, telephone: tel, adresse: adresse,
+      notes: notes, articles: items, itemsJson: itemsJson
+    })
+  }).catch(function(err){ console.error("Erreur envoi commande :", err); });
 
   CART = [];
   updateCartBadge();
@@ -2400,8 +2401,6 @@ function submitCommande() {
 </div>
 
 <script>
-const MEMBERSHIP_API_URL = "https://script.google.com/macros/s/AKfycbznbyC9OUrNAQ2ZX66BkE9eeXk0sHNxK-8IFYK3hDOvISAky-eDxV3UMYSqit9XvAj1/exec";
-
 function openMembreModal(e){if(e)e.stopPropagation();document.getElementById("membreOverlay").classList.add("open");document.body.style.overflow="hidden";}
 function closeMembreModal(){document.getElementById("membreOverlay").classList.remove("open");document.body.style.overflow="";setTimeout(()=>{document.getElementById("membreForm").style.display="block";document.getElementById("membreConfirm").classList.remove("show");document.getElementById("mPrenom").value="";document.getElementById("mNom").value="";document.getElementById("mEmail").value="";},300);}
 function handleMembreOverlay(e){if(e.target===document.getElementById("membreOverlay"))closeMembreModal();}
@@ -2412,14 +2411,11 @@ function submitMembre(){
   if(!p||!n||!em){alert("Veuillez remplir tous les champs.");return;}
   if(!em.includes("@")){alert("Veuillez entrer une adresse email valide.");return;}
 
-  if(MEMBERSHIP_API_URL && MEMBERSHIP_API_URL.indexOf("REMPLACER") === -1){
-    fetch(MEMBERSHIP_API_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ prenom: p, nom: n, email: em })
-    }).catch(function(err){ console.error("Erreur envoi demande membre :", err); });
-  }
+  fetch("/api/membership-request", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prenom: p, nom: n, email: em })
+  }).catch(function(err){ console.error("Erreur envoi demande membre :", err); });
 
   document.getElementById("membreForm").style.display="none";
   document.getElementById("membreConfirm").classList.add("show");

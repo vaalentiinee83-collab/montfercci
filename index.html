@@ -91,12 +91,15 @@
     </div>
   </div>
 </div>
+<script src="shopify-config.js"></script>
 <script>
   const input = document.getElementById("codeInput");
   input.addEventListener("input", () => { const pos = input.selectionStart; input.value = input.value.toUpperCase(); input.setSelectionRange(pos, pos); });
   input.addEventListener("keydown", e => { if (e.key === "Enter") handleAccess(); });
-  const MEMBERSHIP_API_URL = "https://script.google.com/macros/s/AKfycbznbyC9OUrNAQ2ZX66BkE9eeXk0sHNxK-8IFYK3hDOvISAky-eDxV3UMYSqit9XvAj1/exec";
-  let pendingEmail = ""; // email associé au code qui vient d'être validé, en attente de création de mot de passe
+  let pendingEmail = "";  // email du client dont le code vient d'être validé
+  let pendingPrenom = "";
+  let pendingNom = "";
+  let pendingCode = "";
 
   function showStep(name) {
     ["code", "password", "login"].forEach(s => {
@@ -108,18 +111,20 @@
     const code = input.value.trim().toUpperCase();
     if (!code) { showError("errorMsg", "Veuillez entrer votre code d'accès"); return; }
 
-    if (!MEMBERSHIP_API_URL || MEMBERSHIP_API_URL.indexOf("REMPLACER") !== -1) {
-      showError("errorMsg", "Configuration en cours, réessayez plus tard.");
-      return;
-    }
-
     showError("errorMsg", "Vérification…", true);
 
-    fetch(MEMBERSHIP_API_URL + "?action=verify&code=" + encodeURIComponent(code))
+    fetch("/api/verify-code", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code })
+    })
       .then(res => res.json())
       .then(data => {
         if (data.valid) {
           pendingEmail = data.email || "";
+          pendingPrenom = data.prenom || "";
+          pendingNom = data.nom || "";
+          pendingCode = data.code || code;
           document.getElementById("errorMsg").classList.remove("visible");
           showStep("password");
         } else {
@@ -140,25 +145,38 @@
 
     showError("passwordError", "Enregistrement…", true);
 
-    fetch(MEMBERSHIP_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action: "setPassword", email: pendingEmail, password: pass })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.ok) {
-          sessionStorage.setItem("montfercci_member", "true");
-          sessionStorage.setItem("montfercci_email", pendingEmail);
-          sessionStorage.setItem("montfercci_prenom", data.prenom || "");
-          sessionStorage.setItem("montfercci_nom", data.nom || "");
-          document.getElementById("passwordError").textContent = "Bienvenue.";
-          document.getElementById("passwordError").style.color = "#1a1a1a";
-          document.getElementById("passwordError").classList.add("visible");
-          setTimeout(() => { window.location.href = "vitrine.html"; }, 1000);
-        } else {
-          showError("passwordError", "Une erreur est survenue, réessayez.");
+    shopifyCustomerCreate({ email: pendingEmail, password: pass, firstName: pendingPrenom, lastName: pendingNom })
+      .then(result => {
+        if (result.customerUserErrors && result.customerUserErrors.length) {
+          showError("passwordError", result.customerUserErrors[0].message || "Une erreur est survenue, réessayez.");
+          return null;
         }
+        return shopifyCustomerLogin({ email: pendingEmail, password: pass });
+      })
+      .then(loginResult => {
+        if (!loginResult) return; // erreur déjà affichée ci-dessus
+        if (loginResult.customerUserErrors && loginResult.customerUserErrors.length) {
+          showError("passwordError", "Compte créé, mais la connexion automatique a échoué. Essayez de vous connecter.");
+          return;
+        }
+        const token = loginResult.customerAccessToken.accessToken;
+        sessionStorage.setItem("montfercci_member", "true");
+        sessionStorage.setItem("montfercci_email", pendingEmail);
+        sessionStorage.setItem("montfercci_prenom", pendingPrenom);
+        sessionStorage.setItem("montfercci_nom", pendingNom);
+        sessionStorage.setItem("montfercci_customerAccessToken", token);
+
+        // Nettoyage des tags côté Shopify (best-effort, ne bloque pas la suite)
+        fetch("/api/finalize-membership", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: pendingEmail, code: pendingCode })
+        }).catch(() => {});
+
+        document.getElementById("passwordError").textContent = "Bienvenue.";
+        document.getElementById("passwordError").style.color = "#1a1a1a";
+        document.getElementById("passwordError").classList.add("visible");
+        setTimeout(() => { window.location.href = "vitrine.html"; }, 1000);
       })
       .catch(() => { showError("passwordError", "Erreur de connexion, réessayez."); });
   }
@@ -171,25 +189,25 @@
 
     showError("loginError", "Connexion…", true);
 
-    fetch(MEMBERSHIP_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action: "login", email: email, password: pass })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.valid) {
+    shopifyCustomerLogin({ email, password: pass })
+      .then(result => {
+        if (result.customerUserErrors && result.customerUserErrors.length) {
+          showError("loginError", "Email ou mot de passe incorrect.");
+          return;
+        }
+        const token = result.customerAccessToken.accessToken;
+        sessionStorage.setItem("montfercci_customerAccessToken", token);
+        sessionStorage.setItem("montfercci_email", email);
+        // Récupère prénom/nom pour l'affichage du profil.
+        return shopifyCustomerOrders(token).then(customer => {
           sessionStorage.setItem("montfercci_member", "true");
-          sessionStorage.setItem("montfercci_email", email);
-          sessionStorage.setItem("montfercci_prenom", data.prenom || "");
-          sessionStorage.setItem("montfercci_nom", data.nom || "");
+          sessionStorage.setItem("montfercci_prenom", (customer && customer.firstName) || "");
+          sessionStorage.setItem("montfercci_nom", (customer && customer.lastName) || "");
           document.getElementById("loginError").textContent = "Bienvenue.";
           document.getElementById("loginError").style.color = "#1a1a1a";
           document.getElementById("loginError").classList.add("visible");
           setTimeout(() => { window.location.href = "vitrine.html"; }, 800);
-        } else {
-          showError("loginError", "Email ou mot de passe incorrect.");
-        }
+        });
       })
       .catch(() => { showError("loginError", "Erreur de connexion, réessayez."); });
   }
