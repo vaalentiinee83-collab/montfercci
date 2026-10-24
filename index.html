@@ -2468,7 +2468,7 @@ function cmpAddAll(e) {
   }
   msg.textContent = '';
   const group = 'tenue-' + Date.now();
-  addToCart({ name: CMP.noTie ? 'Tailleur, blazer & pantalon' : 'Tieleur, cravate, blazer & pantalon', size: null, img: null, price: CMP.noTie ? CMP_PRICE.noTie : CMP_PRICE.full, group: group });
+  addToCart({ name: CMP.noTie ? 'Tailleur, blazer & pantalon' : 'Tieleur, cravate, blazer & pantalon', size: null, img: null, price: CMP.noTie ? CMP_PRICE.noTie : CMP_PRICE.full, group: group, pack: CMP.noTie ? 'notie' : 'full' });
   (CMP.noTie ? ['jacket', 'pants'] : ['tie', 'jacket', 'pants']).forEach(function (k) {
     const it = cmpItem(k); it.price = 0; it.group = group; addToCart(it);
   });
@@ -2613,6 +2613,12 @@ function goToCommande() {
   }).join('');
   document.getElementById('commande-success').classList.remove('show');
   document.getElementById('commande-form-wrap').style.display = 'block';
+  const payable = CART.some(function (i) { return i.pack; }) && CART.every(function (i) { return i.pack || (i.group && i.price === 0); });
+  document.getElementById('commande-sub').textContent = payable
+    ? 'Renseignez vos coordonnées, puis passez au paiement sécurisé.'
+    : 'Nous vous recontacterons pour confirmer votre commande et convenir du règlement.';
+  document.getElementById('commande-pay-note').textContent = payable ? 'Vous serez redirigée vers la page de paiement sécurisé.' : '';
+  const cb = document.getElementById('commande-btn'); if (cb) { cb.disabled = false; cb.textContent = 'Commander'; }
   if (isMemberSession()) {
     [['cPrenom', 'montfercci_prenom'], ['cNom', 'montfercci_nom'], ['cEmail', 'montfercci_email']].forEach(function (f) {
       const el = document.getElementById(f[0]);
@@ -2649,8 +2655,10 @@ function submitCommande() {
   errorEl.classList.remove('visible');
 
   const items = CART.map(item => item.name + (item.size ? " (Taille : " + item.size + ")" : "") + (typeof item.price === 'number' && item.price > 0 ? ", " + item.price + " €" : "")).join(", ");
-  const itemsJson = JSON.stringify(CART.map(item => ({ name: item.name, size: item.size || null, price: (typeof item.price === 'number') ? item.price : null })));
+  const itemsJson = JSON.stringify(CART.map(item => ({ name: item.name, size: item.size || null, pack: item.pack || null, included: (!item.pack && item.group && item.price === 0) ? true : null })));
 
+  const btn = document.getElementById('commande-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Un instant…'; }
   fetch("/api/order-request", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -2658,12 +2666,27 @@ function submitCommande() {
       prenom: p, nom: n, email: em, telephone: tel, adresse: adresse,
       notes: notes, articles: items, itemsJson: itemsJson
     })
-  }).catch(function(err){ console.error("Erreur envoi commande :", err); });
-
-  CART = [];
-  updateCartBadge();
-  document.getElementById('commande-form-wrap').style.display = 'none';
-  document.getElementById('commande-success').classList.add('show');
+  }).then(function (r) { return r.json(); }).then(function (data) {
+    if (data && data.ok && data.paymentUrl) {
+      CART = [];
+      updateCartBadge();
+      window.location.href = data.paymentUrl;
+      return;
+    }
+    if (data && data.ok) {
+      CART = [];
+      updateCartBadge();
+      document.getElementById('commande-form-wrap').style.display = 'none';
+      document.getElementById('commande-success').classList.add('show');
+      return;
+    }
+    throw new Error((data && data.error) || 'Erreur');
+  }).catch(function (err) {
+    console.error("Erreur envoi commande :", err);
+    errorEl.textContent = "Une erreur est survenue. Merci de réessayer dans un instant.";
+    errorEl.classList.add('visible');
+    if (btn) { btn.disabled = false; btn.textContent = 'Commander'; }
+  });
 }
 
 </script>
@@ -2725,7 +2748,7 @@ function submitCommande() {
   <div class="paiement-page">
     <div id="commande-form-wrap">
       <p class="paiement-title">Finaliser la commande</p>
-      <p class="paiement-sub">Nous vous recontacterons pour confirmer votre commande et convenir du règlement.</p>
+      <p class="paiement-sub" id="commande-sub">Renseignez vos coordonnées, puis passez au paiement sécurisé.</p>
       <span class="paiement-section-label">Votre sélection</span>
       <div id="commande-lines" style="margin-bottom:32px;font-family:'Lora',serif;font-size:.9rem;color:#444"></div>
       <span class="paiement-section-label">Vos coordonnées</span>
@@ -2738,7 +2761,8 @@ function submitCommande() {
         <div class="paiement-field full"><label class="paiement-label">Notes (tailles, précisions...)</label><input type="text" id="cNotes" class="code-input" style="border-bottom:1px solid #ccc"></div>
       </div>
       <p id="commande-error" class="error-msg" style="text-align:left;margin-bottom:16px"></p>
-      <button class="panier-checkout-btn" onclick="submitCommande()">Commander</button>
+      <button class="panier-checkout-btn" id="commande-btn" onclick="submitCommande()">Commander</button>
+      <p id="commande-pay-note" style="margin-top:10px;font-family:'Montserrat',sans-serif;font-size:.58rem;letter-spacing:.08em;color:#888;text-align:center"></p>
       <button class="panier-back-btn" onclick="openPanierPage()">Retour au panier</button>
     </div>
     <div id="commande-success" class="membre-confirm">

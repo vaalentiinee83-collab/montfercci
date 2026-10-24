@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
       adresse,
       notes,
       articles, // human-readable summary string
-      itemsJson // JSON string: [{ name, size }]
+      itemsJson // JSON string: [{ name, size, pack?, included? }]
     } = req.body || {};
 
     if (!prenom || !nom || !email || !telephone || !adresse) {
@@ -71,17 +71,27 @@ module.exports = async (req, res) => {
       return res.status(400).json({ ok: false, error: "Panier vide." });
     }
 
+    // Les prix sont fixés ICI, côté serveur : on ne fait jamais confiance au
+    // prix envoyé par le navigateur. Seules les tenues (pack) sont payables
+    // en ligne ; les pièces de la tenue sont "incluses" (0 €).
+    const PACK_PRICES = { full: 590, notie: 630 };
+    const packs = items.filter((it) => PACK_PRICES[it.pack]);
+    const included = items.filter((it) => !PACK_PRICES[it.pack] && it.included);
+    const others = items.filter((it) => !PACK_PRICES[it.pack] && !it.included);
+    const payable =
+      packs.length > 0 && others.length === 0 && included.length <= packs.length * 3;
+
     const lineItems = items.map((item) => ({
       title: item.size ? `${item.name} (Taille : ${item.size})` : item.name,
       quantity: 1,
       originalUnitPriceWithCurrency: {
-        amount: (typeof item.price === "number" && item.price > 0 ? item.price : 0).toFixed(2),
+        amount: (PACK_PRICES[item.pack] || 0).toFixed(2),
         currencyCode: "EUR"
       }
     }));
 
     const noteParts = [
-      `Commande reçue via le site (sur devis).`,
+      payable ? `Commande reçue via le site (paiement en ligne).` : `Commande reçue via le site (sur devis).`,
       `Client : ${prenom} ${nom}`,
       `Téléphone : ${telephone}`,
       `Adresse de livraison : ${adresse}`,
@@ -101,7 +111,7 @@ module.exports = async (req, res) => {
     const draftMutation = `
       mutation CreateDraftOrder($input: DraftOrderInput!) {
         draftOrderCreate(input: $input) {
-          draftOrder { id name }
+          draftOrder { id name invoiceUrl }
           userErrors { field message }
         }
       }`;
@@ -111,9 +121,12 @@ module.exports = async (req, res) => {
       return res.status(400).json({ ok: false, error: errors[0].message });
     }
 
+    const draftOrder = draftData.draftOrderCreate.draftOrder;
     return res.status(200).json({
       ok: true,
-      draftOrder: draftData.draftOrderCreate.draftOrder
+      draftOrder,
+      payable,
+      paymentUrl: payable ? draftOrder.invoiceUrl : null
     });
   } catch (err) {
     console.error(err);
