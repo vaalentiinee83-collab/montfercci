@@ -34,7 +34,7 @@ header{
 .nav-left{display:flex;align-items:center;gap:4px;margin-left:-8px}
 .nav-right a{
   font-family:'Montserrat',sans-serif;font-size:.6rem;font-weight:300;
-  letter-spacing:.18em;text-transform:uppercase;color:#0a0a0a;
+  letter-spacing:.18em;text-transform:uppercase;
   text-decoration:none;
 }
 .logo-center{display:flex;flex-direction:column;align-items:center;text-decoration:none;position:absolute;left:50%;transform:translateX(-50%)}
@@ -43,16 +43,16 @@ header{
 .nav-right{display:flex;gap:28px;align-items:center}
 .nav-cart{
   display:flex;align-items:center;justify-content:center;
-  width:36px;height:36px;color:#0a0a0a;
-  transition:background-color .2s,color .2s;
+  width:36px;height:36px;color:#6b6b6b;
+  transition:color .2s;
 }
 .nav-cart svg{width:20px;height:20px}
 
 /* ── MENU DÉROULANT (ordinateur + téléphone) ── */
 .menu-icon-btn{
   display:flex;align-items:center;justify-content:center;
-  width:40px;height:40px;background:none;border:none;color:#0a0a0a;cursor:pointer;
-  transition:background-color .2s,color .2s;
+  width:40px;height:40px;background:none;border:none;color:#6b6b6b;cursor:pointer;
+  transition:color .2s;
 }
 .menu-icon-btn svg{width:20px;height:20px}
 .burger{flex-direction:column;gap:5px}
@@ -561,12 +561,11 @@ footer{
 /* ─── BOUTONS : noirs au survol, au clic et au clavier ─── */
 .btn-cta{display:inline-block;transition:background-color .2s,color .2s,border-color .2s}
 @media (hover:hover){
-  :is(.btn-cta,.nav-cart,.menu-icon-btn,.swiper-btn,.size-btn,.topt-size-btn,.topt-panier,#prod-panier,.btn-submit,.btn-avatar,.membre-btn,.sf-btn,.tf-btn,.panier-checkout-btn,.panier-back-btn,.cart-footer-btn):not(:disabled):hover{background:#0a0a0a !important;color:#fff !important;border-color:#0a0a0a !important;opacity:1 !important;}
+  :is(.btn-cta,.swiper-btn,.size-btn,.topt-size-btn,.topt-panier,#prod-panier,.btn-submit,.btn-avatar,.membre-btn,.sf-btn,.tf-btn,.panier-checkout-btn,.panier-back-btn,.cart-footer-btn):not(:disabled):hover{background:#0a0a0a !important;color:#fff !important;border-color:#0a0a0a !important;opacity:1 !important;}
 }
-:is(.btn-cta,.nav-cart,.menu-icon-btn,.swiper-btn,.size-btn,.topt-size-btn,.topt-panier,#prod-panier,.btn-submit,.btn-avatar,.membre-btn,.sf-btn,.tf-btn,.panier-checkout-btn,.panier-back-btn,.cart-footer-btn):not(:disabled):active,
-:is(.btn-cta,.nav-cart,.menu-icon-btn,.swiper-btn,.size-btn,.topt-size-btn,.topt-panier,#prod-panier,.btn-submit,.btn-avatar,.membre-btn,.sf-btn,.tf-btn,.panier-checkout-btn,.panier-back-btn,.cart-footer-btn):not(:disabled):focus-visible{background:#0a0a0a !important;color:#fff !important;border-color:#0a0a0a !important;opacity:1 !important;}
+:is(.btn-cta,.swiper-btn,.size-btn,.topt-size-btn,.topt-panier,#prod-panier,.btn-submit,.btn-avatar,.membre-btn,.sf-btn,.tf-btn,.panier-checkout-btn,.panier-back-btn,.cart-footer-btn):not(:disabled):active,
+:is(.btn-cta,.swiper-btn,.size-btn,.topt-size-btn,.topt-panier,#prod-panier,.btn-submit,.btn-avatar,.membre-btn,.sf-btn,.tf-btn,.panier-checkout-btn,.panier-back-btn,.cart-footer-btn):not(:disabled):focus-visible{background:#0a0a0a !important;color:#fff !important;border-color:#0a0a0a !important;opacity:1 !important;}
 .btn-submit::before,.btn-avatar::before{background:#0a0a0a !important}
-:is(.nav-cart:hover,.nav-cart:active,.nav-cart:focus-visible) .cart-badge{background:#fff !important;color:#0a0a0a !important}
 
 /* Menu + résultats de recherche : le fond reste blanc, seul le texte passe au noir */
 @media (hover:hover){
@@ -576,6 +575,15 @@ footer{
 .menu-sub a:active,.menu-sub a:focus-visible,
 .search-result:active,.search-result:focus-visible{color:#0a0a0a;background:transparent}
 .menu-link:focus-visible,.menu-sub a:focus-visible,.search-result:focus-visible{outline:none;text-decoration:underline;text-underline-offset:6px}
+
+/* Barre du haut : le fond reste blanc, seule l'icône passe au noir */
+@media (hover:hover){
+  .nav-cart:hover,.menu-icon-btn:hover{color:#0a0a0a;background:transparent}
+}
+.nav-cart:active,.nav-cart:focus-visible,
+.menu-icon-btn:active,.menu-icon-btn:focus-visible,
+.burger.open,#searchBtn[aria-expanded="true"]{color:#0a0a0a;background:transparent}
+.nav-cart:focus-visible,.menu-icon-btn:focus-visible{outline:1px solid #0a0a0a;outline-offset:-4px}
 
 /* ─── PANIER ─── */
 .cart-overlay{
