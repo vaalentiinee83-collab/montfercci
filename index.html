@@ -419,7 +419,10 @@ header{
 .cmp-head.alt{margin-bottom:62px}
 .cmp-title-word.struck,#cmp-title-word.struck{text-decoration:line-through;text-decoration-thickness:1px;color:#999}
 .cmp-removed .cmp-stage,.cmp-removed .cmp-dots{display:none}
-.cmp-tie-toggle{text-align:center;margin-top:2px}
+.cmp-row-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;margin-bottom:14px}
+.cmp-row-head .cmp-row-label{margin-bottom:0}
+.cmp-tie-btn{justify-self:end;font-weight:700 !important;color:#0a0a0a !important;white-space:nowrap;text-align:right}
+@media(max-width:600px){.cmp-tie-btn{font-size:.5rem !important;letter-spacing:.12em !important;padding:4px 0 !important}}
 .cmp-price{text-align:center;margin:26px 0 0}
 .cmp-price-label{font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:#888;margin-bottom:6px}
 .cmp-price-val{font-family:'Cormorant Garamond',serif;font-size:2rem;color:#0a0a0a}
@@ -1084,10 +1087,9 @@ footer{
     </div>
 
     <div class="cmp-row" id="cmp-row-tie">
-      <p class="cmp-row-label">1. La cravate</p>
+      <div class="cmp-row-head"><span></span><p class="cmp-row-label">1. La cravate</p><button class="cmp-link cmp-tie-btn" id="cmp-tie-btn" onclick="cmpToggleTie()">Enlever la cravate</button></div>
       <div class="cmp-stage" id="cmp-stage-tie"><button class="cmp-arr l" onclick="cmpMove('tie',-1)" aria-label="Précédent">&#8592;</button><button class="cmp-arr r" onclick="cmpMove('tie',1)" aria-label="Suivant">&#8594;</button></div>
       <div class="cmp-dots" id="cmp-dots-tie"></div>
-      <div class="cmp-tie-toggle"><button class="cmp-link" id="cmp-tie-btn" onclick="cmpToggleTie()">Enlever la cravate</button></div>
     </div>
 
     <div class="cmp-row" id="cmp-row-jacket">
