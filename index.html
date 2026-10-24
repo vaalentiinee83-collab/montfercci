@@ -1105,7 +1105,7 @@ footer{
     <div class="cmp-recap">
       <p class="cmp-row-label">Votre composition</p>
       <div id="cmp-recap-lines"></div>
-      <div class="cmp-price"><p class="cmp-price-label" id="cmp-price-label">Prix fixe Tieleur complet</p><p class="cmp-price-val" id="cmp-price-val">590 €</p></div>
+      <div class="cmp-price"><p class="cmp-price-val" id="cmp-price-val">590 €</p></div>
       <div class="cmp-foot">
         <button class="btn-avatar" style="margin-top:0;margin-bottom:14px" onclick="openTieleurSizeFinder(event)">Votre recommandation de taille</button>
         <button class="topt-panier" id="cmp-add-all" style="margin-top:0" onclick="cmpAddAll(event)">Ajouter la tenue au panier</button>
@@ -2373,7 +2373,6 @@ function cmpTieUI() {
   document.getElementById('cmp-title-alt').style.display = CMP.noTie ? 'block' : 'none';
   document.querySelector('.cmp-head').classList.toggle('alt', CMP.noTie);
   document.getElementById('cmp-tie-btn').textContent = CMP.noTie ? 'Remettre la cravate' : 'Enlever la cravate';
-  document.getElementById('cmp-price-label').textContent = CMP.noTie ? 'Prix fixe Tailleur (sans cravate)' : 'Prix fixe Tieleur complet';
   document.getElementById('cmp-price-val').textContent = (CMP.noTie ? CMP_PRICE.noTie : CMP_PRICE.full) + ' €';
   cmpRecap();
 }
