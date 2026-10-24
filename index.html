@@ -1320,7 +1320,7 @@ footer{
         <button class="size-btn" onclick="selectSize(this)">XL</button>
       </div>
 
-      <button id="prod-panier" onclick="handleBuyClick('product',event)" style="display:block;width:100%;border:1px solid #0a0a0a;background:transparent;padding:14px 0;text-align:center;font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:#0a0a0a;transition:all .3s;margin-bottom:6px" onmouseenter="this.style.background='#0a0a0a';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='#0a0a0a'">Devenir membre</button>
+      <button id="prod-panier" onclick="handleBuyClick('product',event)" style="display:block;width:100%;border:1px solid #0a0a0a;background:transparent;padding:14px 0;text-align:center;font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:#0a0a0a;transition:all .3s;margin-bottom:6px" onmouseenter="this.style.background='#0a0a0a';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='#0a0a0a'">Ajouter au panier</button>
       <p id="prod-panier-note" style="margin-bottom:20px;font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.05em;color:#888;text-align:center">*L’accès à la commande est réservé à nos membres</p>
 
       <p class="made-in">Made in Europe</p>
@@ -2253,7 +2253,7 @@ function applyMemberUI() {
   const prodBtn = document.getElementById('prod-panier');
   const prodNote = document.getElementById('prod-panier-note');
   if (prodBtn) {
-    prodBtn.textContent = member ? 'Ajouter au panier' : 'Devenir membre';
+    prodBtn.textContent = 'Ajouter au panier';
     if (prodNote) prodNote.style.display = member ? 'none' : 'block';
   }
 
@@ -2261,7 +2261,7 @@ function applyMemberUI() {
   const toptBtn = document.getElementById('topt-panier-btn');
   const toptNote = document.getElementById('topt-panier-note');
   if (toptBtn) {
-    toptBtn.textContent = member ? 'Ajouter au panier' : 'Devenir membre';
+    toptBtn.textContent = 'Ajouter au panier';
     if (toptNote) toptNote.style.display = member ? 'none' : 'block';
   }
 }
@@ -2502,7 +2502,7 @@ function cmpFiche(k, i) {
 function cmpMemberUI() {
   const m = (typeof isMemberSession === 'function') && isMemberSession();
   const all = document.getElementById('cmp-add-all');
-  if (all) all.textContent = m ? 'Ajouter la tenue au panier' : 'Devenir membre';
+  if (all) all.textContent = 'Ajouter la tenue au panier';
 }
 // swipe sur chaque carrousel
 ['tie', 'jacket', 'pants'].forEach(function (k) {
@@ -3063,7 +3063,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeLoginModal();})
         <p class="sf-result-alt" id="sfResultAlt"></p>
         <div class="sf-nav">
           <button class="sf-btn sf-btn-secondary" onclick="sfRestart()">Recommencer</button>
-          <button class="sf-btn sf-btn-primary" onclick="closeSizeFinder();openMembreModal();">Devenir membre</button>
+          <button class="sf-btn sf-btn-primary" onclick="closeSizeFinder();handleBuyClick('product',event);">Ajouter au panier</button>
         </div>
       </div>
     </div>
@@ -3278,7 +3278,7 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") closeSizeFind
         <p class="tf-result-cut" id="tfResultCut"></p>
         <div class="tf-nav">
           <button class="tf-btn tf-btn-secondary" onclick="tfRestart()">Recommencer</button>
-          <button class="tf-btn tf-btn-primary" onclick="closeTieleurSizeFinder();openMembreModal();">Devenir membre</button>
+          <button class="tf-btn tf-btn-primary" onclick="closeTieleurSizeFinder();cmpAddAll(event);">Ajouter au panier</button>
         </div>
       </div>
     </div>
