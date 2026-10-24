@@ -891,7 +891,7 @@ footer{
       <a href="#" class="nav-cart" id="navProfilBtn" onclick="openProfil();return false;" style="display:none" aria-label="Mon profil">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
       </a>
-      <a href="#" class="nav-cart" id="navCartBtn" onclick="openCart();return false;" style="display:none" aria-label="Panier">
+      <a href="#" class="nav-cart" id="navCartBtn" onclick="openCart();return false;" style="display:flex" aria-label="Panier">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61h9.72a2 2 0 001.99-1.61L23 6H6"/></svg>
         <span class="cart-badge" id="cart-badge"></span>
       </a>
@@ -2218,6 +2218,7 @@ document.querySelectorAll('.reveal').forEach(el=>spa_observer.observe(el));
 
 // ─── PANIER ───
 let CART = [];
+try { CART = JSON.parse(localStorage.getItem('montfercci_cart') || '[]') || []; } catch (_) { CART = []; }
 function itemPriceText(item) {
   if (typeof item.price === 'number') return item.price > 0 ? item.price + ' €' : 'Inclus';
   return 'Sur devis';
@@ -2238,7 +2239,7 @@ function applyMemberUI() {
   const navLogin = document.getElementById('navLoginBtn');
   if (navLogin) navLogin.style.display = member ? 'none' : 'flex';
   const navCart = document.getElementById('navCartBtn');
-  if (navCart) navCart.style.display = member ? 'flex' : 'none';
+  if (navCart) navCart.style.display = 'flex';
   const navProfil = document.getElementById('navProfilBtn');
   if (navProfil) navProfil.style.display = member ? 'flex' : 'none';
   if (member) {
@@ -2254,7 +2255,7 @@ function applyMemberUI() {
   const prodNote = document.getElementById('prod-panier-note');
   if (prodBtn) {
     prodBtn.textContent = 'Ajouter au panier';
-    if (prodNote) prodNote.style.display = member ? 'none' : 'block';
+    if (prodNote) prodNote.style.display = 'none';
   }
 
   if (typeof cmpMemberUI === 'function') cmpMemberUI();
@@ -2262,10 +2263,10 @@ function applyMemberUI() {
   const toptNote = document.getElementById('topt-panier-note');
   if (toptBtn) {
     toptBtn.textContent = 'Ajouter au panier';
-    if (toptNote) toptNote.style.display = member ? 'none' : 'block';
+    if (toptNote) toptNote.style.display = 'none';
   }
 }
-document.addEventListener('DOMContentLoaded', applyMemberUI);
+document.addEventListener('DOMContentLoaded', function () { applyMemberUI(); renderCart(); updateCartBadge(); });
 
 function logoutMember() {
   sessionStorage.removeItem('montfercci_member');
@@ -2340,10 +2341,6 @@ function renderOrderHistory(orders) {
 }
 
 function handleBuyClick(type, e) {
-  if (!isMemberSession()) {
-    openMembreModal(e);
-    return;
-  }
   if (type === 'product') {
     const name = document.getElementById('prod-name').textContent.trim();
     const colorEl = document.querySelector('.color-row.active .color-name');
@@ -2459,7 +2456,6 @@ function cmpRecap() {
   }).join('');
 }
 function cmpNeedMember(e) {
-  if (typeof isMemberSession === 'function' && !isMemberSession()) { openMembreModal(e); return true; }
   return false;
 }
 function cmpAddAll(e) {
@@ -2543,6 +2539,7 @@ function removeFromCart(idx) {
   updateCartBadge();
 }
 function updateCartBadge() {
+  try { localStorage.setItem('montfercci_cart', JSON.stringify(CART)); } catch (_) {}
   const badge = document.getElementById('cart-badge');
   if (CART.length > 0) {
     badge.textContent = CART.length;
@@ -2616,6 +2613,12 @@ function goToCommande() {
   }).join('');
   document.getElementById('commande-success').classList.remove('show');
   document.getElementById('commande-form-wrap').style.display = 'block';
+  if (isMemberSession()) {
+    [['cPrenom', 'montfercci_prenom'], ['cNom', 'montfercci_nom'], ['cEmail', 'montfercci_email']].forEach(function (f) {
+      const el = document.getElementById(f[0]);
+      if (el && !el.value) el.value = sessionStorage.getItem(f[1]) || '';
+    });
+  }
   showSection('commande');
 }
 
