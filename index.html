@@ -83,7 +83,7 @@ header{
   width:100%;padding:22px 32px;background:none;border:none;
   border-bottom:1px solid rgba(51,51,51,.1);
   font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:400;
-  letter-spacing:.22em;text-transform:uppercase;color:#0a0a0a;
+  letter-spacing:.22em;text-transform:uppercase;color:#6b6b6b;
   text-decoration:none;text-align:left;cursor:pointer;
   transition:background-color .2s,color .2s;
 }
@@ -93,7 +93,7 @@ header{
 .menu-sub a{
   display:block;padding:15px 32px 15px 52px;
   font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;
-  letter-spacing:.03em;color:#0a0a0a;text-decoration:none;cursor:pointer;
+  letter-spacing:.03em;color:#6b6b6b;text-decoration:none;cursor:pointer;
   transition:background-color .2s,color .2s;
 }
 
@@ -120,7 +120,7 @@ header{
 .search-result{
   display:flex;align-items:center;gap:16px;width:100%;padding:12px 14px;
   background:none;border:none;border-bottom:1px solid rgba(51,51,51,.08);
-  text-align:left;cursor:pointer;color:#0a0a0a;
+  text-align:left;cursor:pointer;color:#6b6b6b;
   transition:background-color .2s,color .2s;
 }
 .search-thumb{
@@ -561,13 +561,21 @@ footer{
 /* ─── BOUTONS : noirs au survol, au clic et au clavier ─── */
 .btn-cta{display:inline-block;transition:background-color .2s,color .2s,border-color .2s}
 @media (hover:hover){
-  :is(.btn-cta,.nav-cart,.menu-icon-btn,.swiper-btn,.size-btn,.topt-size-btn,.topt-panier,#prod-panier,.btn-submit,.btn-avatar,.membre-btn,.sf-btn,.tf-btn,.panier-checkout-btn,.panier-back-btn,.cart-footer-btn,.search-result,.menu-link,.menu-sub a):not(:disabled):hover{background:#0a0a0a !important;color:#fff !important;border-color:#0a0a0a !important;opacity:1 !important;}
+  :is(.btn-cta,.nav-cart,.menu-icon-btn,.swiper-btn,.size-btn,.topt-size-btn,.topt-panier,#prod-panier,.btn-submit,.btn-avatar,.membre-btn,.sf-btn,.tf-btn,.panier-checkout-btn,.panier-back-btn,.cart-footer-btn):not(:disabled):hover{background:#0a0a0a !important;color:#fff !important;border-color:#0a0a0a !important;opacity:1 !important;}
 }
-:is(.btn-cta,.nav-cart,.menu-icon-btn,.swiper-btn,.size-btn,.topt-size-btn,.topt-panier,#prod-panier,.btn-submit,.btn-avatar,.membre-btn,.sf-btn,.tf-btn,.panier-checkout-btn,.panier-back-btn,.cart-footer-btn,.search-result,.menu-link,.menu-sub a):not(:disabled):active,
-:is(.btn-cta,.nav-cart,.menu-icon-btn,.swiper-btn,.size-btn,.topt-size-btn,.topt-panier,#prod-panier,.btn-submit,.btn-avatar,.membre-btn,.sf-btn,.tf-btn,.panier-checkout-btn,.panier-back-btn,.cart-footer-btn,.search-result,.menu-link,.menu-sub a):not(:disabled):focus-visible{background:#0a0a0a !important;color:#fff !important;border-color:#0a0a0a !important;opacity:1 !important;}
+:is(.btn-cta,.nav-cart,.menu-icon-btn,.swiper-btn,.size-btn,.topt-size-btn,.topt-panier,#prod-panier,.btn-submit,.btn-avatar,.membre-btn,.sf-btn,.tf-btn,.panier-checkout-btn,.panier-back-btn,.cart-footer-btn):not(:disabled):active,
+:is(.btn-cta,.nav-cart,.menu-icon-btn,.swiper-btn,.size-btn,.topt-size-btn,.topt-panier,#prod-panier,.btn-submit,.btn-avatar,.membre-btn,.sf-btn,.tf-btn,.panier-checkout-btn,.panier-back-btn,.cart-footer-btn):not(:disabled):focus-visible{background:#0a0a0a !important;color:#fff !important;border-color:#0a0a0a !important;opacity:1 !important;}
 .btn-submit::before,.btn-avatar::before{background:#0a0a0a !important}
 :is(.nav-cart:hover,.nav-cart:active,.nav-cart:focus-visible) .cart-badge{background:#fff !important;color:#0a0a0a !important}
-:is(.search-result:hover,.search-result:active,.search-result:focus-visible) .search-result-sub{color:#ccc !important}
+
+/* Menu + résultats de recherche : le fond reste blanc, seul le texte passe au noir */
+@media (hover:hover){
+  .menu-link:hover,.menu-sub a:hover,.search-result:hover{color:#0a0a0a;background:transparent}
+}
+.menu-link:active,.menu-link:focus-visible,.menu-link[aria-expanded="true"],
+.menu-sub a:active,.menu-sub a:focus-visible,
+.search-result:active,.search-result:focus-visible{color:#0a0a0a;background:transparent}
+.menu-link:focus-visible,.menu-sub a:focus-visible,.search-result:focus-visible{outline:none;text-decoration:underline;text-underline-offset:6px}
 
 /* ─── PANIER ─── */
 .cart-overlay{
