@@ -357,6 +357,24 @@ header{
 }
 .topt-panier:hover{background:#0a0a0a;color:#fff}
 
+.apropos-story p{font-family:'Lora',serif;font-size:1rem;line-height:1.95;color:#555;margin-bottom:26px}
+.apropos-story .apropos-lead{font-family:'Cormorant Garamond',serif;font-size:1.45rem;line-height:1.6;color:#0a0a0a;font-weight:400}
+.apropos-story .apropos-message{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;line-height:1.6;color:#0a0a0a;border-left:1px solid #0a0a0a;padding-left:22px;margin:40px 0 34px}
+.apropos-story .apropos-sign{font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:#888;margin-bottom:6px}
+.apropos-story .apropos-tag{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:#0a0a0a;margin-bottom:0}
+
+/* ─── ACCUEIL : promesse ─── */
+.home-promise{padding:80px 48px 72px;max-width:1000px;margin:0 auto;text-align:center}
+.home-promise-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(1.6rem,3vw,2.3rem);line-height:1.35;letter-spacing:.02em;color:#0a0a0a;max-width:700px;margin:0 auto 52px}
+.home-promise-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:48px;border-top:1px solid rgba(51,51,51,.12);padding-top:48px}
+.home-promise-num{font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:#888;margin-bottom:14px}
+.home-promise-h{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.7rem;color:#0a0a0a;margin-bottom:10px}
+.home-promise-t{font-family:'Lora',serif;font-size:.9rem;color:#666;line-height:1.7;max-width:340px;margin:0 auto}
+.home-promise-route{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:22px;font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:#0a0a0a}
+.home-promise-route i{display:block;width:70px;height:1px;background:#0a0a0a;position:relative}
+.home-promise-route i::after{content:'';position:absolute;right:0;top:-3px;width:6px;height:6px;border-top:1px solid #0a0a0a;border-right:1px solid #0a0a0a;transform:rotate(45deg)}
+@media(max-width:600px){.home-promise{padding:56px 24px 48px}}
+
 /* ─── COMPOSER : carrousel de fiches produits ─── */
 .cmp-wrap{max-width:980px;margin:0 auto;padding:110px 20px 20px}
 .cmp-head{text-align:center;margin-bottom:34px}
@@ -827,7 +845,6 @@ footer{
 .color-row.active .color-swatch{border-color:#0a0a0a;box-shadow:0 0 0 2px #fff,0 0 0 3.5px #0a0a0a}
 .color-swatch.noir{background:#0a0a0a}
 .color-swatch.marine{background:#1a2744}
-.color-swatch.creme{background:#e8dcc8;border-color:rgba(51,51,51,.25)}
 .color-name{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:#0a0a0a}
 .sizes{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
 .size-btn{min-width:36px;height:36px;padding:0 10px;border:1px solid rgba(51,51,51,.25);background:transparent;font-family:'Montserrat',sans-serif;font-size:.58rem;letter-spacing:.15em;color:#0a0a0a;transition:all .2s;}
@@ -935,7 +952,7 @@ footer{
 <div id="section-accueil" class="page-section active">
   <section style="min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 48px 40px">
     <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:300;line-height:1.3;letter-spacing:.02em;margin-bottom:32px">Habiller <em>l'ambition.</em></h1>
-    <p style="font-family:'Lora',serif;font-size:1rem;color:#666;max-width:520px;line-height:1.8;margin-bottom:48px">Montfercci crée des pièces de caractère pour l'homme qui refuse le compromis. Du tieleur au costume, chaque création est pensée comme une déclaration d'identité.</p>
+    <p style="font-family:'Lora',serif;font-size:1rem;color:#666;max-width:520px;line-height:1.8;margin-bottom:48px">Montfercci dessine des pièces de caractère pour les femmes qui osent : se lancer, devenir celle qu’elles désirent être et s’affirmer pleinement.</p>
     <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center">
       <a href="#" onclick="showSection('boutique');return false;" class="btn-cta" style="font-family:'Montserrat',sans-serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#fff;background:#0a0a0a;padding:16px 40px;text-decoration:none;cursor:pointer">Découvrir la collection</a>
       <a href="#" onclick="showSection('tieleur');return false;" class="btn-cta" style="font-family:'Montserrat',sans-serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#0a0a0a;border:1px solid #0a0a0a;padding:16px 40px;text-decoration:none;cursor:pointer">Le Tieleur signature</a>
@@ -947,6 +964,22 @@ footer{
       <div class="lb-photo lb-span"><div class="lb-fill" style="background:url('https://i.pinimg.com/control1/1200x/1a/47/9b/1a479b8dc84c975ded75dd06f7a84600.jpg') center/cover no-repeat"></div><div class="lb-label">Tieleur Paris</div></div>
       <div class="lb-photo lb-span"><div class="lb-fill" style="background:url('https://i.pinimg.com/control1/1200x/22/8d/fc/228dfcbdd5e3c775c24b711aa84486da.jpg') center/cover no-repeat"></div><div class="lb-label">Femme en tailleur</div></div>
       <div class="lb-photo"><div class="lb-fill" style="background:url('https://i.pinimg.com/736x/5e/93/4d/5e934d98054659a929555bfffb9a4bd6.jpg') center/cover no-repeat"></div></div>
+    </div>
+  </section>
+  <section class="home-promise">
+    <h2 class="home-promise-title reveal">Des coupes adaptées à toutes les <em>morphologies</em> et <em>statures</em></h2>
+    <div class="home-promise-grid">
+      <div class="home-promise-item reveal">
+        <p class="home-promise-num">Un concept unique</p>
+        <h3 class="home-promise-h">Le Tieleur</h3>
+        <p class="home-promise-t">Le tailleur et sa cravate, réunis en un seul ensemble pensé pour la femme.</p>
+      </div>
+      <div class="home-promise-item reveal" style="transition-delay:.1s">
+        <p class="home-promise-num">Une signature parisienne</p>
+        <h3 class="home-promise-h">Créé et pensé à Paris</h3>
+        <p class="home-promise-t">Dessiné dans la capitale, confectionné avec exigence dans des ateliers européens.</p>
+        <p class="home-promise-route"><span>Paris</span><i></i><span>Europe</span></p>
+      </div>
     </div>
   </section>
   <section style="padding:80px 48px;background:#fafafa">
@@ -1172,10 +1205,6 @@ footer{
           <div class="color-swatch marine"></div>
           <span class="color-name">Marine</span>
         </div>
-        <div class="color-row" onclick="selectColor(this,'Crème')">
-          <div class="color-swatch creme"></div>
-          <span class="color-name">Crème</span>
-        </div>
       </div>
 
       <!-- Sizes -->
@@ -1256,8 +1285,16 @@ footer{
     <section style="padding:80px 48px;max-width:900px;margin:0 auto">
       <p class="section-eyebrow reveal" style="margin-bottom:16px">La Maison</p>
       <h2 class="section-title reveal" style="margin-bottom:40px">Notre <em>histoire</em></h2>
-      <p style="font-family:'Lora',serif;font-size:1.1rem;line-height:1.9;color:#444;margin-bottom:32px">Montfercci est née d'une conviction&nbsp;: l'élégance masculine mérite une maison à sa hauteur. Fondée à Paris, la marque s'est imposée comme une référence pour l'homme qui refuse le banal et cherche dans ses vêtements une extension de sa personnalité.</p>
-      <p style="font-family:'Lora',serif;font-size:1rem;line-height:1.9;color:#666;margin-bottom:32px">Chaque pièce est conçue avec soin, depuis le choix des matières jusqu'à la finition, pour offrir une expérience de la mode aussi rare qu'authentique. Le tieleur, pièce signature de la maison, incarne cette philosophie&nbsp;: sculpter l'identité à travers le vêtement.</p>
+      <div class="apropos-story">
+        <p class="apropos-lead">Étudiante en droit, Valentine voulait porter le tailleur pour gagner en assurance et en crédibilité. De longues recherches sont restées vaines. Mais plus elle cherchait, plus l’idée l’habitait : le tailleur était devenu une véritable obsession. Alors elle a changé de voie, avec une décision : le créer.</p>
+        <p>Elle a quitté le droit pour entrer en école de mode. Devant les défilés, elle a découvert la cravate portée par des femmes, et s’en est éprise : un détail qui donne à la tenue toute sa singularité. Elle a voulu en acquérir plusieurs, sans en trouver une seule au rayon femme.</p>
+        <p>Une évidence s’est alors imposée. Pourquoi réserver aux hommes ce que les femmes portent avec tant de charisme ? Une cravate confère à celle qui la porte une présence incomparable.</p>
+        <p>L’idée était née : réunir le tailleur et la cravate en un seul ensemble, pensé pour les femmes. Le tailleur devenait le Tieleur. Pour la cravate, de la dentelle, pour la touche sensuelle et glamour, ce soupçon de féminité qui change tout.</p>
+        <p>Sans attendre la fin de son diplôme, entre l’école et son stage, elle a fondé MONTFERCCI. Depuis, la passion ne l’a plus quittée.</p>
+        <p class="apropos-message">À toutes les femmes, le message est simple : osez, devenez celle que vous voulez être, affirmez-vous. Vous en êtes capables.</p>
+        <p class="apropos-sign">Valentine, fondatrice de MONTFERCCI Paris</p>
+        <p class="apropos-tag">Habiller <em>l’ambition.</em></p>
+      </div>
     </section>
     <section class="manifeste" style="margin:0">
       <p class="section-eyebrow">Notre Vision</p>
@@ -2249,7 +2286,7 @@ const CMP_PIECES = {
 };
 const CMP_LABEL = { tie: 'Cravate', jacket: 'Blazer', pants: 'Pantalon' };
 const CMP_SIZES = ['XS', 'S', 'M', 'L', 'XL'];
-const CMP_COLORS = [ { id: 'Noir', hex: '#0a0a0a' }, { id: 'Marine', hex: '#1a2d5a' }, { id: 'Crème', hex: '#e8dcc8' } ];
+const CMP_COLORS = [ { id: 'Noir', hex: '#0a0a0a' }, { id: 'Marine', hex: '#1a2d5a' } ];
 const CMP = { idx: { tie: 0, jacket: 0, pants: 0 }, size: { jacket: null, pants: null }, color: 'Noir', noTie: false };
 const CMP_PRICE = { full: 590, noTie: 630 };
 
