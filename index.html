@@ -1224,11 +1224,11 @@ footer{
 
   <!-- Breadcrumb -->
   <div class="breadcrumb">
-    <a href="#" onclick="showSection('boutique');return false;" style="display:flex;align-items:center;gap:6px;font-size:.7rem">&#8592; Retour</a>
+    <a href="#" id="prod-back" onclick="prodBack();return false;" style="display:flex;align-items:center;gap:6px;font-size:.7rem">&#8592; Retour</a>
     <span>/</span>
     <a href="#" onclick="showSection('accueil');return false;">Accueil</a>
     <span>/</span>
-    <a href="#" onclick="showSection('boutique');return false;">Collection</a>
+    <a href="#" id="prod-crumb-coll" onclick="prodBack();return false;">Collection</a>
     <span>/</span>
     <span id="prod-breadcrumb" style="color:#0a0a0a">Tieleur Nuit</span>
   </div>
@@ -1361,6 +1361,7 @@ footer{
 
       <!-- CTA -->
       <button class="btn-avatar" onclick="openSizeFinder(event)">Votre recommandation de taille</button>
+      <button class="btn-avatar" id="prod-back-btn" style="display:none" onclick="prodBack()">Retour à ma composition</button>
 
     </div>
   </div>
@@ -1636,9 +1637,25 @@ const PRODUCTS = {
   }
 };
 
+let PROD_FROM = null;
+function prodUI() {
+  const from = PROD_FROM === 'composer';
+  const back = document.getElementById('prod-back'); if (back) back.innerHTML = from ? '&#8592; Retour à ma composition' : '&#8592; Retour';
+  const crumb = document.getElementById('prod-crumb-coll'); if (crumb) crumb.textContent = from ? 'Nos Tieleurs/Tailleurs' : 'Collection';
+  const bb = document.getElementById('prod-back-btn'); if (bb) bb.style.display = from ? '' : 'none';
+}
+function prodBack() {
+  if (PROD_FROM === 'composer') {
+    const row = PROD_ROW;
+    showSection('tieleur');
+    setTimeout(function () { const el = document.getElementById('cmp-row-' + row); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 200);
+  } else { showSection('boutique'); }
+}
+let PROD_ROW = 'tie';
 function showProduct(id) {
   const p = PRODUCTS[id];
   if (!p) return;
+  PROD_FROM = null; prodUI();
   const img = document.getElementById('mainImg');
   const name = document.getElementById('prod-name');
   const material = document.getElementById('prod-material');
@@ -2467,6 +2484,8 @@ function cmpFiche(k, i) {
   const p = CMP_PIECES[k][i];
   showProduct(p.fiche);
   const n = document.getElementById('prod-name'); if (n) n.textContent = p.name;
+  const bcr = document.getElementById('prod-breadcrumb'); if (bcr) bcr.textContent = p.name;
+  PROD_FROM = 'composer'; PROD_ROW = k; prodUI();
   showSection('produit');
 }
 function cmpMemberUI() {
