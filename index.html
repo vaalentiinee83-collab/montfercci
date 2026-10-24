@@ -1087,7 +1087,7 @@ footer{
     </div>
 
     <div class="cmp-row" id="cmp-row-tie">
-      <div class="cmp-row-head"><span></span><p class="cmp-row-label">1. La cravate</p><button class="cmp-link cmp-tie-btn" id="cmp-tie-btn" onclick="cmpToggleTie()">Enlever la cravate</button></div>
+      <div class="cmp-row-head"><span></span><p class="cmp-row-label">1. La cravate</p><button class="cmp-link cmp-tie-btn" id="cmp-tie-btn" onclick="cmpToggleTie()">Sans cravate</button></div>
       <div class="cmp-stage" id="cmp-stage-tie"><button class="cmp-arr l" onclick="cmpMove('tie',-1)" aria-label="Précédent">&#8592;</button><button class="cmp-arr r" onclick="cmpMove('tie',1)" aria-label="Suivant">&#8594;</button></div>
       <div class="cmp-dots" id="cmp-dots-tie"></div>
     </div>
@@ -2374,7 +2374,7 @@ function cmpTieUI() {
   document.getElementById('cmp-title-word').classList.toggle('struck', CMP.noTie);
   document.getElementById('cmp-title-alt').style.display = CMP.noTie ? 'block' : 'none';
   document.querySelector('.cmp-head').classList.toggle('alt', CMP.noTie);
-  document.getElementById('cmp-tie-btn').textContent = CMP.noTie ? 'Remettre la cravate' : 'Enlever la cravate';
+  document.getElementById('cmp-tie-btn').textContent = CMP.noTie ? 'Avec cravate' : 'Sans cravate';
   document.getElementById('cmp-price-val').textContent = (CMP.noTie ? CMP_PRICE.noTie : CMP_PRICE.full) + ' €';
   cmpRecap();
 }
