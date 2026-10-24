@@ -356,6 +356,58 @@ header{
   color:#0a0a0a;transition:all .3s;margin-top:32px;
 }
 .topt-panier:hover{background:#0a0a0a;color:#fff}
+
+/* ─── COMPOSER : carrousel de fiches produits ─── */
+.cmp-wrap{max-width:980px;margin:0 auto;padding:110px 20px 20px}
+.cmp-head{text-align:center;margin-bottom:34px}
+.cmp-eyebrow{font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:#888;margin-bottom:8px}
+.cmp-title{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:2.4rem;letter-spacing:.04em;color:#0a0a0a;margin-bottom:6px}
+.cmp-sub{font-family:'Lora',serif;font-size:.9rem;color:#666;max-width:520px;margin:0 auto;line-height:1.7}
+.cmp-row{margin:0 0 46px}
+.cmp-row-label{font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:#888;text-align:center;margin-bottom:14px}
+.cmp-stage{position:relative;height:410px;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.cmp-card{position:absolute;top:0;left:50%;width:260px;height:100%;margin-left:-130px;background:#fff;border:1px solid rgba(51,51,51,.14);display:flex;flex-direction:column;align-items:center;padding:16px 16px 14px;text-align:center;transition:transform .5s cubic-bezier(.4,0,.2,1),opacity .5s;will-change:transform}
+.cmp-card.off{opacity:.35;cursor:pointer}
+.cmp-card.on{opacity:1;z-index:2}
+.cmp-img{height:190px;width:100%;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.cmp-img img{max-height:100%;max-width:100%;object-fit:contain;pointer-events:none}
+.cmp-ref{font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;color:#888;margin-bottom:6px}
+.cmp-name{font-family:'Cormorant Garamond',serif;font-size:1.35rem;color:#0a0a0a;line-height:1.2;margin-bottom:6px}
+.cmp-mat{font-family:'Lora',serif;font-size:.78rem;color:#666;margin-bottom:6px}
+.cmp-desc{font-family:'Lora',serif;font-size:.74rem;color:#777;line-height:1.55;margin-bottom:8px;flex:1;overflow:hidden}
+.cmp-link{font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:#6b6b6b;text-decoration:underline;text-underline-offset:3px;background:none;border:none;cursor:pointer;padding:4px}
+.cmp-link:hover{color:#0a0a0a}
+.cmp-arr{position:absolute;top:42%;z-index:5;background:none;border:none;font-size:1.3rem;color:rgba(51,51,51,.45);cursor:pointer;padding:10px 12px;line-height:1;transition:color .2s}
+.cmp-arr:hover{color:#0a0a0a}
+.cmp-arr.l{left:calc(50% - 184px)}
+.cmp-arr.r{right:calc(50% - 184px)}
+.cmp-dots{display:flex;justify-content:center;gap:8px;margin:10px 0 14px}
+.cmp-dot{width:7px;height:7px;border-radius:50%;background:rgba(51,51,51,.2);border:none;padding:0;cursor:pointer}
+.cmp-dot.on{background:#0a0a0a}
+.cmp-pick{display:flex;flex-direction:column;align-items:center;gap:10px}
+.cmp-sizes{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.cmp-msg{font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.05em;color:#8a2b2b;min-height:1em;text-align:center}
+.cmp-add{max-width:260px;margin-top:4px !important}
+.cmp-recap{border-top:1px solid rgba(51,51,51,.14);padding-top:30px;max-width:620px;margin:0 auto}
+.cmp-recap-line{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid rgba(51,51,51,.08)}
+.cmp-recap-thumb{width:46px;height:56px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cmp-recap-thumb img{max-width:100%;max-height:100%;object-fit:contain}
+.cmp-recap-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:#0a0a0a}
+.cmp-recap-meta{font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:#888;margin-top:2px}
+.cmp-colors{display:flex;gap:18px;justify-content:center;margin:22px 0 6px;flex-wrap:wrap}
+.cmp-color{display:flex;align-items:center;gap:8px;cursor:pointer;background:none;border:none;font-family:'Cormorant Garamond',serif;font-size:1rem;color:#6b6b6b;padding:4px}
+.cmp-color i{width:18px;height:18px;border-radius:50%;border:1px solid #ccc;display:block}
+.cmp-color.on{color:#0a0a0a;font-weight:600}
+.cmp-color.on i{box-shadow:0 0 0 2px #fff,0 0 0 3px #0a0a0a}
+.cmp-foot{max-width:320px;margin:20px auto 0}
+@media(max-width:600px){
+  .cmp-wrap{padding-top:96px}
+  .cmp-title{font-size:1.9rem}
+  .cmp-stage{height:400px}
+  .cmp-card{width:230px;margin-left:-115px}
+  .cmp-arr.l{left:4px}
+  .cmp-arr.r{right:4px}
+}
 /* ─── DIVIDER ─── */
 .divider{
   width:1px;height:80px;background:rgba(51,51,51,.15);
@@ -832,6 +884,7 @@ footer{
   <div class="menu-sub" id="menuSubCollection">
     <a href="#" onclick="menuNav(event,'boutique','all')">Tout voir</a>
     <a href="#" onclick="menuNav(event,'section','tieleur')">Nos Tieleurs/Tailleurs</a>
+    <a href="#" onclick="menuNav(event,'section','composer')">Composer ma tenue</a>
     <a href="#" onclick="menuNav(event,'boutique','veste')">Nos vestes</a>
     <a href="#" onclick="menuNav(event,'boutique','pantalon')">Nos pantalons</a>
     <a href="#" onclick="menuNav(event,'boutique','accessoire')">Nos cravates</a>
@@ -910,6 +963,61 @@ footer{
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- SECTION 2: BOUTIQUE -->
 <!-- ═══════════════════════════════════════════════════════════ -->
+<div id="section-composer" class="page-section">
+  <div class="cmp-wrap">
+    <div class="cmp-head">
+      <p class="cmp-eyebrow">Signature</p>
+      <h1 class="cmp-title">Composer ma tenue</h1>
+      <p class="cmp-sub">Faites défiler les fiches de chaque pièce, choisissez votre taille, puis ajoutez la pièce ou toute la tenue à votre panier. La référence de chaque pièce est conservée jusqu’à la commande.</p>
+    </div>
+
+    <div class="cmp-row" id="cmp-row-tie">
+      <p class="cmp-row-label">1 — La cravate</p>
+      <div class="cmp-stage" id="cmp-stage-tie"><button class="cmp-arr l" onclick="cmpMove('tie',-1)" aria-label="Précédent">&#8592;</button><button class="cmp-arr r" onclick="cmpMove('tie',1)" aria-label="Suivant">&#8594;</button></div>
+      <div class="cmp-dots" id="cmp-dots-tie"></div>
+      <div class="cmp-pick">
+        <p class="cmp-msg" id="cmp-msg-tie"></p>
+        <button class="topt-panier cmp-add" onclick="cmpAddPiece('tie',event)">Ajouter cette pièce</button>
+      </div>
+    </div>
+
+    <div class="cmp-row" id="cmp-row-jacket">
+      <p class="cmp-row-label">2 — Le blazer</p>
+      <div class="cmp-stage" id="cmp-stage-jacket"><button class="cmp-arr l" onclick="cmpMove('jacket',-1)" aria-label="Précédent">&#8592;</button><button class="cmp-arr r" onclick="cmpMove('jacket',1)" aria-label="Suivant">&#8594;</button></div>
+      <div class="cmp-dots" id="cmp-dots-jacket"></div>
+      <div class="cmp-pick">
+        <div class="cmp-sizes" id="cmp-sizes-jacket"></div>
+        <p class="cmp-msg" id="cmp-msg-jacket"></p>
+        <button class="topt-panier cmp-add" onclick="cmpAddPiece('jacket',event)">Ajouter cette pièce</button>
+      </div>
+    </div>
+
+    <div class="cmp-row" id="cmp-row-pants">
+      <p class="cmp-row-label">3 — Le pantalon</p>
+      <div class="cmp-stage" id="cmp-stage-pants"><button class="cmp-arr l" onclick="cmpMove('pants',-1)" aria-label="Précédent">&#8592;</button><button class="cmp-arr r" onclick="cmpMove('pants',1)" aria-label="Suivant">&#8594;</button></div>
+      <div class="cmp-dots" id="cmp-dots-pants"></div>
+      <div class="cmp-pick">
+        <div class="cmp-sizes" id="cmp-sizes-pants"></div>
+        <p class="cmp-msg" id="cmp-msg-pants"></p>
+        <button class="topt-panier cmp-add" onclick="cmpAddPiece('pants',event)">Ajouter cette pièce</button>
+      </div>
+    </div>
+
+    <div class="cmp-recap">
+      <p class="cmp-row-label">Votre composition</p>
+      <div id="cmp-recap-lines"></div>
+      <p class="cmp-row-label" style="margin-top:24px;margin-bottom:0">Couleur</p>
+      <div class="cmp-colors" id="cmp-colors"></div>
+      <div class="cmp-foot">
+        <button class="btn-avatar" style="margin-top:0;margin-bottom:14px" onclick="openTieleurSizeFinder(event)">Votre recommandation de taille</button>
+        <button class="topt-panier" id="cmp-add-all" style="margin-top:0" onclick="cmpAddAll(event)">Ajouter la tenue au panier</button>
+        <p class="cmp-msg" id="cmp-msg-all" style="margin-top:8px"></p>
+      </div>
+    </div>
+  </div>
+  <footer><p class="footer-bottom">© 2025 Montfercci Paris — contact@montfercci.com</p></footer>
+</div>
+
 <div id="section-boutique" class="page-section">
   <div style="padding-top:100px">
     <section style="padding:60px 48px 0">
@@ -1784,6 +1892,7 @@ const SEARCH_PAGES = [
   { label: 'Accueil', sub: 'Page', kw: 'accueil home habiller ambition', go: () => showSection('accueil') },
   { label: 'Tout voir', sub: 'Collection', kw: 'collection tout voir boutique', go: () => showBoutiqueFiltered('all') },
   { label: 'Nos Tieleurs/Tailleurs', sub: 'Collection', kw: 'tieleur tieleurs tailleur tailleurs sur mesure costume', go: () => showSection('tieleur') },
+  { label: 'Composer ma tenue', sub: 'Collection', kw: 'composer tenue composition tieleur carrousel blazer pantalon cravate', go: () => showSection('composer') },
   { label: 'Nos vestes', sub: 'Collection', kw: 'veste vestes blazer', go: () => showBoutiqueFiltered('veste') },
   { label: 'Nos pantalons', sub: 'Collection', kw: 'pantalon pantalons', go: () => showBoutiqueFiltered('pantalon') },
   { label: 'Nos cravates', sub: 'Collection', kw: 'cravate cravates soie accessoire accessoires', go: () => showBoutiqueFiltered('accessoire') },
@@ -2200,6 +2309,7 @@ function applyMemberUI() {
     if (prodNote) prodNote.style.display = member ? 'none' : 'block';
   }
 
+  if (typeof cmpMemberUI === 'function') cmpMemberUI();
   const toptBtn = document.getElementById('topt-panier-btn');
   const toptNote = document.getElementById('topt-panier-note');
   if (toptBtn) {
@@ -2305,6 +2415,156 @@ function handleBuyClick(type, e) {
     addToCart({ name: 'Tieleur sur-mesure' + (color ? ' — ' + color : ''), size: sizes || null, img: null });
   }
 }
+
+// ─── COMPOSER : carrousel de fiches produits ───
+const CMP_PIECES = {
+  tie: [
+    { ref: 'MT-001', name: 'Tieleur Nuit',     img: 'pieces/tie_1.png', mat: '100 % soie & cachemire', desc: 'Cravate 7 plis cousue à la main. Doublure en soie. Largeur 8 cm, longueur 148 cm.', fiche: 'tieleur-nuit' },
+    { ref: 'MT-002', name: 'Tieleur Minuit',   img: 'pieces/tie_2.png', mat: '100 % soie & cachemire', desc: 'Cravate 7 plis cousue à la main. Doublure en soie. Largeur 8 cm, longueur 148 cm.', fiche: 'tieleur-minuit' },
+    { ref: 'MT-003', name: 'Tieleur Bordeaux', img: 'pieces/tie_3.png', mat: 'Soie & lin',             desc: 'Cravate 7 plis cousue à la main. Pièce signature de la maison. Largeur 8 cm, longueur 148 cm.', fiche: 'cravate' }
+  ],
+  jacket: [
+    { ref: 'MT-BL-01', name: 'Blazer Ballon', img: 'pieces/jacket_1.png', mat: '100 % laine — Sur mesure', desc: 'Volume ballon, coupe sculpturale, manches bouffantes, boutons dorés.', fiche: 'blazer-ballon' },
+    { ref: 'MT-BL-02', name: 'Blazer Large',  img: 'pieces/jacket_2.png', mat: '100 % laine — Sur mesure', desc: 'Coupe large et oversize, épaules tombantes, poches plaquées, boutons en nacre.', fiche: 'blazer-large' },
+    { ref: 'MT-BL-03', name: 'Blazer Cintré', img: 'pieces/jacket_3.png', mat: '100 % laine — Sur mesure', desc: 'Coupe cintrée, taille marquée, poches passepoilées, doublure en soie.', fiche: 'blazer-cintre' }
+  ],
+  pants: [
+    { ref: 'MT-PA-01', name: 'Pantalon Patte d\u2019Éléphant', img: 'pieces/pants_1.png', mat: '100 % laine — Sur mesure', desc: 'Jambe évasée, taille haute, coupe rétro et élégante, poches latérales.', fiche: 'pantalon-patte' },
+    { ref: 'MT-PA-02', name: 'Pantalon Ballon', img: 'pieces/pants_2.png', mat: '100 % laine — Sur mesure', desc: 'Volume ballon, coupe architecturale, taille haute élastiquée.', fiche: 'pantalon-ballon' },
+    { ref: 'MT-PA-03', name: 'Pantalon Large',  img: 'pieces/pants_3.png', mat: '100 % laine — Sur mesure', desc: 'Jambe large, taille haute, plis avant, poches italiennes.', fiche: 'pantalon-large' }
+  ]
+};
+const CMP_LABEL = { tie: 'Cravate', jacket: 'Blazer', pants: 'Pantalon' };
+const CMP_SIZES = ['XS', 'S', 'M', 'L', 'XL'];
+const CMP_COLORS = [ { id: 'Noir', hex: '#0a0a0a' }, { id: 'Marine', hex: '#1a2d5a' }, { id: 'Crème', hex: '#e8dcc8' } ];
+const CMP = { idx: { tie: 0, jacket: 0, pants: 0 }, size: { jacket: null, pants: null }, color: 'Noir' };
+
+function cmpBuild() {
+  ['tie', 'jacket', 'pants'].forEach(function (k) {
+    const stage = document.getElementById('cmp-stage-' + k);
+    if (!stage) return;
+    stage.querySelectorAll('.cmp-card').forEach(function (c) { c.remove(); });
+    CMP_PIECES[k].forEach(function (p, i) {
+      const c = document.createElement('div');
+      c.className = 'cmp-card';
+      c.dataset.i = i;
+      c.addEventListener('click', function () { if (!c.classList.contains('on') && !CMP.dragged) cmpGo(k, i); });
+      c.innerHTML =
+        '<div class="cmp-img"><img src="' + p.img + '" alt="' + p.name + '"></div>' +
+        '<p class="cmp-ref">Réf. ' + p.ref + '</p>' +
+        '<p class="cmp-name">' + p.name + '</p>' +
+        '<p class="cmp-mat">' + p.mat + '</p>' +
+        '<p class="cmp-desc">' + p.desc + '</p>' +
+        '<button class="cmp-link" onclick="showProduct(\'' + p.fiche + '\');showSection(\'produit\')">Voir la fiche</button>';
+      stage.appendChild(c);
+    });
+    const dots = document.getElementById('cmp-dots-' + k);
+    dots.innerHTML = '';
+    CMP_PIECES[k].forEach(function (p, i) {
+      const d = document.createElement('button');
+      d.className = 'cmp-dot'; d.setAttribute('aria-label', p.name);
+      d.onclick = function () { cmpGo(k, i); };
+      dots.appendChild(d);
+    });
+    const sz = document.getElementById('cmp-sizes-' + k);
+    if (sz) {
+      sz.innerHTML = '';
+      CMP_SIZES.forEach(function (t) {
+        const b = document.createElement('button');
+        b.className = 'topt-size-btn'; b.textContent = t;
+        b.onclick = function () { CMP.size[k] = t; cmpSizeUI(k); cmpRecap(); document.getElementById('cmp-msg-' + k).textContent = ''; };
+        sz.appendChild(b);
+      });
+    }
+    cmpLayout(k);
+  });
+  const col = document.getElementById('cmp-colors');
+  col.innerHTML = '';
+  CMP_COLORS.forEach(function (c) {
+    const b = document.createElement('button');
+    b.className = 'cmp-color' + (c.id === CMP.color ? ' on' : '');
+    b.innerHTML = '<i style="background:' + c.hex + '"></i>' + c.id;
+    b.onclick = function () { CMP.color = c.id; col.querySelectorAll('.cmp-color').forEach(function (x) { x.classList.toggle('on', x === b); }); cmpRecap(); };
+    col.appendChild(b);
+  });
+  cmpRecap();
+  cmpMemberUI();
+}
+function cmpLayout(k) {
+  const stage = document.getElementById('cmp-stage-' + k);
+  const n = CMP_PIECES[k].length, cur = CMP.idx[k];
+  const mobile = window.innerWidth <= 600;
+  const gap = mobile ? 190 : 300;
+  stage.querySelectorAll('.cmp-card').forEach(function (c) {
+    const i = +c.dataset.i;
+    let off = ((i - cur) % n + n) % n; if (off > n / 2) off -= n;
+    const on = off === 0;
+    c.style.transform = 'translateX(' + (off * gap) + 'px) scale(' + (on ? 1 : .82) + ')';
+    c.classList.toggle('on', on); c.classList.toggle('off', !on);
+  });
+  document.querySelectorAll('#cmp-dots-' + k + ' .cmp-dot').forEach(function (d, i) { d.classList.toggle('on', i === cur); });
+}
+function cmpGo(k, i) { const n = CMP_PIECES[k].length; CMP.idx[k] = ((i % n) + n) % n; cmpLayout(k); cmpRecap(); }
+function cmpMove(k, d) { cmpGo(k, CMP.idx[k] + d); }
+function cmpSizeUI(k) {
+  document.querySelectorAll('#cmp-sizes-' + k + ' .topt-size-btn').forEach(function (b) { b.classList.toggle('active', b.textContent === CMP.size[k]); });
+}
+function cmpItem(k) {
+  const p = CMP_PIECES[k][CMP.idx[k]];
+  return { name: p.name + ' — Réf. ' + p.ref + ' — ' + CMP.color, size: k === 'tie' ? null : CMP.size[k], img: p.img };
+}
+function cmpRecap() {
+  const box = document.getElementById('cmp-recap-lines');
+  if (!box) return;
+  box.innerHTML = ['tie', 'jacket', 'pants'].map(function (k) {
+    const p = CMP_PIECES[k][CMP.idx[k]];
+    const sz = k === 'tie' ? '' : ' · Taille : ' + (CMP.size[k] || '<span style="color:#8a2b2b">à choisir</span>');
+    return '<div class="cmp-recap-line"><div class="cmp-recap-thumb"><img src="' + p.img + '" alt=""></div><div><p class="cmp-recap-name">' + p.name + '</p><p class="cmp-recap-meta">Réf. ' + p.ref + ' · ' + CMP.color + sz + '</p></div></div>';
+  }).join('');
+}
+function cmpNeedMember(e) {
+  if (typeof isMemberSession === 'function' && !isMemberSession()) { openMembreModal(e); return true; }
+  return false;
+}
+function cmpAddPiece(k, e) {
+  if (cmpNeedMember(e)) return;
+  if (k !== 'tie' && !CMP.size[k]) { document.getElementById('cmp-msg-' + k).textContent = 'Choisissez une taille avant d’ajouter.'; return; }
+  addToCart(cmpItem(k));
+}
+function cmpAddAll(e) {
+  if (cmpNeedMember(e)) return;
+  const msg = document.getElementById('cmp-msg-all');
+  const missing = ['jacket', 'pants'].filter(function (k) { return !CMP.size[k]; });
+  if (missing.length) {
+    msg.textContent = 'Choisissez la taille du ' + missing.map(function (k) { return k === 'jacket' ? 'blazer' : 'pantalon'; }).join(' et du ') + '.';
+    missing.forEach(function (k) { document.getElementById('cmp-msg-' + k).textContent = 'Choisissez une taille.'; });
+    return;
+  }
+  msg.textContent = '';
+  ['tie', 'jacket', 'pants'].forEach(function (k) { addToCart(cmpItem(k)); });
+}
+function cmpMemberUI() {
+  const m = (typeof isMemberSession === 'function') && isMemberSession();
+  document.querySelectorAll('#section-composer .cmp-add').forEach(function (b) { b.textContent = m ? 'Ajouter cette pièce' : 'Devenir membre'; });
+  const all = document.getElementById('cmp-add-all');
+  if (all) all.textContent = m ? 'Ajouter la tenue au panier' : 'Devenir membre';
+}
+// swipe sur chaque carrousel
+['tie', 'jacket', 'pants'].forEach(function (k) {
+  const el = document.getElementById('cmp-stage-' + k);
+  if (!el) return;
+  let sx = 0, sy = 0, drag = false;
+  el.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  el.addEventListener('touchend', function (e) {
+    const dx = sx - e.changedTouches[0].clientX, dy = sy - e.changedTouches[0].clientY;
+    if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy)) cmpMove(k, dx > 0 ? 1 : -1);
+  });
+  el.addEventListener('mousedown', function (e) { drag = true; sx = e.clientX; });
+  el.addEventListener('mouseup', function (e) { if (!drag) return; drag = false; const dx = sx - e.clientX; if (Math.abs(dx) > 30) cmpMove(k, dx > 0 ? 1 : -1); });
+  el.addEventListener('mouseleave', function () { drag = false; });
+});
+window.addEventListener('resize', function () { ['tie', 'jacket', 'pants'].forEach(cmpLayout); });
+document.addEventListener('DOMContentLoaded', cmpBuild);
 
 function openCart() {
   document.getElementById('cart-overlay').classList.add('open');
