@@ -585,6 +585,15 @@ footer{
 .burger.open,#searchBtn[aria-expanded="true"]{color:#0a0a0a;background:transparent}
 .nav-cart:focus-visible,.menu-icon-btn:focus-visible{outline:1px solid #0a0a0a;outline-offset:-4px}
 
+/* ─── TÉLÉPHONE : produits de la collection en 2 colonnes ─── */
+@media(max-width:768px){
+  #section-boutique section{padding:40px 16px 0 !important}
+  #boutique-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:28px 14px !important}
+  #boutique-grid .boutique-item > div:first-child{height:auto !important;aspect-ratio:3/4 !important;margin-bottom:10px !important}
+  #boutique-grid .boutique-item h3{font-size:1.05rem !important;line-height:1.25 !important}
+  #boutique-grid .boutique-item p{font-size:.72rem !important;line-height:1.5 !important}
+}
+
 /* ─── PANIER ─── */
 .cart-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.35);
