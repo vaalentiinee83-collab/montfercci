@@ -2888,9 +2888,12 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeLoginModal();})
 .sf-fit-options{display:flex;flex-direction:column;gap:12px}
 .sf-fit-card{border:1px solid #ddd;padding:18px 20px;cursor:pointer;transition:border-color .25s,background .25s;text-align:left;background:transparent}
 .sf-fit-card:hover{border-color:#0a0a0a}
-.sf-fit-card.selected{border-color:#0a0a0a;background:#0a0a0a;color:#fff}
+.sf-fit-card,.sf-fit-card:hover,.sf-fit-card:focus-visible{color:#0a0a0a;background:transparent}
+.sf-fit-card-title{color:#0a0a0a}
+.sf-fit-card.selected{border-color:#0a0a0a;background:transparent;color:#0a0a0a;box-shadow:inset 0 0 0 1px #0a0a0a}
+.sf-fit-card.selected .sf-fit-card-title{font-weight:600}
 .sf-fit-card-title{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:1.15rem;margin-bottom:4px}
-.sf-fit-card-desc{font-size:.68rem;letter-spacing:.02em;opacity:.7;line-height:1.5}
+.sf-fit-card-desc{font-size:.68rem;letter-spacing:.02em;opacity:1;color:#0a0a0a;line-height:1.5}
 .sf-nav{display:flex;gap:12px;margin-top:40px}
 .sf-btn{flex:1;padding:18px 0;font-family:"Montserrat",sans-serif;font-weight:300;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;cursor:pointer;transition:background .3s,color .3s,opacity .3s;text-indent:.3em;text-align:center}
 .sf-btn-primary{background:#0a0a0a;border:1px solid #0a0a0a;color:#fff}
