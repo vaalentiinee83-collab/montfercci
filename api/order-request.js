@@ -74,7 +74,10 @@ module.exports = async (req, res) => {
     const lineItems = items.map((item) => ({
       title: item.size ? `${item.name} (Taille : ${item.size})` : item.name,
       quantity: 1,
-      originalUnitPriceWithCurrency: { amount: "0.00", currencyCode: "EUR" }
+      originalUnitPriceWithCurrency: {
+        amount: (typeof item.price === "number" && item.price > 0 ? item.price : 0).toFixed(2),
+        currencyCode: "EUR"
+      }
     }));
 
     const noteParts = [

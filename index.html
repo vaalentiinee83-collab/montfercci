@@ -365,7 +365,7 @@ header{
 .cmp-sub{font-family:'Lora',serif;font-size:.9rem;color:#666;max-width:520px;margin:0 auto;line-height:1.7}
 .cmp-row{margin:0 0 26px}
 .cmp-row-label{font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:#888;text-align:center;margin-bottom:14px}
-.cmp-stage{position:relative;height:250px;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.cmp-stage{position:relative;height:272px;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .cmp-card{position:absolute;top:0;left:50%;width:170px;height:100%;margin-left:-85px;background:#fff;border:1px solid rgba(51,51,51,.14);display:flex;flex-direction:column;align-items:center;padding:12px 10px 10px;text-align:center;transition:transform .5s cubic-bezier(.4,0,.2,1),opacity .5s;will-change:transform}
 .cmp-card.off{opacity:.35;cursor:pointer}
 .cmp-card.on{opacity:1;z-index:2}
@@ -396,7 +396,15 @@ header{
 .cmp-recap-meta{font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:#888;margin-top:2px}
 .cmp-recap-sizes{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
 .cmp-recap-sizes .topt-size-btn{min-width:32px;height:30px;padding:0 8px}
-.cmp-colors{display:flex;gap:18px;justify-content:center;margin:22px 0 6px;flex-wrap:wrap}
+.cmp-colors{display:flex;gap:18px;justify-content:center;margin:8px 0 6px;flex-wrap:wrap}
+.cmp-colorbar{text-align:center;margin:0 0 26px}
+.cmp-title-alt{font-family:'Cormorant Garamond',serif;font-size:2.4rem;letter-spacing:.04em;color:#0a0a0a;display:none;margin-top:-2px}
+.cmp-title-word.struck,#cmp-title-word.struck{text-decoration:line-through;text-decoration-thickness:1px;color:#999}
+.cmp-removed .cmp-stage,.cmp-removed .cmp-dots{display:none}
+.cmp-tie-toggle{text-align:center;margin-top:2px}
+.cmp-price{text-align:center;margin:26px 0 0}
+.cmp-price-label{font-family:'Montserrat',sans-serif;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:#888;margin-bottom:6px}
+.cmp-price-val{font-family:'Cormorant Garamond',serif;font-size:2rem;color:#0a0a0a}
 .cmp-color{display:flex;align-items:center;gap:8px;cursor:pointer;background:none;border:none;font-family:'Cormorant Garamond',serif;font-size:1rem;color:#6b6b6b;padding:4px}
 .cmp-color i{width:18px;height:18px;border-radius:50%;border:1px solid #ccc;display:block}
 .cmp-color.on{color:#0a0a0a;font-weight:600}
@@ -405,7 +413,8 @@ header{
 @media(max-width:600px){
   .cmp-wrap{padding-top:96px}
   .cmp-title{font-size:1.9rem}
-  .cmp-stage{height:235px}
+  .cmp-title-alt{font-size:1.9rem}
+  .cmp-stage{height:258px}
   .cmp-card{width:150px;margin-left:-75px}
   .cmp-arr.l{left:4px}
   .cmp-arr.r{right:4px}
@@ -886,7 +895,7 @@ footer{
   <div class="menu-sub" id="menuSubCollection">
     <a href="#" onclick="menuNav(event,'boutique','all')">Tout voir</a>
     <a href="#" onclick="menuNav(event,'section','tieleur')">Nos Tieleurs/Tailleurs</a>
-    <a href="#" onclick="menuNav(event,'section','composer')">Composer ma tenue</a>
+    <a href="#" onclick="menuNav(event,'section','composer')">Composer mon Tieleur</a>
     <a href="#" onclick="menuNav(event,'boutique','veste')">Nos vestes</a>
     <a href="#" onclick="menuNav(event,'boutique','pantalon')">Nos pantalons</a>
     <a href="#" onclick="menuNav(event,'boutique','accessoire')">Nos cravates</a>
@@ -969,14 +978,20 @@ footer{
   <div class="cmp-wrap">
     <div class="cmp-head">
       <p class="cmp-eyebrow">Signature</p>
-      <h1 class="cmp-title">Composer ma tenue</h1>
-      <p class="cmp-sub">Faites défiler chaque pièce pour composer votre tenue, choisissez vos tailles dans la composition, puis ajoutez la tenue à votre panier. La référence de chaque pièce est conservée jusqu’à la commande.</p>
+      <h1 class="cmp-title">Composer mon <span id="cmp-title-word">Tieleur</span></h1>
+      <p class="cmp-title-alt" id="cmp-title-alt">Tailleur</p>
+    </div>
+
+    <div class="cmp-colorbar">
+      <p class="cmp-row-label" style="margin-bottom:0">Couleur</p>
+      <div class="cmp-colors" id="cmp-colors"></div>
     </div>
 
     <div class="cmp-row" id="cmp-row-tie">
       <p class="cmp-row-label">1 — La cravate</p>
       <div class="cmp-stage" id="cmp-stage-tie"><button class="cmp-arr l" onclick="cmpMove('tie',-1)" aria-label="Précédent">&#8592;</button><button class="cmp-arr r" onclick="cmpMove('tie',1)" aria-label="Suivant">&#8594;</button></div>
       <div class="cmp-dots" id="cmp-dots-tie"></div>
+      <div class="cmp-tie-toggle"><button class="cmp-link" id="cmp-tie-btn" onclick="cmpToggleTie()">Enlever la cravate</button></div>
     </div>
 
     <div class="cmp-row" id="cmp-row-jacket">
@@ -994,8 +1009,7 @@ footer{
     <div class="cmp-recap">
       <p class="cmp-row-label">Votre composition</p>
       <div id="cmp-recap-lines"></div>
-      <p class="cmp-row-label" style="margin-top:24px;margin-bottom:0">Couleur</p>
-      <div class="cmp-colors" id="cmp-colors"></div>
+      <div class="cmp-price"><p class="cmp-price-label" id="cmp-price-label">Prix fixe — Tieleur complet</p><p class="cmp-price-val" id="cmp-price-val">590 €</p></div>
       <div class="cmp-foot">
         <button class="btn-avatar" style="margin-top:0;margin-bottom:14px" onclick="openTieleurSizeFinder(event)">Votre recommandation de taille</button>
         <button class="topt-panier" id="cmp-add-all" style="margin-top:0" onclick="cmpAddAll(event)">Ajouter la tenue au panier</button>
@@ -1880,7 +1894,7 @@ const SEARCH_PAGES = [
   { label: 'Accueil', sub: 'Page', kw: 'accueil home habiller ambition', go: () => showSection('accueil') },
   { label: 'Tout voir', sub: 'Collection', kw: 'collection tout voir boutique', go: () => showBoutiqueFiltered('all') },
   { label: 'Nos Tieleurs/Tailleurs', sub: 'Collection', kw: 'tieleur tieleurs tailleur tailleurs sur mesure costume', go: () => showSection('tieleur') },
-  { label: 'Composer ma tenue', sub: 'Collection', kw: 'composer tenue composition tieleur carrousel blazer pantalon cravate', go: () => showSection('composer') },
+  { label: 'Composer mon Tieleur', sub: 'Collection', kw: 'composer tenue composition tieleur carrousel blazer pantalon cravate', go: () => showSection('composer') },
   { label: 'Nos vestes', sub: 'Collection', kw: 'veste vestes blazer', go: () => showBoutiqueFiltered('veste') },
   { label: 'Nos pantalons', sub: 'Collection', kw: 'pantalon pantalons', go: () => showBoutiqueFiltered('pantalon') },
   { label: 'Nos cravates', sub: 'Collection', kw: 'cravate cravates soie accessoire accessoires', go: () => showBoutiqueFiltered('accessoire') },
@@ -2268,6 +2282,16 @@ document.querySelectorAll('.reveal').forEach(el=>spa_observer.observe(el));
 
 // ─── PANIER ───
 let CART = [];
+function itemPriceText(item) {
+  if (typeof item.price === 'number') return item.price > 0 ? item.price + ' €' : 'Inclus';
+  return 'Sur devis';
+}
+function cartTotalText() {
+  let sum = 0, unpriced = false;
+  CART.forEach(function (it) { if (typeof it.price === 'number') sum += it.price; else unpriced = true; });
+  if (sum > 0) return unpriced ? sum + ' € + sur devis' : sum + ' €';
+  return 'Sur devis';
+}
 
 function isMemberSession() {
   return sessionStorage.getItem('montfercci_member') === 'true';
@@ -2407,25 +2431,26 @@ function handleBuyClick(type, e) {
 // ─── COMPOSER : carrousel de fiches produits ───
 const CMP_PIECES = {
   tie: [
-    { ref: 'MT-001', name: 'Tieleur Nuit',     img: 'pieces/tie_1.png', mat: '100 % soie & cachemire', desc: 'Cravate 7 plis cousue à la main. Doublure en soie. Largeur 8 cm, longueur 148 cm.', fiche: 'tieleur-nuit' },
-    { ref: 'MT-002', name: 'Tieleur Minuit',   img: 'pieces/tie_2.png', mat: '100 % soie & cachemire', desc: 'Cravate 7 plis cousue à la main. Doublure en soie. Largeur 8 cm, longueur 148 cm.', fiche: 'tieleur-minuit' },
-    { ref: 'MT-003', name: 'Tieleur Bordeaux', img: 'pieces/tie_3.png', mat: 'Soie & lin',             desc: 'Cravate 7 plis cousue à la main. Pièce signature de la maison. Largeur 8 cm, longueur 148 cm.', fiche: 'cravate' }
+    { ref: 'MT-001', name: 'Cravate dentelle bleu',  img: 'pieces/tie_1.png', fiche: 'tieleur-nuit' },
+    { ref: 'MT-002', name: 'Cravate dentelle noir',  img: 'pieces/tie_2.png', fiche: 'tieleur-minuit' },
+    { ref: 'MT-003', name: 'Cravate relief blanche', img: 'pieces/tie_3.png', fiche: 'cravate' }
   ],
   jacket: [
-    { ref: 'MT-BL-01', name: 'Blazer Ballon', img: 'pieces/jacket_1.png', mat: '100 % laine — Sur mesure', desc: 'Volume ballon, coupe sculpturale, manches bouffantes, boutons dorés.', fiche: 'blazer-ballon' },
-    { ref: 'MT-BL-02', name: 'Blazer Large',  img: 'pieces/jacket_2.png', mat: '100 % laine — Sur mesure', desc: 'Coupe large et oversize, épaules tombantes, poches plaquées, boutons en nacre.', fiche: 'blazer-large' },
-    { ref: 'MT-BL-03', name: 'Blazer Cintré', img: 'pieces/jacket_3.png', mat: '100 % laine — Sur mesure', desc: 'Coupe cintrée, taille marquée, poches passepoilées, doublure en soie.', fiche: 'blazer-cintre' }
+    { ref: 'MT-BL-01', name: 'Blazer n°1', img: 'pieces/jacket_2.png', fiche: 'blazer-large' },
+    { ref: 'MT-BL-02', name: 'Blazer n°2', img: 'pieces/jacket_3.png', fiche: 'blazer-cintre' },
+    { ref: 'MT-BL-03', name: 'Blazer n°3', img: 'pieces/jacket_1.png', fiche: 'blazer-ballon' }
   ],
   pants: [
-    { ref: 'MT-PA-01', name: 'Pantalon Patte d\u2019Éléphant', img: 'pieces/pants_1.png', mat: '100 % laine — Sur mesure', desc: 'Jambe évasée, taille haute, coupe rétro et élégante, poches latérales.', fiche: 'pantalon-patte' },
-    { ref: 'MT-PA-02', name: 'Pantalon Ballon', img: 'pieces/pants_2.png', mat: '100 % laine — Sur mesure', desc: 'Volume ballon, coupe architecturale, taille haute élastiquée.', fiche: 'pantalon-ballon' },
-    { ref: 'MT-PA-03', name: 'Pantalon Large',  img: 'pieces/pants_3.png', mat: '100 % laine — Sur mesure', desc: 'Jambe large, taille haute, plis avant, poches italiennes.', fiche: 'pantalon-large' }
+    { ref: 'MT-PA-01', name: 'Pantalon n°1', img: 'pieces/pants_3.png', fiche: 'pantalon-large' },
+    { ref: 'MT-PA-02', name: 'Pantalon n°2', img: 'pieces/pants_1.png', fiche: 'pantalon-patte' },
+    { ref: 'MT-PA-03', name: 'Pantalon n°3', img: 'pieces/pants_2.png', fiche: 'pantalon-ballon' }
   ]
 };
 const CMP_LABEL = { tie: 'Cravate', jacket: 'Blazer', pants: 'Pantalon' };
 const CMP_SIZES = ['XS', 'S', 'M', 'L', 'XL'];
 const CMP_COLORS = [ { id: 'Noir', hex: '#0a0a0a' }, { id: 'Marine', hex: '#1a2d5a' }, { id: 'Crème', hex: '#e8dcc8' } ];
-const CMP = { idx: { tie: 0, jacket: 0, pants: 0 }, size: { jacket: null, pants: null }, color: 'Noir' };
+const CMP = { idx: { tie: 0, jacket: 0, pants: 0 }, size: { jacket: null, pants: null }, color: 'Noir', noTie: false };
+const CMP_PRICE = { full: 590, noTie: 630 };
 
 function cmpBuild() {
   ['tie', 'jacket', 'pants'].forEach(function (k) {
@@ -2439,7 +2464,8 @@ function cmpBuild() {
       c.addEventListener('click', function () { if (!c.classList.contains('on') && !CMP.dragged) cmpGo(k, i); });
       c.innerHTML =
         '<div class="cmp-img"><img src="' + p.img + '" alt="' + p.name + '"></div>' +
-        '<p class="cmp-name">' + p.name + '</p>';
+        '<p class="cmp-name">' + p.name + '</p>' +
+        '<button class="cmp-link" onclick="event.stopPropagation();cmpFiche(\'' + k + '\',' + i + ')">Voir la fiche</button>';
       stage.appendChild(c);
     });
     const dots = document.getElementById('cmp-dots-' + k);
@@ -2488,7 +2514,7 @@ function cmpPickSize(k, t) { CMP.size[k] = t; document.getElementById('cmp-msg-a
 function cmpRecap() {
   const box = document.getElementById('cmp-recap-lines');
   if (!box) return;
-  box.innerHTML = ['tie', 'jacket', 'pants'].map(function (k) {
+  box.innerHTML = ['tie', 'jacket', 'pants'].filter(function (k) { return !(k === 'tie' && CMP.noTie); }).map(function (k) {
     const p = CMP_PIECES[k][CMP.idx[k]];
     const sizes = k === 'tie' ? '' : '<div class="cmp-recap-sizes">' + CMP_SIZES.map(function (t) {
       return '<button class="topt-size-btn' + (CMP.size[k] === t ? ' active' : '') + '" onclick="cmpPickSize(\'' + k + '\',\'' + t + '\')">' + t + '</button>';
@@ -2509,7 +2535,30 @@ function cmpAddAll(e) {
     return;
   }
   msg.textContent = '';
-  ['tie', 'jacket', 'pants'].forEach(function (k) { addToCart(cmpItem(k)); });
+  const group = 'tenue-' + Date.now();
+  addToCart({ name: CMP.noTie ? 'Tailleur — blazer & pantalon' : 'Tieleur — cravate, blazer & pantalon', size: null, img: null, price: CMP.noTie ? CMP_PRICE.noTie : CMP_PRICE.full, group: group });
+  (CMP.noTie ? ['jacket', 'pants'] : ['tie', 'jacket', 'pants']).forEach(function (k) {
+    const it = cmpItem(k); it.price = 0; it.group = group; addToCart(it);
+  });
+}
+function cmpToggleTie() {
+  CMP.noTie = !CMP.noTie;
+  cmpTieUI();
+}
+function cmpTieUI() {
+  document.getElementById('cmp-row-tie').classList.toggle('cmp-removed', CMP.noTie);
+  document.getElementById('cmp-title-word').classList.toggle('struck', CMP.noTie);
+  document.getElementById('cmp-title-alt').style.display = CMP.noTie ? 'block' : 'none';
+  document.getElementById('cmp-tie-btn').textContent = CMP.noTie ? 'Remettre la cravate' : 'Enlever la cravate';
+  document.getElementById('cmp-price-label').textContent = CMP.noTie ? 'Prix fixe — Tailleur (sans cravate)' : 'Prix fixe — Tieleur complet';
+  document.getElementById('cmp-price-val').textContent = (CMP.noTie ? CMP_PRICE.noTie : CMP_PRICE.full) + ' €';
+  cmpRecap();
+}
+function cmpFiche(k, i) {
+  const p = CMP_PIECES[k][i];
+  showProduct(p.fiche);
+  const n = document.getElementById('prod-name'); if (n) n.textContent = p.name;
+  showSection('produit');
 }
 function cmpMemberUI() {
   const m = (typeof isMemberSession === 'function') && isMemberSession();
@@ -2531,7 +2580,7 @@ function cmpMemberUI() {
   el.addEventListener('mouseleave', function () { drag = false; });
 });
 window.addEventListener('resize', function () { ['tie', 'jacket', 'pants'].forEach(cmpLayout); });
-document.addEventListener('DOMContentLoaded', cmpBuild);
+document.addEventListener('DOMContentLoaded', function () { cmpBuild(); cmpTieUI(); });
 
 function openCart() {
   document.getElementById('cart-overlay').classList.add('open');
@@ -2548,7 +2597,9 @@ function addToCart(item) {
   openCart();
 }
 function removeFromCart(idx) {
-  CART.splice(idx, 1);
+  const g = CART[idx] && CART[idx].group;
+  if (g) { CART = CART.filter(function (it) { return it.group !== g; }); }
+  else { CART.splice(idx, 1); }
   renderCart();
   updateCartBadge();
 }
@@ -2576,7 +2627,7 @@ function renderCart() {
     const imgHtml = item.img
       ? `<img src="${item.img}" alt="${item.name}">`
       : `<span>${item.name}</span>`;
-    const sizeHtml = item.size ? `<span class="cart-item-size">Taille : ${item.size}</span>` : '';
+    const sizeHtml = (item.size ? `<span class="cart-item-size">Taille : ${item.size}</span>` : '') + (typeof item.price === 'number' ? `<span class="cart-item-size" style="display:block">${itemPriceText(item)}</span>` : '');
     return `<div class="cart-item">
       <div class="cart-item-img">${imgHtml}</div>
       <div class="cart-item-info">
@@ -2600,7 +2651,7 @@ function openPanierPage() {
     const imgHtml = item.img
       ? `<img src="${item.img}" alt="${item.name}">`
       : `<span>${item.name}</span>`;
-    const sizeHtml = item.size ? `<p class="panier-line-size">Taille : ${item.size}</p>` : '';
+    const sizeHtml = (item.size ? `<p class="panier-line-size">Taille : ${item.size}</p>` : '') + (typeof item.price === 'number' ? `<p class="panier-line-size">${itemPriceText(item)}</p>` : '');
     return `<div class="panier-line">
       <div class="panier-line-img">${imgHtml}</div>
       <div class="panier-line-info">
@@ -2611,8 +2662,9 @@ function openPanierPage() {
     </div>`;
   }).join('');
   resumeLines.innerHTML = CART.map(item =>
-    `<div class="panier-resume-line"><span>${item.name}</span><span>Sur devis</span></div>`
+    `<div class="panier-resume-line"><span>${item.name}</span><span>${itemPriceText(item)}</span></div>`
   ).join('');
+  document.getElementById('panier-total').textContent = cartTotalText();
   showSection('panier');
 }
 
@@ -2620,7 +2672,8 @@ function goToCommande() {
   const lines = document.getElementById('commande-lines');
   lines.innerHTML = CART.map(item => {
     const sizeHtml = item.size ? ` — Taille : ${item.size}` : '';
-    return `<div class="panier-resume-line"><span>${item.name}${sizeHtml}</span></div>`;
+    const pr = typeof item.price === 'number' ? `<span>${itemPriceText(item)}</span>` : '';
+    return `<div class="panier-resume-line"><span>${item.name}${sizeHtml}</span>${pr}</div>`;
   }).join('');
   document.getElementById('commande-success').classList.remove('show');
   document.getElementById('commande-form-wrap').style.display = 'block';
@@ -2653,8 +2706,8 @@ function submitCommande() {
   }
   errorEl.classList.remove('visible');
 
-  const items = CART.map(item => item.name + (item.size ? " (Taille : " + item.size + ")" : "")).join(", ");
-  const itemsJson = JSON.stringify(CART.map(item => ({ name: item.name, size: item.size || null })));
+  const items = CART.map(item => item.name + (item.size ? " (Taille : " + item.size + ")" : "") + (typeof item.price === 'number' && item.price > 0 ? " — " + item.price + " €" : "")).join(", ");
+  const itemsJson = JSON.stringify(CART.map(item => ({ name: item.name, size: item.size || null, price: (typeof item.price === 'number') ? item.price : null })));
 
   fetch("/api/order-request", {
     method: "POST",
@@ -2718,7 +2771,7 @@ function submitCommande() {
       <p class="panier-resume-title">Récapitulatif</p>
       <div id="panier-resume-lines"></div>
       <hr class="panier-resume-sep">
-      <div class="panier-resume-total"><span>Total</span><span>Sur devis</span></div>
+      <div class="panier-resume-total"><span>Total</span><span id="panier-total">Sur devis</span></div>
       <button class="panier-checkout-btn" onclick="goToCommande()">Finaliser la commande</button>
       <button class="panier-back-btn" onclick="showSection('boutique')">Continuer mes achats</button>
     </div>
