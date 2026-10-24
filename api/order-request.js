@@ -75,17 +75,23 @@ module.exports = async (req, res) => {
     // prix envoyé par le navigateur. Seules les tenues (pack) sont payables
     // en ligne ; les pièces de la tenue sont "incluses" (0 €).
     const PACK_PRICES = { full: 590, notie: 630 };
+    const PRODUCT_PRICES = {
+      "blazer-large": 370, "blazer-cintre": 370, "blazer-ballon": 370,
+      "pantalon-large": 280, "pantalon-patte": 280, "pantalon-ballon": 280
+    };
+    const priceOf = (it) => PACK_PRICES[it.pack] || PRODUCT_PRICES[it.pid] || 0;
+    const paid = items.filter((it) => priceOf(it) > 0);
     const packs = items.filter((it) => PACK_PRICES[it.pack]);
-    const included = items.filter((it) => !PACK_PRICES[it.pack] && it.included);
-    const others = items.filter((it) => !PACK_PRICES[it.pack] && !it.included);
+    const included = items.filter((it) => priceOf(it) === 0 && it.included);
+    const others = items.filter((it) => priceOf(it) === 0 && !it.included);
     const payable =
-      packs.length > 0 && others.length === 0 && included.length <= packs.length * 3;
+      paid.length > 0 && others.length === 0 && included.length <= packs.length * 3;
 
     const lineItems = items.map((item) => ({
       title: item.size ? `${item.name} (Taille : ${item.size})` : item.name,
       quantity: 1,
       originalUnitPriceWithCurrency: {
-        amount: (PACK_PRICES[item.pack] || 0).toFixed(2),
+        amount: priceOf(item).toFixed(2),
         currencyCode: "EUR"
       }
     }));
