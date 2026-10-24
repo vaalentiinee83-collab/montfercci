@@ -851,7 +851,10 @@ footer{
 
 @media(max-width:900px){
   .product-wrap{grid-template-columns:1fr}
-  .product-visual{position:relative;top:0;height:60vw;min-height:320px}
+  .product-visual{position:relative;top:0;height:auto;min-height:0}
+  .visual-main{flex:none;height:72vw;min-height:300px;max-height:460px}
+  .breadcrumb > span, .breadcrumb > a:not(#prod-back){display:none}
+  .breadcrumb #prod-back{font-size:.62rem !important}
   .product-info{padding:32px 24px 48px}
 }
 
